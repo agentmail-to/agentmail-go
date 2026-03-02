@@ -1,4 +1,4 @@
-module github.com/agentmail-to/agentmail-go
+module github.com/stainless-sdks/agentmail-go
 
 go 1.22
 

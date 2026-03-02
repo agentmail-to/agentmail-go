@@ -2,7 +2,7 @@ package apijson
 
 import (
 	"errors"
-	"github.com/agentmail-to/agentmail-go/packages/param"
+	"github.com/stainless-sdks/agentmail-go/packages/param"
 	"reflect"
 
 	"github.com/tidwall/gjson"

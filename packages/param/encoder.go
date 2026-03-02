@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	shimjson "github.com/agentmail-to/agentmail-go/internal/encoding/json"
+	shimjson "github.com/stainless-sdks/agentmail-go/internal/encoding/json"
 
 	"github.com/tidwall/sjson"
 )

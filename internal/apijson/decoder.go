@@ -7,7 +7,7 @@ package apijson
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/agentmail-to/agentmail-go/packages/param"
+	"github.com/stainless-sdks/agentmail-go/packages/param"
 	"reflect"
 	"strconv"
 	"sync"

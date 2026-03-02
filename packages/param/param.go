@@ -2,7 +2,7 @@ package param
 
 import (
 	"encoding/json"
-	"github.com/agentmail-to/agentmail-go/internal/encoding/json/sentinel"
+	"github.com/stainless-sdks/agentmail-go/internal/encoding/json/sentinel"
 	"reflect"
 )
 
