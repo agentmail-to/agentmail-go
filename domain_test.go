@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-sdks/agentmail-go"
-	"github.com/stainless-sdks/agentmail-go/internal/testutil"
-	"github.com/stainless-sdks/agentmail-go/option"
+	"github.com/agentmail-to/agentmail-go"
+	"github.com/agentmail-to/agentmail-go/internal/testutil"
+	"github.com/agentmail-to/agentmail-go/option"
 )
 
 func TestDomainNew(t *testing.T) {

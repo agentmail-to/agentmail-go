@@ -3,8 +3,8 @@ package apijson_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stainless-sdks/agentmail-go/internal/apijson"
-	"github.com/stainless-sdks/agentmail-go/packages/param"
+	"github.com/agentmail-to/agentmail-go/internal/apijson"
+	"github.com/agentmail-to/agentmail-go/packages/param"
 	"reflect"
 	"testing"
 )

@@ -3,8 +3,8 @@
 package agentmail
 
 import (
-	"github.com/stainless-sdks/agentmail-go/internal/apierror"
-	"github.com/stainless-sdks/agentmail-go/packages/param"
+	"github.com/agentmail-to/agentmail-go/internal/apierror"
+	"github.com/agentmail-to/agentmail-go/packages/param"
 )
 
 // aliased to make [param.APIUnion] private when embedding

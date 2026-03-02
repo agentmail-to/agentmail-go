@@ -2,28 +2,36 @@
 
 <!-- x-release-please-start-version -->
 
-<a href="https://pkg.go.dev/github.com/stainless-sdks/agentmail-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/agentmail-go.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go"><img src="https://pkg.go.dev/badge/github.com/agentmail-to/agentmail-go.svg" alt="Go Reference"></a>
 
 <!-- x-release-please-end -->
 
-The Agentmail Go library provides convenient access to the Agentmail REST API
+The Agentmail Go library provides convenient access to the [Agentmail REST API](https://docs.agentmail.to)
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
+<!-- x-release-please-start-version -->
+
 ```go
 import (
-	"github.com/stainless-sdks/agentmail-go" // imported as agentmail
+	"github.com/agentmail-to/agentmail-go" // imported as agentmail
 )
 ```
 
+<!-- x-release-please-end -->
+
 Or to pin the version:
 
+<!-- x-release-please-start-version -->
+
 ```sh
-go get -u 'github.com/stainless-sdks/agentmail-go@v0.0.1'
+go get -u 'github.com/agentmail-to/agentmail-go@v0.0.1'
 ```
+
+<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -40,13 +48,14 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stainless-sdks/agentmail-go"
-	"github.com/stainless-sdks/agentmail-go/option"
+	"github.com/agentmail-to/agentmail-go"
+	"github.com/agentmail-to/agentmail-go/option"
 )
 
 func main() {
 	client := agentmail.NewClient(
-		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("AGENTMAIL_API_KEY")
+		option.WithAPIKey("My API Key"),     // defaults to os.LookupEnv("AGENTMAIL_API_KEY")
+		option.WithEnvironmentDevelopment(), // defaults to option.WithEnvironmentProduction()
 	)
 	listInboxes, err := client.Inboxes.List(context.TODO(), agentmail.InboxListParams{})
 	if err != nil {
@@ -268,7 +277,7 @@ client.Inboxes.List(context.TODO(), ...,
 
 The request option `option.WithDebugLog(nil)` may be helpful while debugging.
 
-See the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/agentmail-go/option).
+See the [full list of request options](https://pkg.go.dev/github.com/agentmail-to/agentmail-go/option).
 
 ### Pagination
 
@@ -474,7 +483,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/agentmail-go/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/agentmail-to/agentmail-go/issues) with questions, bugs, or suggestions.
 
 ## Contributing
 
