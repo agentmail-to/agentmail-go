@@ -3,8 +3,8 @@ package respjson_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stainless-sdks/agentmail-go/internal/apijson"
-	rj "github.com/stainless-sdks/agentmail-go/packages/respjson"
+	"github.com/agentmail-to/agentmail-go/internal/apijson"
+	rj "github.com/agentmail-to/agentmail-go/packages/respjson"
 	"reflect"
 	"testing"
 )

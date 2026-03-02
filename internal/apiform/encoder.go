@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/stainless-sdks/agentmail-go/packages/param"
+	"github.com/agentmail-to/agentmail-go/packages/param"
 )
 
 var encoders sync.Map // map[encoderEntry]encoderFunc

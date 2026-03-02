@@ -3,7 +3,7 @@ package param
 import (
 	"encoding/json"
 	"fmt"
-	shimjson "github.com/stainless-sdks/agentmail-go/internal/encoding/json"
+	shimjson "github.com/agentmail-to/agentmail-go/internal/encoding/json"
 	"time"
 )
 
