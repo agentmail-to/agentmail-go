@@ -12,13 +12,13 @@ import (
 	"slices"
 	"time"
 
-	"github.com/stainless-sdks/agentmail-go/internal/apijson"
-	"github.com/stainless-sdks/agentmail-go/internal/apiquery"
-	shimjson "github.com/stainless-sdks/agentmail-go/internal/encoding/json"
-	"github.com/stainless-sdks/agentmail-go/internal/requestconfig"
-	"github.com/stainless-sdks/agentmail-go/option"
-	"github.com/stainless-sdks/agentmail-go/packages/param"
-	"github.com/stainless-sdks/agentmail-go/packages/respjson"
+	"github.com/agentmail-to/agentmail-go/internal/apijson"
+	"github.com/agentmail-to/agentmail-go/internal/apiquery"
+	shimjson "github.com/agentmail-to/agentmail-go/internal/encoding/json"
+	"github.com/agentmail-to/agentmail-go/internal/requestconfig"
+	"github.com/agentmail-to/agentmail-go/option"
+	"github.com/agentmail-to/agentmail-go/packages/param"
+	"github.com/agentmail-to/agentmail-go/packages/respjson"
 )
 
 // InboxService contains methods and other services that help with interacting with

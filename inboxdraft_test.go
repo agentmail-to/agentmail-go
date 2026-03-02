@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stainless-sdks/agentmail-go"
-	"github.com/stainless-sdks/agentmail-go/internal/testutil"
-	"github.com/stainless-sdks/agentmail-go/option"
+	"github.com/agentmail-to/agentmail-go"
+	"github.com/agentmail-to/agentmail-go/internal/testutil"
+	"github.com/agentmail-to/agentmail-go/option"
 )
 
 func TestInboxDraftNewWithOptionalParams(t *testing.T) {

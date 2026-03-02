@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stainless-sdks/agentmail-go"
-	"github.com/stainless-sdks/agentmail-go/internal"
-	"github.com/stainless-sdks/agentmail-go/option"
+	"github.com/agentmail-to/agentmail-go"
+	"github.com/agentmail-to/agentmail-go/internal"
+	"github.com/agentmail-to/agentmail-go/option"
 )
 
 type closureTransport struct {

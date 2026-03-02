@@ -18,10 +18,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stainless-sdks/agentmail-go/internal"
-	"github.com/stainless-sdks/agentmail-go/internal/apierror"
-	"github.com/stainless-sdks/agentmail-go/internal/apiform"
-	"github.com/stainless-sdks/agentmail-go/internal/apiquery"
+	"github.com/agentmail-to/agentmail-go/internal"
+	"github.com/agentmail-to/agentmail-go/internal/apierror"
+	"github.com/agentmail-to/agentmail-go/internal/apiform"
+	"github.com/agentmail-to/agentmail-go/internal/apiquery"
 )
 
 func getDefaultHeaders() map[string]string {
