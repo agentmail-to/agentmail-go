@@ -8,10 +8,10 @@ import (
 	"slices"
 	"time"
 
-	"github.com/agentmail-to/agentmail-go/internal/apijson"
-	"github.com/agentmail-to/agentmail-go/internal/requestconfig"
-	"github.com/agentmail-to/agentmail-go/option"
-	"github.com/agentmail-to/agentmail-go/packages/respjson"
+	"github.com/stainless-sdks/agentmail-go/internal/apijson"
+	"github.com/stainless-sdks/agentmail-go/internal/requestconfig"
+	"github.com/stainless-sdks/agentmail-go/option"
+	"github.com/stainless-sdks/agentmail-go/packages/respjson"
 )
 
 // OrganizationService contains methods and other services that help with

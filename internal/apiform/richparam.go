@@ -1,7 +1,7 @@
 package apiform
 
 import (
-	"github.com/agentmail-to/agentmail-go/packages/param"
+	"github.com/stainless-sdks/agentmail-go/packages/param"
 	"mime/multipart"
 	"reflect"
 )

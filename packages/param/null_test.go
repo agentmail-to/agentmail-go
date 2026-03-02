@@ -2,7 +2,7 @@ package param_test
 
 import (
 	"encoding/json"
-	"github.com/agentmail-to/agentmail-go/packages/param"
+	"github.com/stainless-sdks/agentmail-go/packages/param"
 	"testing"
 )
 

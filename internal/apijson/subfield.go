@@ -1,7 +1,7 @@
 package apijson
 
 import (
-	"github.com/agentmail-to/agentmail-go/packages/respjson"
+	"github.com/stainless-sdks/agentmail-go/packages/respjson"
 	"reflect"
 )
 

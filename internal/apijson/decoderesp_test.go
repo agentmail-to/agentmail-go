@@ -2,8 +2,8 @@ package apijson_test
 
 import (
 	"encoding/json"
-	"github.com/agentmail-to/agentmail-go/internal/apijson"
-	"github.com/agentmail-to/agentmail-go/packages/respjson"
+	"github.com/stainless-sdks/agentmail-go/internal/apijson"
+	"github.com/stainless-sdks/agentmail-go/packages/respjson"
 	"testing"
 )
 

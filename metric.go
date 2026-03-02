@@ -9,9 +9,9 @@ import (
 	"slices"
 	"time"
 
-	"github.com/agentmail-to/agentmail-go/internal/apiquery"
-	"github.com/agentmail-to/agentmail-go/internal/requestconfig"
-	"github.com/agentmail-to/agentmail-go/option"
+	"github.com/stainless-sdks/agentmail-go/internal/apiquery"
+	"github.com/stainless-sdks/agentmail-go/internal/requestconfig"
+	"github.com/stainless-sdks/agentmail-go/option"
 )
 
 // MetricService contains methods and other services that help with interacting

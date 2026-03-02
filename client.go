@@ -8,8 +8,8 @@ import (
 	"os"
 	"slices"
 
-	"github.com/agentmail-to/agentmail-go/internal/requestconfig"
-	"github.com/agentmail-to/agentmail-go/option"
+	"github.com/stainless-sdks/agentmail-go/internal/requestconfig"
+	"github.com/stainless-sdks/agentmail-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with
