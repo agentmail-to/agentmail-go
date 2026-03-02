@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/stainless-sdks/agentmail-go/internal/apijson"
-	"github.com/stainless-sdks/agentmail-go/packages/respjson"
+	"github.com/agentmail-to/agentmail-go/internal/apijson"
+	"github.com/agentmail-to/agentmail-go/packages/respjson"
 )
 
 // Error represents an error that originates from the API, i.e. when a request is

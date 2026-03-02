@@ -2,7 +2,7 @@
 package json
 
 import (
-	"github.com/stainless-sdks/agentmail-go/internal/encoding/json/shims"
+	"github.com/agentmail-to/agentmail-go/internal/encoding/json/shims"
 	"reflect"
 	"time"
 )
