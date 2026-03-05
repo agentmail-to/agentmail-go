@@ -99,7 +99,7 @@ type Draft struct {
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// ID of draft.
 	DraftID string `json:"draft_id" api:"required"`
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of draft.
 	Labels []string `json:"labels" api:"required"`
@@ -212,7 +212,7 @@ func (r *ListDrafts) UnmarshalJSON(data []byte) error {
 type ListDraftsDraft struct {
 	// ID of draft.
 	DraftID string `json:"draft_id" api:"required"`
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of draft.
 	Labels []string `json:"labels" api:"required"`

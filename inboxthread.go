@@ -136,7 +136,7 @@ func (r *ListThreads) UnmarshalJSON(data []byte) error {
 type ListThreadsThread struct {
 	// Time at which thread was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of thread.
 	Labels []string `json:"labels" api:"required"`
@@ -200,7 +200,7 @@ func (r *ListThreadsThread) UnmarshalJSON(data []byte) error {
 type Thread struct {
 	// Time at which thread was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of thread.
 	Labels []string `json:"labels" api:"required"`
@@ -265,7 +265,7 @@ func (r *Thread) UnmarshalJSON(data []byte) error {
 }
 
 type InboxThreadGetParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	paramObj
 }
@@ -301,13 +301,13 @@ func (r InboxThreadListParams) URLQuery() (v url.Values, err error) {
 }
 
 type InboxThreadDeleteParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxThreadGetAttachmentParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	// ID of thread.
 	ThreadID string `path:"thread_id" api:"required" json:"-"`
