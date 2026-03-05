@@ -52,6 +52,7 @@ func TestAPIKeyListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.APIKeys.List(context.TODO(), agentmail.APIKeyListParams{
+		Ascending: agentmail.Bool(true),
 		Limit:     agentmail.Int(0),
 		PageToken: agentmail.String("page_token"),
 	})

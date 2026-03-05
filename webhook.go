@@ -221,6 +221,8 @@ func (r *WebhookUpdateParams) UnmarshalJSON(data []byte) error {
 }
 
 type WebhookListParams struct {
+	// Sort in ascending temporal order.
+	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
 	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
