@@ -212,13 +212,13 @@ func (r *InboxDraftNewParams) UnmarshalJSON(data []byte) error {
 }
 
 type InboxDraftGetParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxDraftUpdateParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	// HTML body of draft.
 	HTML param.Opt[string] `json:"html,omitzero"`
@@ -276,13 +276,13 @@ func (r InboxDraftListParams) URLQuery() (v url.Values, err error) {
 }
 
 type InboxDraftDeleteParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxDraftSendParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID       string `path:"inbox_id" api:"required" json:"-"`
 	UpdateMessage UpdateMessageParam
 	paramObj
