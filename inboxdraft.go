@@ -184,6 +184,8 @@ type InboxDraftNewParams struct {
 	Subject param.Opt[string] `json:"subject,omitzero"`
 	// Plain text body of draft.
 	Text param.Opt[string] `json:"text,omitzero"`
+	// Attachments to include in draft.
+	Attachments []SendAttachmentParam `json:"attachments,omitzero"`
 	// Addresses of BCC recipients. In format `username@domain.com` or
 	// `Display Name <username@domain.com>`.
 	Bcc []string `json:"bcc,omitzero"`
