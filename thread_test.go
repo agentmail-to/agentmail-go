@@ -56,6 +56,7 @@ func TestThreadListWithOptionalParams(t *testing.T) {
 		Before:         agentmail.Time(time.Now()),
 		IncludeBlocked: agentmail.Bool(true),
 		IncludeSpam:    agentmail.Bool(true),
+		IncludeTrash:   agentmail.Bool(true),
 		Labels:         []string{"string"},
 		Limit:          agentmail.Int(0),
 		PageToken:      agentmail.String("page_token"),
