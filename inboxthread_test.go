@@ -80,7 +80,7 @@ func TestInboxThreadListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestInboxThreadDelete(t *testing.T) {
+func TestInboxThreadDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -97,7 +97,8 @@ func TestInboxThreadDelete(t *testing.T) {
 		context.TODO(),
 		"thread_id",
 		agentmail.InboxThreadDeleteParams{
-			InboxID: "inbox_id",
+			InboxID:   "inbox_id",
+			Permanent: agentmail.Bool(true),
 		},
 	)
 	if err != nil {

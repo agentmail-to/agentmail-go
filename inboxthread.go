@@ -68,12 +68,14 @@ func (r *InboxThreadService) List(ctx context.Context, inboxID string, query Inb
 	return
 }
 
-// Delete Thread
-func (r *InboxThreadService) Delete(ctx context.Context, threadID string, body InboxThreadDeleteParams, opts ...option.RequestOption) (err error) {
+// Moves the thread to trash by adding a trash label to all messages. If the thread
+// is already in trash, it will be permanently deleted. Use `permanent=true` to
+// force permanent deletion.
+func (r *InboxThreadService) Delete(ctx context.Context, threadID string, params InboxThreadDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if body.InboxID == "" {
+	if params.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
 		return
 	}
@@ -81,8 +83,8 @@ func (r *InboxThreadService) Delete(ctx context.Context, threadID string, body I
 		err = errors.New("missing required thread_id parameter")
 		return
 	}
-	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(body.InboxID), url.PathEscape(threadID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(params.InboxID), url.PathEscape(threadID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
 	return
 }
 
@@ -303,7 +305,18 @@ func (r InboxThreadListParams) URLQuery() (v url.Values, err error) {
 type InboxThreadDeleteParams struct {
 	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
+	// If true, permanently delete the thread instead of moving to trash.
+	Permanent param.Opt[bool] `query:"permanent,omitzero" json:"-"`
 	paramObj
+}
+
+// URLQuery serializes [InboxThreadDeleteParams]'s query parameters as
+// `url.Values`.
+func (r InboxThreadDeleteParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type InboxThreadGetAttachmentParams struct {
