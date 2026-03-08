@@ -104,8 +104,8 @@ func (r *InboxService) Delete(ctx context.Context, inboxID string, opts ...optio
 	return
 }
 
-// List Metrics
-func (r *InboxService) ListMetrics(ctx context.Context, inboxID string, query InboxListMetricsParams, opts ...option.RequestOption) (res *ListMetrics, err error) {
+// Query Metrics
+func (r *InboxService) ListMetrics(ctx context.Context, inboxID string, query InboxListMetricsParams, opts ...option.RequestOption) (res *InboxListMetricsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if inboxID == "" {
@@ -195,59 +195,6 @@ func (r *ListInboxes) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ListMetrics struct {
-	// Message metrics grouped by event type.
-	Message ListMetricsMessage `json:"message" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Message     respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ListMetrics) RawJSON() string { return r.JSON.raw }
-func (r *ListMetrics) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Message metrics grouped by event type.
-type ListMetricsMessage struct {
-	// Timestamps when messages bounced.
-	Bounced []time.Time `json:"bounced" api:"nullable" format:"date-time"`
-	// Timestamps when messages received complaints.
-	Complained []time.Time `json:"complained" api:"nullable" format:"date-time"`
-	// Timestamps when messages were delayed.
-	Delayed []time.Time `json:"delayed" api:"nullable" format:"date-time"`
-	// Timestamps when messages were delivered.
-	Delivered []time.Time `json:"delivered" api:"nullable" format:"date-time"`
-	// Timestamps when messages were received.
-	Received []time.Time `json:"received" api:"nullable" format:"date-time"`
-	// Timestamps when messages were rejected.
-	Rejected []time.Time `json:"rejected" api:"nullable" format:"date-time"`
-	// Timestamps when messages were sent.
-	Sent []time.Time `json:"sent" api:"nullable" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Bounced     respjson.Field
-		Complained  respjson.Field
-		Delayed     respjson.Field
-		Delivered   respjson.Field
-		Received    respjson.Field
-		Rejected    respjson.Field
-		Sent        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ListMetricsMessage) RawJSON() string { return r.JSON.raw }
-func (r *ListMetricsMessage) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Type of metric event.
 type MetricEventType string
 
@@ -260,6 +207,28 @@ const (
 	MetricEventTypeMessageComplained MetricEventType = "message.complained"
 	MetricEventTypeMessageReceived   MetricEventType = "message.received"
 )
+
+type InboxListMetricsResponse map[string][]InboxListMetricsResponseItem
+
+type InboxListMetricsResponseItem struct {
+	// Count of events in the bucket.
+	Count int64 `json:"count" api:"required"`
+	// Timestamp of the bucket.
+	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Count       respjson.Field
+		Timestamp   respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r InboxListMetricsResponseItem) RawJSON() string { return r.JSON.raw }
+func (r *InboxListMetricsResponseItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type InboxNewParams struct {
 	CreateInbox CreateInboxParam
@@ -306,11 +275,17 @@ func (r InboxListParams) URLQuery() (v url.Values, err error) {
 }
 
 type InboxListMetricsParams struct {
-	// End timestamp for the metrics query range.
-	EndTimestamp time.Time `query:"end_timestamp" api:"required" format:"date-time" json:"-"`
-	// Start timestamp for the metrics query range.
-	StartTimestamp time.Time `query:"start_timestamp" api:"required" format:"date-time" json:"-"`
-	// List of metric event types to filter by.
+	// Sort in descending order.
+	Descending param.Opt[bool] `query:"descending,omitzero" json:"-"`
+	// End timestamp for the query.
+	End param.Opt[time.Time] `query:"end,omitzero" format:"date-time" json:"-"`
+	// Limit on number of buckets to return.
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
+	// Period in number of seconds for the query.
+	Period param.Opt[string] `query:"period,omitzero" json:"-"`
+	// Start timestamp for the query.
+	Start param.Opt[time.Time] `query:"start,omitzero" format:"date-time" json:"-"`
+	// List of metric event types to query.
 	EventTypes []MetricEventType `query:"event_types,omitzero" json:"-"`
 	paramObj
 }

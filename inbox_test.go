@@ -163,9 +163,12 @@ func TestInboxListMetricsWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"inbox_id",
 		agentmail.InboxListMetricsParams{
-			EndTimestamp:   time.Now(),
-			StartTimestamp: time.Now(),
-			EventTypes:     []agentmail.MetricEventType{agentmail.MetricEventTypeMessageSent},
+			Descending: agentmail.Bool(true),
+			End:        agentmail.Time(time.Now()),
+			EventTypes: []agentmail.MetricEventType{agentmail.MetricEventTypeMessageSent},
+			Limit:      agentmail.Int(0),
+			Period:     agentmail.String("period"),
+			Start:      agentmail.Time(time.Now()),
 		},
 	)
 	if err != nil {
