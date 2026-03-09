@@ -126,9 +126,8 @@ func (r *InboxMessageService) GetAttachment(ctx context.Context, attachmentID st
 }
 
 // Get Raw Message
-func (r *InboxMessageService) GetRaw(ctx context.Context, messageID string, query InboxMessageGetRawParams, opts ...option.RequestOption) (err error) {
+func (r *InboxMessageService) GetRaw(ctx context.Context, messageID string, query InboxMessageGetRawParams, opts ...option.RequestOption) (res *InboxMessageGetRawResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if query.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
@@ -139,7 +138,7 @@ func (r *InboxMessageService) GetRaw(ctx context.Context, messageID string, quer
 		return
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/messages/%s/raw", url.PathEscape(query.InboxID), url.PathEscape(messageID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -495,6 +494,34 @@ type InboxMessageListResponseMessage struct {
 // Returns the unmodified JSON received from the API
 func (r InboxMessageListResponseMessage) RawJSON() string { return r.JSON.raw }
 func (r *InboxMessageListResponseMessage) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Signed URL to download the raw .eml file. Uses CloudFront signing, same as
+// attachments.
+type InboxMessageGetRawResponse struct {
+	// Pre-signed CloudFront URL to download the raw message. Expires at expires_at.
+	DownloadURL string `json:"download_url" api:"required"`
+	// Time at which the download URL expires.
+	ExpiresAt time.Time `json:"expires_at" api:"required" format:"date-time"`
+	// ID of the message.
+	MessageID string `json:"message_id" api:"required"`
+	// Size of the raw message in bytes.
+	Size int64 `json:"size" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		DownloadURL respjson.Field
+		ExpiresAt   respjson.Field
+		MessageID   respjson.Field
+		Size        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r InboxMessageGetRawResponse) RawJSON() string { return r.JSON.raw }
+func (r *InboxMessageGetRawResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
