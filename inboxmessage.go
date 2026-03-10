@@ -497,10 +497,9 @@ func (r *InboxMessageListResponseMessage) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Signed URL to download the raw .eml file. Uses CloudFront signing, same as
-// attachments.
+// S3 presigned URL to download the raw .eml file.
 type InboxMessageGetRawResponse struct {
-	// Pre-signed CloudFront URL to download the raw message. Expires at expires_at.
+	// S3 presigned URL to download the raw message. Expires at expires_at.
 	DownloadURL string `json:"download_url" api:"required"`
 	// Time at which the download URL expires.
 	ExpiresAt time.Time `json:"expires_at" api:"required" format:"date-time"`
