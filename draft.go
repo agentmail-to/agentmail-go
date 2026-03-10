@@ -103,8 +103,6 @@ type Draft struct {
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of draft.
 	Labels []string `json:"labels" api:"required"`
-	// ID of thread.
-	ThreadID string `json:"thread_id" api:"required"`
 	// Time at which draft was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Attachments in draft.
@@ -147,7 +145,6 @@ type Draft struct {
 		DraftID     respjson.Field
 		InboxID     respjson.Field
 		Labels      respjson.Field
-		ThreadID    respjson.Field
 		UpdatedAt   respjson.Field
 		Attachments respjson.Field
 		Bcc         respjson.Field
@@ -216,8 +213,6 @@ type ListDraftsDraft struct {
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of draft.
 	Labels []string `json:"labels" api:"required"`
-	// ID of thread.
-	ThreadID string `json:"thread_id" api:"required"`
 	// Time at which draft was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Attachments in draft.
@@ -246,7 +241,6 @@ type ListDraftsDraft struct {
 		DraftID     respjson.Field
 		InboxID     respjson.Field
 		Labels      respjson.Field
-		ThreadID    respjson.Field
 		UpdatedAt   respjson.Field
 		Attachments respjson.Field
 		Bcc         respjson.Field
