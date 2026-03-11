@@ -42,11 +42,11 @@ func (r *ThreadService) Get(ctx context.Context, threadID string, opts ...option
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if threadID == "" {
 		err = errors.New("missing required thread_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/threads/%s", url.PathEscape(threadID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List Threads
@@ -55,7 +55,7 @@ func (r *ThreadService) List(ctx context.Context, query ThreadListParams, opts .
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/threads"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get Attachment
@@ -64,15 +64,15 @@ func (r *ThreadService) GetAttachment(ctx context.Context, attachmentID string, 
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if query.ThreadID == "" {
 		err = errors.New("missing required thread_id parameter")
-		return
+		return nil, err
 	}
 	if attachmentID == "" {
 		err = errors.New("missing required attachment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/threads/%s/attachments/%s", url.PathEscape(query.ThreadID), url.PathEscape(attachmentID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ThreadListParams struct {

@@ -44,7 +44,7 @@ func (r *APIKeyService) New(ctx context.Context, body APIKeyNewParams, opts ...o
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/api-keys"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // List API Keys
@@ -53,7 +53,7 @@ func (r *APIKeyService) List(ctx context.Context, query APIKeyListParams, opts .
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/api-keys"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete API Key
@@ -63,11 +63,11 @@ func (r *APIKeyService) Delete(ctx context.Context, apiKey string, opts ...optio
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if apiKey == "" {
 		err = errors.New("missing required api_key parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/api-keys/%s", url.PathEscape(apiKey))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 type APIKeyNewResponse struct {

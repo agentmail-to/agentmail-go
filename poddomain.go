@@ -43,11 +43,11 @@ func (r *PodDomainService) New(ctx context.Context, podID string, body PodDomain
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if podID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s/domains", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // List Domains
@@ -56,11 +56,11 @@ func (r *PodDomainService) List(ctx context.Context, podID string, query PodDoma
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if podID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s/domains", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete Domain
@@ -70,15 +70,15 @@ func (r *PodDomainService) Delete(ctx context.Context, domainID string, body Pod
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if body.PodID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return err
 	}
 	if domainID == "" {
 		err = errors.New("missing required domain_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/pods/%s/domains/%s", url.PathEscape(body.PodID), url.PathEscape(domainID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 type PodDomainNewParams struct {

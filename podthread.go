@@ -42,15 +42,15 @@ func (r *PodThreadService) Get(ctx context.Context, threadID string, query PodTh
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if query.PodID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	if threadID == "" {
 		err = errors.New("missing required thread_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s/threads/%s", url.PathEscape(query.PodID), url.PathEscape(threadID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List Threads
@@ -59,11 +59,11 @@ func (r *PodThreadService) List(ctx context.Context, podID string, query PodThre
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if podID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s/threads", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get Attachment
@@ -72,19 +72,19 @@ func (r *PodThreadService) GetAttachment(ctx context.Context, attachmentID strin
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if query.PodID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	if query.ThreadID == "" {
 		err = errors.New("missing required thread_id parameter")
-		return
+		return nil, err
 	}
 	if attachmentID == "" {
 		err = errors.New("missing required attachment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s/threads/%s/attachments/%s", url.PathEscape(query.PodID), url.PathEscape(query.ThreadID), url.PathEscape(attachmentID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type PodThreadGetParams struct {

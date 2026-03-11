@@ -46,7 +46,7 @@ func (r *DomainService) New(ctx context.Context, body DomainNewParams, opts ...o
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/domains"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get Domain
@@ -55,11 +55,11 @@ func (r *DomainService) Get(ctx context.Context, domainID string, opts ...option
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if domainID == "" {
 		err = errors.New("missing required domain_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/domains/%s", url.PathEscape(domainID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List Domains
@@ -68,7 +68,7 @@ func (r *DomainService) List(ctx context.Context, query DomainListParams, opts .
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/domains"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete Domain
@@ -78,11 +78,11 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, opts ...opt
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if domainID == "" {
 		err = errors.New("missing required domain_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/domains/%s", url.PathEscape(domainID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Get Zone File
@@ -92,11 +92,11 @@ func (r *DomainService) GetZoneFile(ctx context.Context, domainID string, opts .
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if domainID == "" {
 		err = errors.New("missing required domain_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/domains/%s/zone-file", url.PathEscape(domainID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Verify Domain
@@ -106,11 +106,11 @@ func (r *DomainService) Verify(ctx context.Context, domainID string, opts ...opt
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if domainID == "" {
 		err = errors.New("missing required domain_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/domains/%s/verify", url.PathEscape(domainID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // The properties Domain, FeedbackEnabled are required.
