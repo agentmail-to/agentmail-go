@@ -43,11 +43,11 @@ func (r *PodInboxService) New(ctx context.Context, podID string, body PodInboxNe
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if podID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s/inboxes", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get Inbox
@@ -56,15 +56,15 @@ func (r *PodInboxService) Get(ctx context.Context, inboxID string, query PodInbo
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if query.PodID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	if inboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s/inboxes/%s", url.PathEscape(query.PodID), url.PathEscape(inboxID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List Inboxes
@@ -73,11 +73,11 @@ func (r *PodInboxService) List(ctx context.Context, podID string, query PodInbox
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if podID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s/inboxes", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete Inbox
@@ -87,15 +87,15 @@ func (r *PodInboxService) Delete(ctx context.Context, inboxID string, body PodIn
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if body.PodID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return err
 	}
 	if inboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/pods/%s/inboxes/%s", url.PathEscape(body.PodID), url.PathEscape(inboxID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 type PodInboxNewParams struct {

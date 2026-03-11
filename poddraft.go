@@ -42,15 +42,15 @@ func (r *PodDraftService) Get(ctx context.Context, draftID string, query PodDraf
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if query.PodID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	if draftID == "" {
 		err = errors.New("missing required draft_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s/drafts/%s", url.PathEscape(query.PodID), url.PathEscape(draftID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List Drafts
@@ -59,11 +59,11 @@ func (r *PodDraftService) List(ctx context.Context, podID string, query PodDraft
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if podID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s/drafts", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 type PodDraftGetParams struct {

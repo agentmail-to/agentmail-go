@@ -44,11 +44,11 @@ func (r *DraftService) Get(ctx context.Context, draftID string, opts ...option.R
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if draftID == "" {
 		err = errors.New("missing required draft_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/drafts/%s", url.PathEscape(draftID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List Drafts
@@ -57,7 +57,7 @@ func (r *DraftService) List(ctx context.Context, query DraftListParams, opts ...
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/drafts"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 type AttachmentFile struct {

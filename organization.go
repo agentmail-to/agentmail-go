@@ -39,7 +39,7 @@ func (r *OrganizationService) Get(ctx context.Context, opts ...option.RequestOpt
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/organizations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Organization details with usage limits and counts.
