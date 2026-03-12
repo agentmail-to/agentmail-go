@@ -223,6 +223,8 @@ type ListDraftsDraft struct {
 	// Addresses of CC recipients. In format `username@domain.com` or
 	// `Display Name <username@domain.com>`.
 	Cc []string `json:"cc" api:"nullable"`
+	// ID of message being replied to.
+	InReplyTo string `json:"in_reply_to" api:"nullable"`
 	// Text preview of draft.
 	Preview string `json:"preview" api:"nullable"`
 	// Time at which to schedule send draft.
@@ -245,6 +247,7 @@ type ListDraftsDraft struct {
 		Attachments respjson.Field
 		Bcc         respjson.Field
 		Cc          respjson.Field
+		InReplyTo   respjson.Field
 		Preview     respjson.Field
 		SendAt      respjson.Field
 		SendStatus  respjson.Field
