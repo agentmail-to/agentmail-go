@@ -81,6 +81,8 @@ type APIKeyNewResponse struct {
 	Name string `json:"name" api:"required"`
 	// Prefix of api key.
 	Prefix string `json:"prefix" api:"required"`
+	// Inbox ID the api key is scoped to.
+	InboxID string `json:"inbox_id" api:"nullable"`
 	// Pod ID the api key is scoped to.
 	PodID string `json:"pod_id" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -90,6 +92,7 @@ type APIKeyNewResponse struct {
 		CreatedAt   respjson.Field
 		Name        respjson.Field
 		Prefix      respjson.Field
+		InboxID     respjson.Field
 		PodID       respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
@@ -134,6 +137,9 @@ type APIKeyListResponseAPIKey struct {
 	Name string `json:"name" api:"required"`
 	// Prefix of api key.
 	Prefix string `json:"prefix" api:"required"`
+	// Inbox ID the api key is scoped to. If set, the key can only access resources
+	// within this inbox.
+	InboxID string `json:"inbox_id" api:"nullable"`
 	// Pod ID the api key is scoped to. If set, the key can only access resources
 	// within this pod.
 	PodID string `json:"pod_id" api:"nullable"`
@@ -145,6 +151,7 @@ type APIKeyListResponseAPIKey struct {
 		CreatedAt   respjson.Field
 		Name        respjson.Field
 		Prefix      respjson.Field
+		InboxID     respjson.Field
 		PodID       respjson.Field
 		UsedAt      respjson.Field
 		ExtraFields map[string]respjson.Field
