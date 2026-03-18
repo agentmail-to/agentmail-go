@@ -4,8 +4,6 @@ package agentmail
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"net/http"
 	"net/url"
 	"slices"
@@ -54,20 +52,6 @@ func (r *APIKeyService) List(ctx context.Context, query APIKeyListParams, opts .
 	path := "v0/api-keys"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return res, err
-}
-
-// Delete API Key
-func (r *APIKeyService) Delete(ctx context.Context, apiKey string, opts ...option.RequestOption) (err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if apiKey == "" {
-		err = errors.New("missing required api_key parameter")
-		return err
-	}
-	path := fmt.Sprintf("v0/api-keys/%s", url.PathEscape(apiKey))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return err
 }
 
 type APIKeyNewResponse struct {
