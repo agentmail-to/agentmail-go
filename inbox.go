@@ -140,6 +140,8 @@ func (r *CreateInboxParam) UnmarshalJSON(data []byte) error {
 type Inbox struct {
 	// Time at which inbox was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Email address of the inbox.
+	Email string `json:"email" api:"required"`
 	// The ID of the inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// ID of pod.
@@ -153,6 +155,7 @@ type Inbox struct {
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CreatedAt   respjson.Field
+		Email       respjson.Field
 		InboxID     respjson.Field
 		PodID       respjson.Field
 		UpdatedAt   respjson.Field
