@@ -13,7 +13,7 @@ import (
 	"github.com/agentmail-to/agentmail-go/option"
 )
 
-func TestAPIKeyNew(t *testing.T) {
+func TestAPIKeyNewWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,6 +28,43 @@ func TestAPIKeyNew(t *testing.T) {
 	)
 	_, err := client.APIKeys.New(context.TODO(), agentmail.APIKeyNewParams{
 		Name: "name",
+		Permissions: agentmail.APIKeyNewParamsPermissions{
+			CreateAPIKey:    agentmail.Bool(true),
+			CreateDomain:    agentmail.Bool(true),
+			CreateDraft:     agentmail.Bool(true),
+			CreateInbox:     agentmail.Bool(true),
+			CreateListEntry: agentmail.Bool(true),
+			CreatePod:       agentmail.Bool(true),
+			CreateWebhook:   agentmail.Bool(true),
+			DeleteAPIKey:    agentmail.Bool(true),
+			DeleteDomain:    agentmail.Bool(true),
+			DeleteDraft:     agentmail.Bool(true),
+			DeleteInbox:     agentmail.Bool(true),
+			DeleteListEntry: agentmail.Bool(true),
+			DeletePod:       agentmail.Bool(true),
+			DeleteThread:    agentmail.Bool(true),
+			DeleteWebhook:   agentmail.Bool(true),
+			ReadAPIKey:      agentmail.Bool(true),
+			ReadBlocked:     agentmail.Bool(true),
+			ReadDomain:      agentmail.Bool(true),
+			ReadDraft:       agentmail.Bool(true),
+			ReadInbox:       agentmail.Bool(true),
+			ReadListEntry:   agentmail.Bool(true),
+			ReadMessage:     agentmail.Bool(true),
+			ReadMetrics:     agentmail.Bool(true),
+			ReadPod:         agentmail.Bool(true),
+			ReadSpam:        agentmail.Bool(true),
+			ReadThread:      agentmail.Bool(true),
+			ReadTrash:       agentmail.Bool(true),
+			ReadWebhook:     agentmail.Bool(true),
+			SendDraft:       agentmail.Bool(true),
+			SendMessage:     agentmail.Bool(true),
+			UpdateDomain:    agentmail.Bool(true),
+			UpdateDraft:     agentmail.Bool(true),
+			UpdateInbox:     agentmail.Bool(true),
+			UpdateMessage:   agentmail.Bool(true),
+			UpdateWebhook:   agentmail.Bool(true),
+		},
 	})
 	if err != nil {
 		var apierr *agentmail.Error
