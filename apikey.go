@@ -97,114 +97,114 @@ func (r *APIKeyNewResponse) UnmarshalJSON(data []byte) error {
 // Otherwise, only permissions set to true are granted.
 type APIKeyNewResponsePermissions struct {
 	// Create API keys.
-	CreateAPIKey bool `json:"create_api_key" api:"nullable"`
-	// Create domains.
-	CreateDomain bool `json:"create_domain" api:"nullable"`
-	// Create drafts.
-	CreateDraft bool `json:"create_draft" api:"nullable"`
-	// Create new inboxes.
-	CreateInbox bool `json:"create_inbox" api:"nullable"`
-	// Create list entries.
-	CreateListEntry bool `json:"create_list_entry" api:"nullable"`
-	// Create pods.
-	CreatePod bool `json:"create_pod" api:"nullable"`
-	// Create webhooks.
-	CreateWebhook bool `json:"create_webhook" api:"nullable"`
+	APIKeyCreate bool `json:"api_key_create" api:"nullable"`
 	// Delete API keys.
-	DeleteAPIKey bool `json:"delete_api_key" api:"nullable"`
-	// Delete domains.
-	DeleteDomain bool `json:"delete_domain" api:"nullable"`
-	// Delete drafts.
-	DeleteDraft bool `json:"delete_draft" api:"nullable"`
-	// Delete inboxes.
-	DeleteInbox bool `json:"delete_inbox" api:"nullable"`
-	// Delete list entries.
-	DeleteListEntry bool `json:"delete_list_entry" api:"nullable"`
-	// Delete pods.
-	DeletePod bool `json:"delete_pod" api:"nullable"`
-	// Delete threads.
-	DeleteThread bool `json:"delete_thread" api:"nullable"`
-	// Delete webhooks.
-	DeleteWebhook bool `json:"delete_webhook" api:"nullable"`
+	APIKeyDelete bool `json:"api_key_delete" api:"nullable"`
 	// Read API keys.
-	ReadAPIKey bool `json:"read_api_key" api:"nullable"`
-	// Access messages labeled blocked.
-	ReadBlocked bool `json:"read_blocked" api:"nullable"`
+	APIKeyRead bool `json:"api_key_read" api:"nullable"`
+	// Create domains.
+	DomainCreate bool `json:"domain_create" api:"nullable"`
+	// Delete domains.
+	DomainDelete bool `json:"domain_delete" api:"nullable"`
 	// Read domain details.
-	ReadDomain bool `json:"read_domain" api:"nullable"`
-	// Read drafts.
-	ReadDraft bool `json:"read_draft" api:"nullable"`
-	// Read inbox details.
-	ReadInbox bool `json:"read_inbox" api:"nullable"`
-	// Read list entries.
-	ReadListEntry bool `json:"read_list_entry" api:"nullable"`
-	// Read messages.
-	ReadMessage bool `json:"read_message" api:"nullable"`
-	// Read metrics.
-	ReadMetrics bool `json:"read_metrics" api:"nullable"`
-	// Read pods.
-	ReadPod bool `json:"read_pod" api:"nullable"`
-	// Access messages labeled spam.
-	ReadSpam bool `json:"read_spam" api:"nullable"`
-	// Read threads.
-	ReadThread bool `json:"read_thread" api:"nullable"`
-	// Access messages labeled trash.
-	ReadTrash bool `json:"read_trash" api:"nullable"`
-	// Read webhook configurations.
-	ReadWebhook bool `json:"read_webhook" api:"nullable"`
-	// Send drafts.
-	SendDraft bool `json:"send_draft" api:"nullable"`
-	// Send messages.
-	SendMessage bool `json:"send_message" api:"nullable"`
+	DomainRead bool `json:"domain_read" api:"nullable"`
 	// Update domains.
-	UpdateDomain bool `json:"update_domain" api:"nullable"`
+	DomainUpdate bool `json:"domain_update" api:"nullable"`
+	// Create drafts.
+	DraftCreate bool `json:"draft_create" api:"nullable"`
+	// Delete drafts.
+	DraftDelete bool `json:"draft_delete" api:"nullable"`
+	// Read drafts.
+	DraftRead bool `json:"draft_read" api:"nullable"`
+	// Send drafts.
+	DraftSend bool `json:"draft_send" api:"nullable"`
 	// Update drafts.
-	UpdateDraft bool `json:"update_draft" api:"nullable"`
+	DraftUpdate bool `json:"draft_update" api:"nullable"`
+	// Create new inboxes.
+	InboxCreate bool `json:"inbox_create" api:"nullable"`
+	// Delete inboxes.
+	InboxDelete bool `json:"inbox_delete" api:"nullable"`
+	// Read inbox details.
+	InboxRead bool `json:"inbox_read" api:"nullable"`
 	// Update inbox settings.
-	UpdateInbox bool `json:"update_inbox" api:"nullable"`
+	InboxUpdate bool `json:"inbox_update" api:"nullable"`
+	// Access messages labeled blocked.
+	LabelBlockedRead bool `json:"label_blocked_read" api:"nullable"`
+	// Access messages labeled spam.
+	LabelSpamRead bool `json:"label_spam_read" api:"nullable"`
+	// Access messages labeled trash.
+	LabelTrashRead bool `json:"label_trash_read" api:"nullable"`
+	// Create list entries.
+	ListEntryCreate bool `json:"list_entry_create" api:"nullable"`
+	// Delete list entries.
+	ListEntryDelete bool `json:"list_entry_delete" api:"nullable"`
+	// Read list entries.
+	ListEntryRead bool `json:"list_entry_read" api:"nullable"`
+	// Read messages.
+	MessageRead bool `json:"message_read" api:"nullable"`
+	// Send messages.
+	MessageSend bool `json:"message_send" api:"nullable"`
 	// Update message labels.
-	UpdateMessage bool `json:"update_message" api:"nullable"`
+	MessageUpdate bool `json:"message_update" api:"nullable"`
+	// Read metrics.
+	MetricsRead bool `json:"metrics_read" api:"nullable"`
+	// Create pods.
+	PodCreate bool `json:"pod_create" api:"nullable"`
+	// Delete pods.
+	PodDelete bool `json:"pod_delete" api:"nullable"`
+	// Read pods.
+	PodRead bool `json:"pod_read" api:"nullable"`
+	// Delete threads.
+	ThreadDelete bool `json:"thread_delete" api:"nullable"`
+	// Read threads.
+	ThreadRead bool `json:"thread_read" api:"nullable"`
+	// Create webhooks.
+	WebhookCreate bool `json:"webhook_create" api:"nullable"`
+	// Delete webhooks.
+	WebhookDelete bool `json:"webhook_delete" api:"nullable"`
+	// Read webhook configurations.
+	WebhookRead bool `json:"webhook_read" api:"nullable"`
 	// Update webhooks.
-	UpdateWebhook bool `json:"update_webhook" api:"nullable"`
+	WebhookUpdate bool `json:"webhook_update" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CreateAPIKey    respjson.Field
-		CreateDomain    respjson.Field
-		CreateDraft     respjson.Field
-		CreateInbox     respjson.Field
-		CreateListEntry respjson.Field
-		CreatePod       respjson.Field
-		CreateWebhook   respjson.Field
-		DeleteAPIKey    respjson.Field
-		DeleteDomain    respjson.Field
-		DeleteDraft     respjson.Field
-		DeleteInbox     respjson.Field
-		DeleteListEntry respjson.Field
-		DeletePod       respjson.Field
-		DeleteThread    respjson.Field
-		DeleteWebhook   respjson.Field
-		ReadAPIKey      respjson.Field
-		ReadBlocked     respjson.Field
-		ReadDomain      respjson.Field
-		ReadDraft       respjson.Field
-		ReadInbox       respjson.Field
-		ReadListEntry   respjson.Field
-		ReadMessage     respjson.Field
-		ReadMetrics     respjson.Field
-		ReadPod         respjson.Field
-		ReadSpam        respjson.Field
-		ReadThread      respjson.Field
-		ReadTrash       respjson.Field
-		ReadWebhook     respjson.Field
-		SendDraft       respjson.Field
-		SendMessage     respjson.Field
-		UpdateDomain    respjson.Field
-		UpdateDraft     respjson.Field
-		UpdateInbox     respjson.Field
-		UpdateMessage   respjson.Field
-		UpdateWebhook   respjson.Field
-		ExtraFields     map[string]respjson.Field
-		raw             string
+		APIKeyCreate     respjson.Field
+		APIKeyDelete     respjson.Field
+		APIKeyRead       respjson.Field
+		DomainCreate     respjson.Field
+		DomainDelete     respjson.Field
+		DomainRead       respjson.Field
+		DomainUpdate     respjson.Field
+		DraftCreate      respjson.Field
+		DraftDelete      respjson.Field
+		DraftRead        respjson.Field
+		DraftSend        respjson.Field
+		DraftUpdate      respjson.Field
+		InboxCreate      respjson.Field
+		InboxDelete      respjson.Field
+		InboxRead        respjson.Field
+		InboxUpdate      respjson.Field
+		LabelBlockedRead respjson.Field
+		LabelSpamRead    respjson.Field
+		LabelTrashRead   respjson.Field
+		ListEntryCreate  respjson.Field
+		ListEntryDelete  respjson.Field
+		ListEntryRead    respjson.Field
+		MessageRead      respjson.Field
+		MessageSend      respjson.Field
+		MessageUpdate    respjson.Field
+		MetricsRead      respjson.Field
+		PodCreate        respjson.Field
+		PodDelete        respjson.Field
+		PodRead          respjson.Field
+		ThreadDelete     respjson.Field
+		ThreadRead       respjson.Field
+		WebhookCreate    respjson.Field
+		WebhookDelete    respjson.Field
+		WebhookRead      respjson.Field
+		WebhookUpdate    respjson.Field
+		ExtraFields      map[string]respjson.Field
+		raw              string
 	} `json:"-"`
 }
 
@@ -282,114 +282,114 @@ func (r *APIKeyListResponseAPIKey) UnmarshalJSON(data []byte) error {
 // Otherwise, only permissions set to true are granted.
 type APIKeyListResponseAPIKeyPermissions struct {
 	// Create API keys.
-	CreateAPIKey bool `json:"create_api_key" api:"nullable"`
-	// Create domains.
-	CreateDomain bool `json:"create_domain" api:"nullable"`
-	// Create drafts.
-	CreateDraft bool `json:"create_draft" api:"nullable"`
-	// Create new inboxes.
-	CreateInbox bool `json:"create_inbox" api:"nullable"`
-	// Create list entries.
-	CreateListEntry bool `json:"create_list_entry" api:"nullable"`
-	// Create pods.
-	CreatePod bool `json:"create_pod" api:"nullable"`
-	// Create webhooks.
-	CreateWebhook bool `json:"create_webhook" api:"nullable"`
+	APIKeyCreate bool `json:"api_key_create" api:"nullable"`
 	// Delete API keys.
-	DeleteAPIKey bool `json:"delete_api_key" api:"nullable"`
-	// Delete domains.
-	DeleteDomain bool `json:"delete_domain" api:"nullable"`
-	// Delete drafts.
-	DeleteDraft bool `json:"delete_draft" api:"nullable"`
-	// Delete inboxes.
-	DeleteInbox bool `json:"delete_inbox" api:"nullable"`
-	// Delete list entries.
-	DeleteListEntry bool `json:"delete_list_entry" api:"nullable"`
-	// Delete pods.
-	DeletePod bool `json:"delete_pod" api:"nullable"`
-	// Delete threads.
-	DeleteThread bool `json:"delete_thread" api:"nullable"`
-	// Delete webhooks.
-	DeleteWebhook bool `json:"delete_webhook" api:"nullable"`
+	APIKeyDelete bool `json:"api_key_delete" api:"nullable"`
 	// Read API keys.
-	ReadAPIKey bool `json:"read_api_key" api:"nullable"`
-	// Access messages labeled blocked.
-	ReadBlocked bool `json:"read_blocked" api:"nullable"`
+	APIKeyRead bool `json:"api_key_read" api:"nullable"`
+	// Create domains.
+	DomainCreate bool `json:"domain_create" api:"nullable"`
+	// Delete domains.
+	DomainDelete bool `json:"domain_delete" api:"nullable"`
 	// Read domain details.
-	ReadDomain bool `json:"read_domain" api:"nullable"`
-	// Read drafts.
-	ReadDraft bool `json:"read_draft" api:"nullable"`
-	// Read inbox details.
-	ReadInbox bool `json:"read_inbox" api:"nullable"`
-	// Read list entries.
-	ReadListEntry bool `json:"read_list_entry" api:"nullable"`
-	// Read messages.
-	ReadMessage bool `json:"read_message" api:"nullable"`
-	// Read metrics.
-	ReadMetrics bool `json:"read_metrics" api:"nullable"`
-	// Read pods.
-	ReadPod bool `json:"read_pod" api:"nullable"`
-	// Access messages labeled spam.
-	ReadSpam bool `json:"read_spam" api:"nullable"`
-	// Read threads.
-	ReadThread bool `json:"read_thread" api:"nullable"`
-	// Access messages labeled trash.
-	ReadTrash bool `json:"read_trash" api:"nullable"`
-	// Read webhook configurations.
-	ReadWebhook bool `json:"read_webhook" api:"nullable"`
-	// Send drafts.
-	SendDraft bool `json:"send_draft" api:"nullable"`
-	// Send messages.
-	SendMessage bool `json:"send_message" api:"nullable"`
+	DomainRead bool `json:"domain_read" api:"nullable"`
 	// Update domains.
-	UpdateDomain bool `json:"update_domain" api:"nullable"`
+	DomainUpdate bool `json:"domain_update" api:"nullable"`
+	// Create drafts.
+	DraftCreate bool `json:"draft_create" api:"nullable"`
+	// Delete drafts.
+	DraftDelete bool `json:"draft_delete" api:"nullable"`
+	// Read drafts.
+	DraftRead bool `json:"draft_read" api:"nullable"`
+	// Send drafts.
+	DraftSend bool `json:"draft_send" api:"nullable"`
 	// Update drafts.
-	UpdateDraft bool `json:"update_draft" api:"nullable"`
+	DraftUpdate bool `json:"draft_update" api:"nullable"`
+	// Create new inboxes.
+	InboxCreate bool `json:"inbox_create" api:"nullable"`
+	// Delete inboxes.
+	InboxDelete bool `json:"inbox_delete" api:"nullable"`
+	// Read inbox details.
+	InboxRead bool `json:"inbox_read" api:"nullable"`
 	// Update inbox settings.
-	UpdateInbox bool `json:"update_inbox" api:"nullable"`
+	InboxUpdate bool `json:"inbox_update" api:"nullable"`
+	// Access messages labeled blocked.
+	LabelBlockedRead bool `json:"label_blocked_read" api:"nullable"`
+	// Access messages labeled spam.
+	LabelSpamRead bool `json:"label_spam_read" api:"nullable"`
+	// Access messages labeled trash.
+	LabelTrashRead bool `json:"label_trash_read" api:"nullable"`
+	// Create list entries.
+	ListEntryCreate bool `json:"list_entry_create" api:"nullable"`
+	// Delete list entries.
+	ListEntryDelete bool `json:"list_entry_delete" api:"nullable"`
+	// Read list entries.
+	ListEntryRead bool `json:"list_entry_read" api:"nullable"`
+	// Read messages.
+	MessageRead bool `json:"message_read" api:"nullable"`
+	// Send messages.
+	MessageSend bool `json:"message_send" api:"nullable"`
 	// Update message labels.
-	UpdateMessage bool `json:"update_message" api:"nullable"`
+	MessageUpdate bool `json:"message_update" api:"nullable"`
+	// Read metrics.
+	MetricsRead bool `json:"metrics_read" api:"nullable"`
+	// Create pods.
+	PodCreate bool `json:"pod_create" api:"nullable"`
+	// Delete pods.
+	PodDelete bool `json:"pod_delete" api:"nullable"`
+	// Read pods.
+	PodRead bool `json:"pod_read" api:"nullable"`
+	// Delete threads.
+	ThreadDelete bool `json:"thread_delete" api:"nullable"`
+	// Read threads.
+	ThreadRead bool `json:"thread_read" api:"nullable"`
+	// Create webhooks.
+	WebhookCreate bool `json:"webhook_create" api:"nullable"`
+	// Delete webhooks.
+	WebhookDelete bool `json:"webhook_delete" api:"nullable"`
+	// Read webhook configurations.
+	WebhookRead bool `json:"webhook_read" api:"nullable"`
 	// Update webhooks.
-	UpdateWebhook bool `json:"update_webhook" api:"nullable"`
+	WebhookUpdate bool `json:"webhook_update" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CreateAPIKey    respjson.Field
-		CreateDomain    respjson.Field
-		CreateDraft     respjson.Field
-		CreateInbox     respjson.Field
-		CreateListEntry respjson.Field
-		CreatePod       respjson.Field
-		CreateWebhook   respjson.Field
-		DeleteAPIKey    respjson.Field
-		DeleteDomain    respjson.Field
-		DeleteDraft     respjson.Field
-		DeleteInbox     respjson.Field
-		DeleteListEntry respjson.Field
-		DeletePod       respjson.Field
-		DeleteThread    respjson.Field
-		DeleteWebhook   respjson.Field
-		ReadAPIKey      respjson.Field
-		ReadBlocked     respjson.Field
-		ReadDomain      respjson.Field
-		ReadDraft       respjson.Field
-		ReadInbox       respjson.Field
-		ReadListEntry   respjson.Field
-		ReadMessage     respjson.Field
-		ReadMetrics     respjson.Field
-		ReadPod         respjson.Field
-		ReadSpam        respjson.Field
-		ReadThread      respjson.Field
-		ReadTrash       respjson.Field
-		ReadWebhook     respjson.Field
-		SendDraft       respjson.Field
-		SendMessage     respjson.Field
-		UpdateDomain    respjson.Field
-		UpdateDraft     respjson.Field
-		UpdateInbox     respjson.Field
-		UpdateMessage   respjson.Field
-		UpdateWebhook   respjson.Field
-		ExtraFields     map[string]respjson.Field
-		raw             string
+		APIKeyCreate     respjson.Field
+		APIKeyDelete     respjson.Field
+		APIKeyRead       respjson.Field
+		DomainCreate     respjson.Field
+		DomainDelete     respjson.Field
+		DomainRead       respjson.Field
+		DomainUpdate     respjson.Field
+		DraftCreate      respjson.Field
+		DraftDelete      respjson.Field
+		DraftRead        respjson.Field
+		DraftSend        respjson.Field
+		DraftUpdate      respjson.Field
+		InboxCreate      respjson.Field
+		InboxDelete      respjson.Field
+		InboxRead        respjson.Field
+		InboxUpdate      respjson.Field
+		LabelBlockedRead respjson.Field
+		LabelSpamRead    respjson.Field
+		LabelTrashRead   respjson.Field
+		ListEntryCreate  respjson.Field
+		ListEntryDelete  respjson.Field
+		ListEntryRead    respjson.Field
+		MessageRead      respjson.Field
+		MessageSend      respjson.Field
+		MessageUpdate    respjson.Field
+		MetricsRead      respjson.Field
+		PodCreate        respjson.Field
+		PodDelete        respjson.Field
+		PodRead          respjson.Field
+		ThreadDelete     respjson.Field
+		ThreadRead       respjson.Field
+		WebhookCreate    respjson.Field
+		WebhookDelete    respjson.Field
+		WebhookRead      respjson.Field
+		WebhookUpdate    respjson.Field
+		ExtraFields      map[string]respjson.Field
+		raw              string
 	} `json:"-"`
 }
 
@@ -420,75 +420,75 @@ func (r *APIKeyNewParams) UnmarshalJSON(data []byte) error {
 // Otherwise, only permissions set to true are granted.
 type APIKeyNewParamsPermissions struct {
 	// Create API keys.
-	CreateAPIKey param.Opt[bool] `json:"create_api_key,omitzero"`
-	// Create domains.
-	CreateDomain param.Opt[bool] `json:"create_domain,omitzero"`
-	// Create drafts.
-	CreateDraft param.Opt[bool] `json:"create_draft,omitzero"`
-	// Create new inboxes.
-	CreateInbox param.Opt[bool] `json:"create_inbox,omitzero"`
-	// Create list entries.
-	CreateListEntry param.Opt[bool] `json:"create_list_entry,omitzero"`
-	// Create pods.
-	CreatePod param.Opt[bool] `json:"create_pod,omitzero"`
-	// Create webhooks.
-	CreateWebhook param.Opt[bool] `json:"create_webhook,omitzero"`
+	APIKeyCreate param.Opt[bool] `json:"api_key_create,omitzero"`
 	// Delete API keys.
-	DeleteAPIKey param.Opt[bool] `json:"delete_api_key,omitzero"`
-	// Delete domains.
-	DeleteDomain param.Opt[bool] `json:"delete_domain,omitzero"`
-	// Delete drafts.
-	DeleteDraft param.Opt[bool] `json:"delete_draft,omitzero"`
-	// Delete inboxes.
-	DeleteInbox param.Opt[bool] `json:"delete_inbox,omitzero"`
-	// Delete list entries.
-	DeleteListEntry param.Opt[bool] `json:"delete_list_entry,omitzero"`
-	// Delete pods.
-	DeletePod param.Opt[bool] `json:"delete_pod,omitzero"`
-	// Delete threads.
-	DeleteThread param.Opt[bool] `json:"delete_thread,omitzero"`
-	// Delete webhooks.
-	DeleteWebhook param.Opt[bool] `json:"delete_webhook,omitzero"`
+	APIKeyDelete param.Opt[bool] `json:"api_key_delete,omitzero"`
 	// Read API keys.
-	ReadAPIKey param.Opt[bool] `json:"read_api_key,omitzero"`
-	// Access messages labeled blocked.
-	ReadBlocked param.Opt[bool] `json:"read_blocked,omitzero"`
+	APIKeyRead param.Opt[bool] `json:"api_key_read,omitzero"`
+	// Create domains.
+	DomainCreate param.Opt[bool] `json:"domain_create,omitzero"`
+	// Delete domains.
+	DomainDelete param.Opt[bool] `json:"domain_delete,omitzero"`
 	// Read domain details.
-	ReadDomain param.Opt[bool] `json:"read_domain,omitzero"`
-	// Read drafts.
-	ReadDraft param.Opt[bool] `json:"read_draft,omitzero"`
-	// Read inbox details.
-	ReadInbox param.Opt[bool] `json:"read_inbox,omitzero"`
-	// Read list entries.
-	ReadListEntry param.Opt[bool] `json:"read_list_entry,omitzero"`
-	// Read messages.
-	ReadMessage param.Opt[bool] `json:"read_message,omitzero"`
-	// Read metrics.
-	ReadMetrics param.Opt[bool] `json:"read_metrics,omitzero"`
-	// Read pods.
-	ReadPod param.Opt[bool] `json:"read_pod,omitzero"`
-	// Access messages labeled spam.
-	ReadSpam param.Opt[bool] `json:"read_spam,omitzero"`
-	// Read threads.
-	ReadThread param.Opt[bool] `json:"read_thread,omitzero"`
-	// Access messages labeled trash.
-	ReadTrash param.Opt[bool] `json:"read_trash,omitzero"`
-	// Read webhook configurations.
-	ReadWebhook param.Opt[bool] `json:"read_webhook,omitzero"`
-	// Send drafts.
-	SendDraft param.Opt[bool] `json:"send_draft,omitzero"`
-	// Send messages.
-	SendMessage param.Opt[bool] `json:"send_message,omitzero"`
+	DomainRead param.Opt[bool] `json:"domain_read,omitzero"`
 	// Update domains.
-	UpdateDomain param.Opt[bool] `json:"update_domain,omitzero"`
+	DomainUpdate param.Opt[bool] `json:"domain_update,omitzero"`
+	// Create drafts.
+	DraftCreate param.Opt[bool] `json:"draft_create,omitzero"`
+	// Delete drafts.
+	DraftDelete param.Opt[bool] `json:"draft_delete,omitzero"`
+	// Read drafts.
+	DraftRead param.Opt[bool] `json:"draft_read,omitzero"`
+	// Send drafts.
+	DraftSend param.Opt[bool] `json:"draft_send,omitzero"`
 	// Update drafts.
-	UpdateDraft param.Opt[bool] `json:"update_draft,omitzero"`
+	DraftUpdate param.Opt[bool] `json:"draft_update,omitzero"`
+	// Create new inboxes.
+	InboxCreate param.Opt[bool] `json:"inbox_create,omitzero"`
+	// Delete inboxes.
+	InboxDelete param.Opt[bool] `json:"inbox_delete,omitzero"`
+	// Read inbox details.
+	InboxRead param.Opt[bool] `json:"inbox_read,omitzero"`
 	// Update inbox settings.
-	UpdateInbox param.Opt[bool] `json:"update_inbox,omitzero"`
+	InboxUpdate param.Opt[bool] `json:"inbox_update,omitzero"`
+	// Access messages labeled blocked.
+	LabelBlockedRead param.Opt[bool] `json:"label_blocked_read,omitzero"`
+	// Access messages labeled spam.
+	LabelSpamRead param.Opt[bool] `json:"label_spam_read,omitzero"`
+	// Access messages labeled trash.
+	LabelTrashRead param.Opt[bool] `json:"label_trash_read,omitzero"`
+	// Create list entries.
+	ListEntryCreate param.Opt[bool] `json:"list_entry_create,omitzero"`
+	// Delete list entries.
+	ListEntryDelete param.Opt[bool] `json:"list_entry_delete,omitzero"`
+	// Read list entries.
+	ListEntryRead param.Opt[bool] `json:"list_entry_read,omitzero"`
+	// Read messages.
+	MessageRead param.Opt[bool] `json:"message_read,omitzero"`
+	// Send messages.
+	MessageSend param.Opt[bool] `json:"message_send,omitzero"`
 	// Update message labels.
-	UpdateMessage param.Opt[bool] `json:"update_message,omitzero"`
+	MessageUpdate param.Opt[bool] `json:"message_update,omitzero"`
+	// Read metrics.
+	MetricsRead param.Opt[bool] `json:"metrics_read,omitzero"`
+	// Create pods.
+	PodCreate param.Opt[bool] `json:"pod_create,omitzero"`
+	// Delete pods.
+	PodDelete param.Opt[bool] `json:"pod_delete,omitzero"`
+	// Read pods.
+	PodRead param.Opt[bool] `json:"pod_read,omitzero"`
+	// Delete threads.
+	ThreadDelete param.Opt[bool] `json:"thread_delete,omitzero"`
+	// Read threads.
+	ThreadRead param.Opt[bool] `json:"thread_read,omitzero"`
+	// Create webhooks.
+	WebhookCreate param.Opt[bool] `json:"webhook_create,omitzero"`
+	// Delete webhooks.
+	WebhookDelete param.Opt[bool] `json:"webhook_delete,omitzero"`
+	// Read webhook configurations.
+	WebhookRead param.Opt[bool] `json:"webhook_read,omitzero"`
 	// Update webhooks.
-	UpdateWebhook param.Opt[bool] `json:"update_webhook,omitzero"`
+	WebhookUpdate param.Opt[bool] `json:"webhook_update,omitzero"`
 	paramObj
 }
 
