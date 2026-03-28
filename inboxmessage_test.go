@@ -212,7 +212,7 @@ func TestInboxMessageGetRaw(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	err := client.Inboxes.Messages.GetRaw(
+	_, err := client.Inboxes.Messages.GetRaw(
 		context.TODO(),
 		"message_id",
 		agentmail.InboxMessageGetRawParams{

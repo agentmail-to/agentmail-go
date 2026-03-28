@@ -38,7 +38,7 @@ func TestUserAgentHeader(t *testing.T) {
 			},
 		}),
 	)
-	client.Inboxes.List(context.Background(), agentmail.InboxListParams{})
+	_, _ = client.Inboxes.List(context.Background(), agentmail.InboxListParams{})
 	if userAgent != fmt.Sprintf("Agentmail/Go %s", internal.PackageVersion) {
 		t.Errorf("Expected User-Agent to be correct, but got: %#v", userAgent)
 	}

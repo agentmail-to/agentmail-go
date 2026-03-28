@@ -121,7 +121,13 @@ func NewRequestConfig(ctx context.Context, method string, u string, body any, ds
 		}
 		params := q.Encode()
 		if params != "" {
-			u = u + "?" + params
+			parsed, _ := url.Parse(u)
+			if parsed.RawQuery != "" {
+				parsed.RawQuery = parsed.RawQuery + "&" + params
+				u = parsed.String()
+			} else {
+				u = u + "?" + params
+			}
 		}
 	}
 	if body, ok := body.([]byte); ok {
@@ -355,11 +361,9 @@ func (b *bodyWithTimeout) Close() error {
 }
 
 func retryDelay(res *http.Response, retryCount int) time.Duration {
-	// If the API asks us to wait a certain amount of time (and it's a reasonable amount),
-	// just do what it says.
-
-	if retryAfterDelay, ok := parseRetryAfterHeader(res); ok && 0 <= retryAfterDelay && retryAfterDelay < time.Minute {
-		return retryAfterDelay
+	// If the backend tells us to wait a certain amount of time, use that value
+	if retryAfterDelay, ok := parseRetryAfterHeader(res); ok {
+		return max(0, retryAfterDelay)
 	}
 
 	maxDelay := 8 * time.Second
@@ -463,7 +467,7 @@ func (cfg *RequestConfig) Execute() (err error) {
 
 		// Close the response body before retrying to prevent connection leaks
 		if res != nil && res.Body != nil {
-			res.Body.Close()
+			_ = res.Body.Close()
 		}
 
 		select {
@@ -491,7 +495,7 @@ func (cfg *RequestConfig) Execute() (err error) {
 
 	if res.StatusCode >= 400 {
 		contents, err := io.ReadAll(res.Body)
-		res.Body.Close()
+		_ = res.Body.Close()
 		if err != nil {
 			return err
 		}
@@ -522,7 +526,7 @@ func (cfg *RequestConfig) Execute() (err error) {
 	}
 
 	contents, err := io.ReadAll(res.Body)
-	res.Body.Close()
+	_ = res.Body.Close()
 	if err != nil {
 		return fmt.Errorf("error reading response body: %w", err)
 	}

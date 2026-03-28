@@ -52,7 +52,7 @@ func (r *InboxService) New(ctx context.Context, body InboxNewParams, opts ...opt
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/inboxes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get Inbox
@@ -61,11 +61,11 @@ func (r *InboxService) Get(ctx context.Context, inboxID string, opts ...option.R
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if inboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s", url.PathEscape(inboxID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Update Inbox
@@ -74,11 +74,11 @@ func (r *InboxService) Update(ctx context.Context, inboxID string, body InboxUpd
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if inboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s", url.PathEscape(inboxID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // List Inboxes
@@ -87,7 +87,7 @@ func (r *InboxService) List(ctx context.Context, query InboxListParams, opts ...
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/inboxes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete Inbox
@@ -97,11 +97,11 @@ func (r *InboxService) Delete(ctx context.Context, inboxID string, opts ...optio
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if inboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s", url.PathEscape(inboxID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // List Metrics
@@ -110,11 +110,11 @@ func (r *InboxService) ListMetrics(ctx context.Context, inboxID string, query In
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if inboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/metrics", url.PathEscape(inboxID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 type CreateInboxParam struct {

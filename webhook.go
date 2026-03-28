@@ -44,7 +44,7 @@ func (r *WebhookService) New(ctx context.Context, body WebhookNewParams, opts ..
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/webhooks"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get Webhook
@@ -53,11 +53,11 @@ func (r *WebhookService) Get(ctx context.Context, webhookID string, opts ...opti
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if webhookID == "" {
 		err = errors.New("missing required webhook_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/webhooks/%s", url.PathEscape(webhookID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Update Webhook
@@ -66,11 +66,11 @@ func (r *WebhookService) Update(ctx context.Context, webhookID string, body Webh
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if webhookID == "" {
 		err = errors.New("missing required webhook_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/webhooks/%s", url.PathEscape(webhookID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // List Webhooks
@@ -79,7 +79,7 @@ func (r *WebhookService) List(ctx context.Context, query WebhookListParams, opts
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/webhooks"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete Webhook
@@ -89,11 +89,11 @@ func (r *WebhookService) Delete(ctx context.Context, webhookID string, opts ...o
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if webhookID == "" {
 		err = errors.New("missing required webhook_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/webhooks/%s", url.PathEscape(webhookID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 type EventType string

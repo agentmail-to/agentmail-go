@@ -46,11 +46,11 @@ func (r *InboxDraftService) New(ctx context.Context, inboxID string, body InboxD
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if inboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/drafts", url.PathEscape(inboxID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get Draft
@@ -59,15 +59,15 @@ func (r *InboxDraftService) Get(ctx context.Context, draftID string, query Inbox
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if query.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	if draftID == "" {
 		err = errors.New("missing required draft_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/drafts/%s", url.PathEscape(query.InboxID), url.PathEscape(draftID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Update Draft
@@ -76,15 +76,15 @@ func (r *InboxDraftService) Update(ctx context.Context, draftID string, params I
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if params.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	if draftID == "" {
 		err = errors.New("missing required draft_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/drafts/%s", url.PathEscape(params.InboxID), url.PathEscape(draftID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // List Drafts
@@ -93,11 +93,11 @@ func (r *InboxDraftService) List(ctx context.Context, inboxID string, query Inbo
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if inboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/drafts", url.PathEscape(inboxID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete Draft
@@ -107,15 +107,15 @@ func (r *InboxDraftService) Delete(ctx context.Context, draftID string, body Inb
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if body.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return err
 	}
 	if draftID == "" {
 		err = errors.New("missing required draft_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/drafts/%s", url.PathEscape(body.InboxID), url.PathEscape(draftID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Send Draft
@@ -124,15 +124,15 @@ func (r *InboxDraftService) Send(ctx context.Context, draftID string, params Inb
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if params.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	if draftID == "" {
 		err = errors.New("missing required draft_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/drafts/%s/send", url.PathEscape(params.InboxID), url.PathEscape(draftID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type SendMessageResponse struct {

@@ -44,15 +44,15 @@ func (r *InboxThreadService) Get(ctx context.Context, threadID string, query Inb
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if query.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	if threadID == "" {
 		err = errors.New("missing required thread_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(query.InboxID), url.PathEscape(threadID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List Threads
@@ -61,11 +61,11 @@ func (r *InboxThreadService) List(ctx context.Context, inboxID string, query Inb
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if inboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/threads", url.PathEscape(inboxID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete Thread
@@ -75,15 +75,15 @@ func (r *InboxThreadService) Delete(ctx context.Context, threadID string, body I
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if body.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return err
 	}
 	if threadID == "" {
 		err = errors.New("missing required thread_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(body.InboxID), url.PathEscape(threadID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 // Get Attachment
@@ -92,19 +92,19 @@ func (r *InboxThreadService) GetAttachment(ctx context.Context, attachmentID str
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if query.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
-		return
+		return nil, err
 	}
 	if query.ThreadID == "" {
 		err = errors.New("missing required thread_id parameter")
-		return
+		return nil, err
 	}
 	if attachmentID == "" {
 		err = errors.New("missing required attachment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/threads/%s/attachments/%s", url.PathEscape(query.InboxID), url.PathEscape(query.ThreadID), url.PathEscape(attachmentID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type ListThreads struct {

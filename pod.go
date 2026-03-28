@@ -52,7 +52,7 @@ func (r *PodService) New(ctx context.Context, body PodNewParams, opts ...option.
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/pods"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get Pod
@@ -61,11 +61,11 @@ func (r *PodService) Get(ctx context.Context, podID string, opts ...option.Reque
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if podID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("v0/pods/%s", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // List Pods
@@ -74,7 +74,7 @@ func (r *PodService) List(ctx context.Context, query PodListParams, opts ...opti
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/pods"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Delete Pod
@@ -84,11 +84,11 @@ func (r *PodService) Delete(ctx context.Context, podID string, opts ...option.Re
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if podID == "" {
 		err = errors.New("missing required pod_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("v0/pods/%s", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
+	return err
 }
 
 type Pod struct {
