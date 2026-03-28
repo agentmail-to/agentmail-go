@@ -68,14 +68,12 @@ func (r *InboxThreadService) List(ctx context.Context, inboxID string, query Inb
 	return res, err
 }
 
-// Moves the thread to trash by adding a trash label to all messages. If the thread
-// is already in trash, it will be permanently deleted. Use `permanent=true` to
-// force permanent deletion.
-func (r *InboxThreadService) Delete(ctx context.Context, threadID string, params InboxThreadDeleteParams, opts ...option.RequestOption) (err error) {
+// Delete Thread
+func (r *InboxThreadService) Delete(ctx context.Context, threadID string, body InboxThreadDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if params.InboxID == "" {
+	if body.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
 		return err
 	}
@@ -83,8 +81,8 @@ func (r *InboxThreadService) Delete(ctx context.Context, threadID string, params
 		err = errors.New("missing required thread_id parameter")
 		return err
 	}
-	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(params.InboxID), url.PathEscape(threadID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
+	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(body.InboxID), url.PathEscape(threadID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
 }
 
@@ -138,7 +136,7 @@ func (r *ListThreads) UnmarshalJSON(data []byte) error {
 type ListThreadsThread struct {
 	// Time at which thread was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// The ID of the inbox.
+	// ID of inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of thread.
 	Labels []string `json:"labels" api:"required"`
@@ -202,7 +200,7 @@ func (r *ListThreadsThread) UnmarshalJSON(data []byte) error {
 type Thread struct {
 	// Time at which thread was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// The ID of the inbox.
+	// ID of inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of thread.
 	Labels []string `json:"labels" api:"required"`
@@ -267,7 +265,7 @@ func (r *Thread) UnmarshalJSON(data []byte) error {
 }
 
 type InboxThreadGetParams struct {
-	// The ID of the inbox.
+	// ID of inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	paramObj
 }
@@ -279,12 +277,8 @@ type InboxThreadListParams struct {
 	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
 	// Timestamp before which to filter by.
 	Before param.Opt[time.Time] `query:"before,omitzero" format:"date-time" json:"-"`
-	// Include blocked in results.
-	IncludeBlocked param.Opt[bool] `query:"include_blocked,omitzero" json:"-"`
 	// Include spam in results.
 	IncludeSpam param.Opt[bool] `query:"include_spam,omitzero" json:"-"`
-	// Include trash in results.
-	IncludeTrash param.Opt[bool] `query:"include_trash,omitzero" json:"-"`
 	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
@@ -303,24 +297,13 @@ func (r InboxThreadListParams) URLQuery() (v url.Values, err error) {
 }
 
 type InboxThreadDeleteParams struct {
-	// The ID of the inbox.
+	// ID of inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
-	// If true, permanently delete the thread instead of moving to trash.
-	Permanent param.Opt[bool] `query:"permanent,omitzero" json:"-"`
 	paramObj
 }
 
-// URLQuery serializes [InboxThreadDeleteParams]'s query parameters as
-// `url.Values`.
-func (r InboxThreadDeleteParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
 type InboxThreadGetAttachmentParams struct {
-	// The ID of the inbox.
+	// ID of inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	// ID of thread.
 	ThreadID string `path:"thread_id" api:"required" json:"-"`

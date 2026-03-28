@@ -62,7 +62,6 @@ func TestPodDomainListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"pod_id",
 		agentmail.PodDomainListParams{
-			Ascending: agentmail.Bool(true),
 			Limit:     agentmail.Int(0),
 			PageToken: agentmail.String("page_token"),
 		},

@@ -54,36 +54,21 @@ type OrganizationGetResponse struct {
 	OrganizationID string `json:"organization_id" api:"required"`
 	// Time at which organization was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
-	// Provider-agnostic authentication ID.
-	AuthenticationID string `json:"authentication_id" api:"nullable"`
-	// Authentication provider type.
-	AuthenticationType string `json:"authentication_type" api:"nullable"`
-	// Provider-agnostic billing customer ID.
-	BillingID string `json:"billing_id" api:"nullable"`
-	// Active billing subscription ID.
-	BillingSubscriptionID string `json:"billing_subscription_id" api:"nullable"`
-	// Billing provider type (e.g. "stripe").
-	BillingType string `json:"billing_type" api:"nullable"`
 	// Maximum number of domains allowed.
 	DomainLimit int64 `json:"domain_limit" api:"nullable"`
 	// Maximum number of inboxes allowed.
 	InboxLimit int64 `json:"inbox_limit" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CreatedAt             respjson.Field
-		DomainCount           respjson.Field
-		InboxCount            respjson.Field
-		OrganizationID        respjson.Field
-		UpdatedAt             respjson.Field
-		AuthenticationID      respjson.Field
-		AuthenticationType    respjson.Field
-		BillingID             respjson.Field
-		BillingSubscriptionID respjson.Field
-		BillingType           respjson.Field
-		DomainLimit           respjson.Field
-		InboxLimit            respjson.Field
-		ExtraFields           map[string]respjson.Field
-		raw                   string
+		CreatedAt      respjson.Field
+		DomainCount    respjson.Field
+		InboxCount     respjson.Field
+		OrganizationID respjson.Field
+		UpdatedAt      respjson.Field
+		DomainLimit    respjson.Field
+		InboxLimit     respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
 	} `json:"-"`
 }
 

@@ -78,7 +78,6 @@ func TestDomainListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Domains.List(context.TODO(), agentmail.DomainListParams{
-		Ascending: agentmail.Bool(true),
 		Limit:     agentmail.Int(0),
 		PageToken: agentmail.String("page_token"),
 	})

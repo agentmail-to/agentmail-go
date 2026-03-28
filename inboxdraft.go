@@ -184,8 +184,6 @@ type InboxDraftNewParams struct {
 	Subject param.Opt[string] `json:"subject,omitzero"`
 	// Plain text body of draft.
 	Text param.Opt[string] `json:"text,omitzero"`
-	// Attachments to include in draft.
-	Attachments []SendAttachmentParam `json:"attachments,omitzero"`
 	// Addresses of BCC recipients. In format `username@domain.com` or
 	// `Display Name <username@domain.com>`.
 	Bcc []string `json:"bcc,omitzero"`
@@ -212,13 +210,13 @@ func (r *InboxDraftNewParams) UnmarshalJSON(data []byte) error {
 }
 
 type InboxDraftGetParams struct {
-	// The ID of the inbox.
+	// ID of inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxDraftUpdateParams struct {
-	// The ID of the inbox.
+	// ID of inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	// HTML body of draft.
 	HTML param.Opt[string] `json:"html,omitzero"`
@@ -276,13 +274,13 @@ func (r InboxDraftListParams) URLQuery() (v url.Values, err error) {
 }
 
 type InboxDraftDeleteParams struct {
-	// The ID of the inbox.
+	// ID of inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxDraftSendParams struct {
-	// The ID of the inbox.
+	// ID of inbox.
 	InboxID       string `path:"inbox_id" api:"required" json:"-"`
 	UpdateMessage UpdateMessageParam
 	paramObj

@@ -82,12 +82,8 @@ type ThreadListParams struct {
 	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
 	// Timestamp before which to filter by.
 	Before param.Opt[time.Time] `query:"before,omitzero" format:"date-time" json:"-"`
-	// Include blocked in results.
-	IncludeBlocked param.Opt[bool] `query:"include_blocked,omitzero" json:"-"`
 	// Include spam in results.
 	IncludeSpam param.Opt[bool] `query:"include_spam,omitzero" json:"-"`
-	// Include trash in results.
-	IncludeTrash param.Opt[bool] `query:"include_trash,omitzero" json:"-"`
 	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.

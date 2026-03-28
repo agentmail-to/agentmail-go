@@ -28,12 +28,9 @@ func TestMetricListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Metrics.List(context.TODO(), agentmail.MetricListParams{
-		Descending: agentmail.Bool(true),
-		End:        agentmail.Time(time.Now()),
-		EventTypes: []agentmail.MetricEventType{agentmail.MetricEventTypeMessageSent},
-		Limit:      agentmail.Int(0),
-		Period:     agentmail.String("period"),
-		Start:      agentmail.Time(time.Now()),
+		EndTimestamp:   time.Now(),
+		StartTimestamp: time.Now(),
+		EventTypes:     []agentmail.MetricEventType{agentmail.MetricEventTypeMessageSent},
 	})
 	if err != nil {
 		var apierr *agentmail.Error
