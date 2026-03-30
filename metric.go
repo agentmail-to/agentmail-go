@@ -9,9 +9,12 @@ import (
 	"slices"
 	"time"
 
+	"github.com/agentmail-to/agentmail-go/internal/apijson"
 	"github.com/agentmail-to/agentmail-go/internal/apiquery"
 	"github.com/agentmail-to/agentmail-go/internal/requestconfig"
 	"github.com/agentmail-to/agentmail-go/option"
+	"github.com/agentmail-to/agentmail-go/packages/param"
+	"github.com/agentmail-to/agentmail-go/packages/respjson"
 )
 
 // MetricService contains methods and other services that help with interacting
@@ -33,8 +36,8 @@ func NewMetricService(opts ...option.RequestOption) (r MetricService) {
 	return
 }
 
-// List Metrics
-func (r *MetricService) List(ctx context.Context, query MetricListParams, opts ...option.RequestOption) (res *ListMetrics, err error) {
+// Query Metrics
+func (r *MetricService) List(ctx context.Context, query MetricListParams, opts ...option.RequestOption) (res *MetricListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	path := "v0/metrics"
@@ -42,12 +45,40 @@ func (r *MetricService) List(ctx context.Context, query MetricListParams, opts .
 	return res, err
 }
 
+type MetricListResponse map[string][]MetricListResponseItem
+
+type MetricListResponseItem struct {
+	// Count of events in the bucket.
+	Count int64 `json:"count" api:"required"`
+	// Timestamp of the bucket.
+	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Count       respjson.Field
+		Timestamp   respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r MetricListResponseItem) RawJSON() string { return r.JSON.raw }
+func (r *MetricListResponseItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type MetricListParams struct {
-	// End timestamp for the metrics query range.
-	EndTimestamp time.Time `query:"end_timestamp" api:"required" format:"date-time" json:"-"`
-	// Start timestamp for the metrics query range.
-	StartTimestamp time.Time `query:"start_timestamp" api:"required" format:"date-time" json:"-"`
-	// List of metric event types to filter by.
+	// Sort in descending order.
+	Descending param.Opt[bool] `query:"descending,omitzero" json:"-"`
+	// End timestamp for the query.
+	End param.Opt[time.Time] `query:"end,omitzero" format:"date-time" json:"-"`
+	// Limit on number of buckets to return.
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
+	// Period in number of seconds for the query.
+	Period param.Opt[string] `query:"period,omitzero" json:"-"`
+	// Start timestamp for the query.
+	Start param.Opt[time.Time] `query:"start,omitzero" format:"date-time" json:"-"`
+	// List of metric event types to query.
 	EventTypes []MetricEventType `query:"event_types,omitzero" json:"-"`
 	paramObj
 }

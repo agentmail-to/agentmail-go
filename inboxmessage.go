@@ -58,7 +58,7 @@ func (r *InboxMessageService) Get(ctx context.Context, messageID string, query I
 }
 
 // Update Message
-func (r *InboxMessageService) Update(ctx context.Context, messageID string, params InboxMessageUpdateParams, opts ...option.RequestOption) (res *Message, err error) {
+func (r *InboxMessageService) Update(ctx context.Context, messageID string, params InboxMessageUpdateParams, opts ...option.RequestOption) (res *InboxMessageUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
 	if params.InboxID == "" {
@@ -259,7 +259,7 @@ type Message struct {
 	// Address of sender. In format `username@domain.com` or
 	// `Display Name <username@domain.com>`.
 	From string `json:"from" api:"required"`
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of message.
 	Labels []string `json:"labels" api:"required"`
@@ -399,6 +399,26 @@ func (r *SendMessageRequestParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type InboxMessageUpdateResponse struct {
+	// Labels of message.
+	Labels []string `json:"labels" api:"required"`
+	// ID of message.
+	MessageID string `json:"message_id" api:"required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Labels      respjson.Field
+		MessageID   respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r InboxMessageUpdateResponse) RawJSON() string { return r.JSON.raw }
+func (r *InboxMessageUpdateResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type InboxMessageListResponse struct {
 	// Number of items returned.
 	Count int64 `json:"count" api:"required"`
@@ -431,7 +451,7 @@ type InboxMessageListResponseMessage struct {
 	// Address of sender. In format `username@domain.com` or
 	// `Display Name <username@domain.com>`.
 	From string `json:"from" api:"required"`
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of message.
 	Labels []string `json:"labels" api:"required"`
@@ -525,13 +545,13 @@ func (r *InboxMessageGetRawResponse) UnmarshalJSON(data []byte) error {
 }
 
 type InboxMessageGetParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxMessageUpdateParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID       string `path:"inbox_id" api:"required" json:"-"`
 	UpdateMessage UpdateMessageParam
 	paramObj
@@ -551,8 +571,12 @@ type InboxMessageListParams struct {
 	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
 	// Timestamp before which to filter by.
 	Before param.Opt[time.Time] `query:"before,omitzero" format:"date-time" json:"-"`
+	// Include blocked in results.
+	IncludeBlocked param.Opt[bool] `query:"include_blocked,omitzero" json:"-"`
 	// Include spam in results.
 	IncludeSpam param.Opt[bool] `query:"include_spam,omitzero" json:"-"`
+	// Include trash in results.
+	IncludeTrash param.Opt[bool] `query:"include_trash,omitzero" json:"-"`
 	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
@@ -571,7 +595,7 @@ func (r InboxMessageListParams) URLQuery() (v url.Values, err error) {
 }
 
 type InboxMessageForwardParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID            string `path:"inbox_id" api:"required" json:"-"`
 	SendMessageRequest SendMessageRequestParam
 	paramObj
@@ -585,7 +609,7 @@ func (r *InboxMessageForwardParams) UnmarshalJSON(data []byte) error {
 }
 
 type InboxMessageGetAttachmentParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	// ID of message.
 	MessageID string `path:"message_id" api:"required" json:"-"`
@@ -593,13 +617,13 @@ type InboxMessageGetAttachmentParams struct {
 }
 
 type InboxMessageGetRawParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	paramObj
 }
 
 type InboxMessageReplyParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	// HTML body of message.
 	HTML param.Opt[string] `json:"html,omitzero"`
@@ -633,7 +657,7 @@ func (r *InboxMessageReplyParams) UnmarshalJSON(data []byte) error {
 }
 
 type InboxMessageReplyAllParams struct {
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
 	// HTML body of message.
 	HTML param.Opt[string] `json:"html,omitzero"`

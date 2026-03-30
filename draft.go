@@ -99,12 +99,10 @@ type Draft struct {
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
 	// ID of draft.
 	DraftID string `json:"draft_id" api:"required"`
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of draft.
 	Labels []string `json:"labels" api:"required"`
-	// ID of thread.
-	ThreadID string `json:"thread_id" api:"required"`
 	// Time at which draft was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Attachments in draft.
@@ -147,7 +145,6 @@ type Draft struct {
 		DraftID     respjson.Field
 		InboxID     respjson.Field
 		Labels      respjson.Field
-		ThreadID    respjson.Field
 		UpdatedAt   respjson.Field
 		Attachments respjson.Field
 		Bcc         respjson.Field
@@ -212,12 +209,10 @@ func (r *ListDrafts) UnmarshalJSON(data []byte) error {
 type ListDraftsDraft struct {
 	// ID of draft.
 	DraftID string `json:"draft_id" api:"required"`
-	// ID of inbox.
+	// The ID of the inbox.
 	InboxID string `json:"inbox_id" api:"required"`
 	// Labels of draft.
 	Labels []string `json:"labels" api:"required"`
-	// ID of thread.
-	ThreadID string `json:"thread_id" api:"required"`
 	// Time at which draft was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Attachments in draft.
@@ -228,6 +223,8 @@ type ListDraftsDraft struct {
 	// Addresses of CC recipients. In format `username@domain.com` or
 	// `Display Name <username@domain.com>`.
 	Cc []string `json:"cc" api:"nullable"`
+	// ID of message being replied to.
+	InReplyTo string `json:"in_reply_to" api:"nullable"`
 	// Text preview of draft.
 	Preview string `json:"preview" api:"nullable"`
 	// Time at which to schedule send draft.
@@ -246,11 +243,11 @@ type ListDraftsDraft struct {
 		DraftID     respjson.Field
 		InboxID     respjson.Field
 		Labels      respjson.Field
-		ThreadID    respjson.Field
 		UpdatedAt   respjson.Field
 		Attachments respjson.Field
 		Bcc         respjson.Field
 		Cc          respjson.Field
+		InReplyTo   respjson.Field
 		Preview     respjson.Field
 		SendAt      respjson.Field
 		SendStatus  respjson.Field

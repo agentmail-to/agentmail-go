@@ -115,7 +115,7 @@ func (r *DomainService) Verify(ctx context.Context, domainID string, opts ...opt
 
 // The properties Domain, FeedbackEnabled are required.
 type CreateDomainParam struct {
-	// The name of the domain. (e.g., "example.com")
+	// The name of the domain (e.g., `example.com`).
 	Domain string `json:"domain" api:"required"`
 	// Bounce and complaint notifications are sent to your inboxes.
 	FeedbackEnabled bool `json:"feedback_enabled" api:"required"`
@@ -133,7 +133,9 @@ func (r *CreateDomainParam) UnmarshalJSON(data []byte) error {
 type Domain struct {
 	// Time at which the domain was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// The name of the domain. (e.g., " your-domain.com")
+	// The name of the domain (e.g., `example.com`).
+	Domain string `json:"domain" api:"required"`
+	// The ID of the domain.
 	DomainID string `json:"domain_id" api:"required"`
 	// Bounce and complaint notifications are sent to your inboxes.
 	FeedbackEnabled bool `json:"feedback_enabled" api:"required"`
@@ -152,6 +154,7 @@ type Domain struct {
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CreatedAt       respjson.Field
+		Domain          respjson.Field
 		DomainID        respjson.Field
 		FeedbackEnabled respjson.Field
 		Records         respjson.Field
@@ -244,10 +247,16 @@ func (r *ListDomains) UnmarshalJSON(data []byte) error {
 type ListDomainsDomain struct {
 	// Time at which the domain was created.
 	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// The name of the domain. (e.g., " your-domain.com")
+	// The name of the domain (e.g., `example.com`).
+	Domain string `json:"domain" api:"required"`
+	// The ID of the domain.
 	DomainID string `json:"domain_id" api:"required"`
 	// Bounce and complaint notifications are sent to your inboxes.
 	FeedbackEnabled bool `json:"feedback_enabled" api:"required"`
+	// The verification status of the domain.
+	//
+	// Any of "NOT_STARTED", "PENDING", "INVALID", "FAILED", "VERIFYING", "VERIFIED".
+	Status string `json:"status" api:"required"`
 	// Time at which the domain was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Client ID of domain.
@@ -257,8 +266,10 @@ type ListDomainsDomain struct {
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CreatedAt       respjson.Field
+		Domain          respjson.Field
 		DomainID        respjson.Field
 		FeedbackEnabled respjson.Field
+		Status          respjson.Field
 		UpdatedAt       respjson.Field
 		ClientID        respjson.Field
 		PodID           respjson.Field
@@ -286,6 +297,8 @@ func (r *DomainNewParams) UnmarshalJSON(data []byte) error {
 }
 
 type DomainListParams struct {
+	// Sort in ascending temporal order.
+	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
 	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
