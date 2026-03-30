@@ -51,13 +51,15 @@ func TestThreadListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Threads.List(context.TODO(), agentmail.ThreadListParams{
-		After:       agentmail.Time(time.Now()),
-		Ascending:   agentmail.Bool(true),
-		Before:      agentmail.Time(time.Now()),
-		IncludeSpam: agentmail.Bool(true),
-		Labels:      []string{"string"},
-		Limit:       agentmail.Int(0),
-		PageToken:   agentmail.String("page_token"),
+		After:          agentmail.Time(time.Now()),
+		Ascending:      agentmail.Bool(true),
+		Before:         agentmail.Time(time.Now()),
+		IncludeBlocked: agentmail.Bool(true),
+		IncludeSpam:    agentmail.Bool(true),
+		IncludeTrash:   agentmail.Bool(true),
+		Labels:         []string{"string"},
+		Limit:          agentmail.Int(0),
+		PageToken:      agentmail.String("page_token"),
 	})
 	if err != nil {
 		var apierr *agentmail.Error

@@ -93,6 +93,7 @@ func TestPodInboxListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"pod_id",
 		agentmail.PodInboxListParams{
+			Ascending: agentmail.Bool(true),
 			Limit:     agentmail.Int(0),
 			PageToken: agentmail.String("page_token"),
 		},
