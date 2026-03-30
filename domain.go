@@ -253,10 +253,6 @@ type ListDomainsDomain struct {
 	DomainID string `json:"domain_id" api:"required"`
 	// Bounce and complaint notifications are sent to your inboxes.
 	FeedbackEnabled bool `json:"feedback_enabled" api:"required"`
-	// The verification status of the domain.
-	//
-	// Any of "NOT_STARTED", "PENDING", "INVALID", "FAILED", "VERIFYING", "VERIFIED".
-	Status string `json:"status" api:"required"`
 	// Time at which the domain was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Client ID of domain.
@@ -269,7 +265,6 @@ type ListDomainsDomain struct {
 		Domain          respjson.Field
 		DomainID        respjson.Field
 		FeedbackEnabled respjson.Field
-		Status          respjson.Field
 		UpdatedAt       respjson.Field
 		ClientID        respjson.Field
 		PodID           respjson.Field
