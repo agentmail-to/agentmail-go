@@ -1,0 +1,17 @@
+name: Notify CLI
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger CLI auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/agentmail-to/agentmail-cli/dispatches \
+            -f event_type=go-sdk-released \
+            -f "client_payload[version]=${{ github.event.release.tag_name }}"
