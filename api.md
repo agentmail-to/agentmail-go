@@ -1,3 +1,15 @@
+# Agent
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#AgentSignupResponse">AgentSignupResponse</a>
+- <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#AgentVerifyResponse">AgentVerifyResponse</a>
+
+Methods:
+
+- <code title="post /v0/agent/sign-up">client.Agent.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#AgentService.SignUp">SignUp</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#AgentSignUpParams">AgentSignUpParams</a>) (\*<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#AgentSignupResponse">AgentSignupResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /v0/agent/verify">client.Agent.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#AgentService.Verify">Verify</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#AgentVerifyParams">AgentVerifyParams</a>) (\*<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#AgentVerifyResponse">AgentVerifyResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # Inboxes
 
 Params Types:

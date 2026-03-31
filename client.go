@@ -17,6 +17,7 @@ import (
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
 	Options       []option.RequestOption
+	Agent         AgentService
 	Inboxes       InboxService
 	Pods          PodService
 	Webhooks      WebhookService
@@ -50,6 +51,7 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 
 	r = Client{Options: opts}
 
+	r.Agent = NewAgentService(opts...)
 	r.Inboxes = NewInboxService(opts...)
 	r.Pods = NewPodService(opts...)
 	r.Webhooks = NewWebhookService(opts...)
