@@ -209,8 +209,12 @@ func TestInboxDraftSendWithOptionalParams(t *testing.T) {
 		agentmail.InboxDraftSendParams{
 			InboxID: "inbox_id",
 			UpdateMessage: agentmail.UpdateMessageParam{
-				AddLabels:    []string{"string"},
-				RemoveLabels: []string{"string"},
+				AddLabels: agentmail.UpdateMessageAddLabelsUnionParam{
+					OfString: agentmail.String("string"),
+				},
+				RemoveLabels: agentmail.UpdateMessageRemoveLabelsUnionParam{
+					OfString: agentmail.String("string"),
+				},
 			},
 		},
 	)
