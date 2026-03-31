@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 (2026-03-31)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/agentmail-to/agentmail-go/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** api update ([958e6a9](https://github.com/agentmail-to/agentmail-go/commit/958e6a974eea2f71b12f81c251ed9c30f3c0c0a5))
+
 ## 0.2.0 (2026-03-31)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/agentmail-to/agentmail-go/compare/v0.1.0...v0.2.0)
