@@ -13,7 +13,7 @@ import (
 	"github.com/agentmail-to/agentmail-go/option"
 )
 
-func TestPodDomainNew(t *testing.T) {
+func TestAgentSignUp(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,16 +26,10 @@ func TestPodDomainNew(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Pods.Domains.New(
-		context.TODO(),
-		"pod_id",
-		agentmail.PodDomainNewParams{
-			CreateDomain: agentmail.CreateDomainParam{
-				Domain:          "domain",
-				FeedbackEnabled: true,
-			},
-		},
-	)
+	_, err := client.Agent.SignUp(context.TODO(), agentmail.AgentSignUpParams{
+		HumanEmail: "human_email",
+		Username:   "username",
+	})
 	if err != nil {
 		var apierr *agentmail.Error
 		if errors.As(err, &apierr) {
@@ -45,7 +39,7 @@ func TestPodDomainNew(t *testing.T) {
 	}
 }
 
-func TestPodDomainListWithOptionalParams(t *testing.T) {
+func TestAgentVerify(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -58,44 +52,9 @@ func TestPodDomainListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Pods.Domains.List(
-		context.TODO(),
-		"pod_id",
-		agentmail.PodDomainListParams{
-			Ascending: agentmail.Bool(true),
-			Limit:     agentmail.Int(0),
-			PageToken: agentmail.String("page_token"),
-		},
-	)
-	if err != nil {
-		var apierr *agentmail.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestPodDomainDelete(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := agentmail.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
-	)
-	err := client.Pods.Domains.Delete(
-		context.TODO(),
-		"domain_id",
-		agentmail.PodDomainDeleteParams{
-			PodID: "pod_id",
-		},
-	)
+	_, err := client.Agent.Verify(context.TODO(), agentmail.AgentVerifyParams{
+		OtpCode: "otp_code",
+	})
 	if err != nil {
 		var apierr *agentmail.Error
 		if errors.As(err, &apierr) {

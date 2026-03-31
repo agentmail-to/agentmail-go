@@ -60,13 +60,15 @@ func TestPodThreadListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"pod_id",
 		agentmail.PodThreadListParams{
-			After:       agentmail.Time(time.Now()),
-			Ascending:   agentmail.Bool(true),
-			Before:      agentmail.Time(time.Now()),
-			IncludeSpam: agentmail.Bool(true),
-			Labels:      []string{"string"},
-			Limit:       agentmail.Int(0),
-			PageToken:   agentmail.String("page_token"),
+			After:          agentmail.Time(time.Now()),
+			Ascending:      agentmail.Bool(true),
+			Before:         agentmail.Time(time.Now()),
+			IncludeBlocked: agentmail.Bool(true),
+			IncludeSpam:    agentmail.Bool(true),
+			IncludeTrash:   agentmail.Bool(true),
+			Labels:         []string{"string"},
+			Limit:          agentmail.Int(0),
+			PageToken:      agentmail.String("page_token"),
 		},
 	)
 	if err != nil {

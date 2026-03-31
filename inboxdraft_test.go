@@ -31,6 +31,14 @@ func TestInboxDraftNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"inbox_id",
 		agentmail.InboxDraftNewParams{
+			Attachments: []agentmail.SendAttachmentParam{{
+				Content:            agentmail.String("content"),
+				ContentDisposition: agentmail.AttachmentContentDispositionInline,
+				ContentID:          agentmail.String("content_id"),
+				ContentType:        agentmail.String("content_type"),
+				Filename:           agentmail.String("filename"),
+				URL:                agentmail.String("url"),
+			}},
 			Bcc:       []string{"string"},
 			Cc:        []string{"string"},
 			ClientID:  agentmail.String("client_id"),

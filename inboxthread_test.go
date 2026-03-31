@@ -60,13 +60,15 @@ func TestInboxThreadListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"inbox_id",
 		agentmail.InboxThreadListParams{
-			After:       agentmail.Time(time.Now()),
-			Ascending:   agentmail.Bool(true),
-			Before:      agentmail.Time(time.Now()),
-			IncludeSpam: agentmail.Bool(true),
-			Labels:      []string{"string"},
-			Limit:       agentmail.Int(0),
-			PageToken:   agentmail.String("page_token"),
+			After:          agentmail.Time(time.Now()),
+			Ascending:      agentmail.Bool(true),
+			Before:         agentmail.Time(time.Now()),
+			IncludeBlocked: agentmail.Bool(true),
+			IncludeSpam:    agentmail.Bool(true),
+			IncludeTrash:   agentmail.Bool(true),
+			Labels:         []string{"string"},
+			Limit:          agentmail.Int(0),
+			PageToken:      agentmail.String("page_token"),
 		},
 	)
 	if err != nil {
@@ -78,7 +80,7 @@ func TestInboxThreadListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestInboxThreadDelete(t *testing.T) {
+func TestInboxThreadDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -95,7 +97,8 @@ func TestInboxThreadDelete(t *testing.T) {
 		context.TODO(),
 		"thread_id",
 		agentmail.InboxThreadDeleteParams{
-			InboxID: "inbox_id",
+			InboxID:   "inbox_id",
+			Permanent: agentmail.Bool(true),
 		},
 	)
 	if err != nil {

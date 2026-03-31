@@ -110,6 +110,7 @@ func TestInboxListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Inboxes.List(context.TODO(), agentmail.InboxListParams{
+		Ascending: agentmail.Bool(true),
 		Limit:     agentmail.Int(0),
 		PageToken: agentmail.String("page_token"),
 	})
@@ -162,9 +163,12 @@ func TestInboxListMetricsWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"inbox_id",
 		agentmail.InboxListMetricsParams{
-			EndTimestamp:   time.Now(),
-			StartTimestamp: time.Now(),
-			EventTypes:     []agentmail.MetricEventType{agentmail.MetricEventTypeMessageSent},
+			Descending: agentmail.Bool(true),
+			End:        agentmail.Time(time.Now()),
+			EventTypes: []agentmail.MetricEventType{agentmail.MetricEventTypeMessageSent},
+			Limit:      agentmail.Int(0),
+			Period:     agentmail.String("period"),
+			Start:      agentmail.Time(time.Now()),
 		},
 	)
 	if err != nil {
