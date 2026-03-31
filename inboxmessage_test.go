@@ -62,8 +62,12 @@ func TestInboxMessageUpdateWithOptionalParams(t *testing.T) {
 		agentmail.InboxMessageUpdateParams{
 			InboxID: "inbox_id",
 			UpdateMessage: agentmail.UpdateMessageParam{
-				AddLabels:    []string{"string"},
-				RemoveLabels: []string{"string"},
+				AddLabels: agentmail.UpdateMessageAddLabelsUnionParam{
+					OfString: agentmail.String("string"),
+				},
+				RemoveLabels: agentmail.UpdateMessageRemoveLabelsUnionParam{
+					OfString: agentmail.String("string"),
+				},
 			},
 		},
 	)
