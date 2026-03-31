@@ -156,10 +156,10 @@ func (r *SendMessageResponse) UnmarshalJSON(data []byte) error {
 }
 
 type UpdateMessageParam struct {
-	// Labels to add to message.
-	AddLabels []string `json:"add_labels,omitzero"`
-	// Labels to remove from message.
-	RemoveLabels []string `json:"remove_labels,omitzero"`
+	// Label or labels to add to message.
+	AddLabels UpdateMessageAddLabelsUnionParam `json:"add_labels,omitzero"`
+	// Label or labels to remove from message.
+	RemoveLabels UpdateMessageRemoveLabelsUnionParam `json:"remove_labels,omitzero"`
 	paramObj
 }
 
@@ -169,6 +169,38 @@ func (r UpdateMessageParam) MarshalJSON() (data []byte, err error) {
 }
 func (r *UpdateMessageParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type UpdateMessageAddLabelsUnionParam struct {
+	OfString      param.Opt[string] `json:",omitzero,inline"`
+	OfStringArray []string          `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u UpdateMessageAddLabelsUnionParam) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion(u, u.OfString, u.OfStringArray)
+}
+func (u *UpdateMessageAddLabelsUnionParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type UpdateMessageRemoveLabelsUnionParam struct {
+	OfString      param.Opt[string] `json:",omitzero,inline"`
+	OfStringArray []string          `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u UpdateMessageRemoveLabelsUnionParam) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion(u, u.OfString, u.OfStringArray)
+}
+func (u *UpdateMessageRemoveLabelsUnionParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
 }
 
 type InboxDraftNewParams struct {
