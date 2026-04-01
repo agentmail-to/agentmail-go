@@ -38,7 +38,11 @@ func NewWebhookService(opts ...option.RequestOption) (r WebhookService) {
 	return
 }
 
-// Create Webhook
+// **CLI:**
+//
+// ```bash
+// agentmail webhooks create --url https://example.com/webhook --event-type message.received
+// ```
 func (r *WebhookService) New(ctx context.Context, body WebhookNewParams, opts ...option.RequestOption) (res *Webhook, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -47,7 +51,11 @@ func (r *WebhookService) New(ctx context.Context, body WebhookNewParams, opts ..
 	return res, err
 }
 
-// Get Webhook
+// **CLI:**
+//
+// ```bash
+// agentmail webhooks retrieve --webhook-id <webhook_id>
+// ```
 func (r *WebhookService) Get(ctx context.Context, webhookID string, opts ...option.RequestOption) (res *Webhook, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -60,7 +68,11 @@ func (r *WebhookService) Get(ctx context.Context, webhookID string, opts ...opti
 	return res, err
 }
 
-// Update Webhook
+// **CLI:**
+//
+// ```bash
+// agentmail webhooks update --webhook-id <webhook_id> --add-inbox-id <inbox_id>
+// ```
 func (r *WebhookService) Update(ctx context.Context, webhookID string, body WebhookUpdateParams, opts ...option.RequestOption) (res *Webhook, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -73,7 +85,11 @@ func (r *WebhookService) Update(ctx context.Context, webhookID string, body Webh
 	return res, err
 }
 
-// List Webhooks
+// **CLI:**
+//
+// ```bash
+// agentmail webhooks list
+// ```
 func (r *WebhookService) List(ctx context.Context, query WebhookListParams, opts ...option.RequestOption) (res *WebhookListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -82,7 +98,11 @@ func (r *WebhookService) List(ctx context.Context, query WebhookListParams, opts
 	return res, err
 }
 
-// Delete Webhook
+// **CLI:**
+//
+// ```bash
+// agentmail webhooks delete --webhook-id <webhook_id>
+// ```
 func (r *WebhookService) Delete(ctx context.Context, webhookID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)

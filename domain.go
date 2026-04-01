@@ -40,7 +40,11 @@ func NewDomainService(opts ...option.RequestOption) (r DomainService) {
 	return
 }
 
-// Create Domain
+// **CLI:**
+//
+// ```bash
+// agentmail domains create --domain example.com
+// ```
 func (r *DomainService) New(ctx context.Context, body DomainNewParams, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -49,7 +53,11 @@ func (r *DomainService) New(ctx context.Context, body DomainNewParams, opts ...o
 	return res, err
 }
 
-// Get Domain
+// **CLI:**
+//
+// ```bash
+// agentmail domains retrieve --domain-id <domain_id>
+// ```
 func (r *DomainService) Get(ctx context.Context, domainID string, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -62,7 +70,11 @@ func (r *DomainService) Get(ctx context.Context, domainID string, opts ...option
 	return res, err
 }
 
-// List Domains
+// **CLI:**
+//
+// ```bash
+// agentmail domains list
+// ```
 func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *ListDomains, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -71,7 +83,11 @@ func (r *DomainService) List(ctx context.Context, query DomainListParams, opts .
 	return res, err
 }
 
-// Delete Domain
+// **CLI:**
+//
+// ```bash
+// agentmail domains delete --domain-id <domain_id>
+// ```
 func (r *DomainService) Delete(ctx context.Context, domainID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -85,7 +101,11 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, opts ...opt
 	return err
 }
 
-// Get Zone File
+// **CLI:**
+//
+// ```bash
+// agentmail domains get-zone-file --domain-id <domain_id>
+// ```
 func (r *DomainService) GetZoneFile(ctx context.Context, domainID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -99,7 +119,11 @@ func (r *DomainService) GetZoneFile(ctx context.Context, domainID string, opts .
 	return err
 }
 
-// Verify Domain
+// **CLI:**
+//
+// ```bash
+// agentmail domains verify --domain-id <domain_id>
+// ```
 func (r *DomainService) Verify(ctx context.Context, domainID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)

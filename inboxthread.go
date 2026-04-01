@@ -38,7 +38,11 @@ func NewInboxThreadService(opts ...option.RequestOption) (r InboxThreadService) 
 	return
 }
 
-// Get Thread
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:threads retrieve --inbox-id <inbox_id> --thread-id <thread_id>
+// ```
 func (r *InboxThreadService) Get(ctx context.Context, threadID string, query InboxThreadGetParams, opts ...option.RequestOption) (res *Thread, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -55,7 +59,11 @@ func (r *InboxThreadService) Get(ctx context.Context, threadID string, query Inb
 	return res, err
 }
 
-// List Threads
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:threads list --inbox-id <inbox_id>
+// ```
 func (r *InboxThreadService) List(ctx context.Context, inboxID string, query InboxThreadListParams, opts ...option.RequestOption) (res *ListThreads, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -71,6 +79,12 @@ func (r *InboxThreadService) List(ctx context.Context, inboxID string, query Inb
 // Moves the thread to trash by adding a trash label to all messages. If the thread
 // is already in trash, it will be permanently deleted. Use `permanent=true` to
 // force permanent deletion.
+//
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:threads delete --inbox-id <inbox_id> --thread-id <thread_id>
+// ```
 func (r *InboxThreadService) Delete(ctx context.Context, threadID string, params InboxThreadDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -88,7 +102,11 @@ func (r *InboxThreadService) Delete(ctx context.Context, threadID string, params
 	return err
 }
 
-// Get Attachment
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:threads get-attachment --inbox-id <inbox_id> --thread-id <thread_id> --attachment-id <attachment_id>
+// ```
 func (r *InboxThreadService) GetAttachment(ctx context.Context, attachmentID string, query InboxThreadGetAttachmentParams, opts ...option.RequestOption) (res *AttachmentResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)

@@ -38,7 +38,11 @@ func NewDraftService(opts ...option.RequestOption) (r DraftService) {
 	return
 }
 
-// Get Draft
+// **CLI:**
+//
+// ```bash
+// agentmail drafts retrieve --draft-id <draft_id>
+// ```
 func (r *DraftService) Get(ctx context.Context, draftID string, opts ...option.RequestOption) (res *Draft, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -51,7 +55,11 @@ func (r *DraftService) Get(ctx context.Context, draftID string, opts ...option.R
 	return res, err
 }
 
-// List Drafts
+// **CLI:**
+//
+// ```bash
+// agentmail drafts list
+// ```
 func (r *DraftService) List(ctx context.Context, query DraftListParams, opts ...option.RequestOption) (res *ListDrafts, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)

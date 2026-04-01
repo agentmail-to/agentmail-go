@@ -41,6 +41,12 @@ func NewAgentService(opts ...option.RequestOption) (r AgentService) {
 //
 // The returned API key has limited permissions until the organization is verified
 // via the verify endpoint.
+//
+// **CLI:**
+//
+// ```bash
+// agentmail agent sign-up --human-email user@example.com --username my-agent
+// ```
 func (r *AgentService) SignUp(ctx context.Context, body AgentSignUpParams, opts ...option.RequestOption) (res *AgentSignupResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -57,6 +63,12 @@ func (r *AgentService) SignUp(ctx context.Context, body AgentSignUpParams, opts 
 // applied.
 //
 // The OTP expires after 24 hours and allows a maximum of 10 attempts.
+//
+// **CLI:**
+//
+// ```bash
+// agentmail agent verify --otp-code 123456
+// ```
 func (r *AgentService) Verify(ctx context.Context, body AgentVerifyParams, opts ...option.RequestOption) (res *AgentVerifyResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)

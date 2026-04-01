@@ -36,7 +36,11 @@ func NewMetricService(opts ...option.RequestOption) (r MetricService) {
 	return
 }
 
-// Query Metrics
+// **CLI:**
+//
+// ```bash
+// agentmail metrics list
+// ```
 func (r *MetricService) List(ctx context.Context, query MetricListParams, opts ...option.RequestOption) (res *MetricListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
