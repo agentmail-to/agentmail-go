@@ -31,6 +31,9 @@ type PodService struct {
 	Drafts  PodDraftService
 	Inboxes PodInboxService
 	Threads PodThreadService
+	Lists   PodListService
+	APIKeys PodAPIKeyService
+	Metrics PodMetricService
 }
 
 // NewPodService generates a new service that applies the given options to each
@@ -43,10 +46,17 @@ func NewPodService(opts ...option.RequestOption) (r PodService) {
 	r.Drafts = NewPodDraftService(opts...)
 	r.Inboxes = NewPodInboxService(opts...)
 	r.Threads = NewPodThreadService(opts...)
+	r.Lists = NewPodListService(opts...)
+	r.APIKeys = NewPodAPIKeyService(opts...)
+	r.Metrics = NewPodMetricService(opts...)
 	return
 }
 
-// Create Pod
+// **CLI:**
+//
+// ```bash
+// agentmail pods create --client-id my-pod
+// ```
 func (r *PodService) New(ctx context.Context, body PodNewParams, opts ...option.RequestOption) (res *Pod, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -55,7 +65,11 @@ func (r *PodService) New(ctx context.Context, body PodNewParams, opts ...option.
 	return res, err
 }
 
-// Get Pod
+// **CLI:**
+//
+// ```bash
+// agentmail pods retrieve --pod-id <pod_id>
+// ```
 func (r *PodService) Get(ctx context.Context, podID string, opts ...option.RequestOption) (res *Pod, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -68,7 +82,11 @@ func (r *PodService) Get(ctx context.Context, podID string, opts ...option.Reque
 	return res, err
 }
 
-// List Pods
+// **CLI:**
+//
+// ```bash
+// agentmail pods list
+// ```
 func (r *PodService) List(ctx context.Context, query PodListParams, opts ...option.RequestOption) (res *PodListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -77,7 +95,11 @@ func (r *PodService) List(ctx context.Context, query PodListParams, opts ...opti
 	return res, err
 }
 
-// Delete Pod
+// **CLI:**
+//
+// ```bash
+// agentmail pods delete --pod-id <pod_id>
+// ```
 func (r *PodService) Delete(ctx context.Context, podID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)

@@ -24,6 +24,7 @@ type Client struct {
 	APIKeys       APIKeyService
 	Domains       DomainService
 	Drafts        DraftService
+	Lists         ListService
 	Metrics       MetricService
 	Organizations OrganizationService
 	Threads       ThreadService
@@ -58,6 +59,7 @@ func NewClient(opts ...option.RequestOption) (r Client) {
 	r.APIKeys = NewAPIKeyService(opts...)
 	r.Domains = NewDomainService(opts...)
 	r.Drafts = NewDraftService(opts...)
+	r.Lists = NewListService(opts...)
 	r.Metrics = NewMetricService(opts...)
 	r.Organizations = NewOrganizationService(opts...)
 	r.Threads = NewThreadService(opts...)

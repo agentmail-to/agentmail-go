@@ -36,7 +36,11 @@ func NewPodDraftService(opts ...option.RequestOption) (r PodDraftService) {
 	return
 }
 
-// Get Draft
+// **CLI:**
+//
+// ```bash
+// agentmail pods:drafts retrieve --pod-id <pod_id> --draft-id <draft_id>
+// ```
 func (r *PodDraftService) Get(ctx context.Context, draftID string, query PodDraftGetParams, opts ...option.RequestOption) (res *Draft, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -53,7 +57,11 @@ func (r *PodDraftService) Get(ctx context.Context, draftID string, query PodDraf
 	return res, err
 }
 
-// List Drafts
+// **CLI:**
+//
+// ```bash
+// agentmail pods:drafts list --pod-id <pod_id>
+// ```
 func (r *PodDraftService) List(ctx context.Context, podID string, query PodDraftListParams, opts ...option.RequestOption) (res *ListDrafts, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -63,6 +71,31 @@ func (r *PodDraftService) List(ctx context.Context, podID string, query PodDraft
 	}
 	path := fmt.Sprintf("v0/pods/%s/drafts", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return res, err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail pods:drafts get-attachment --pod-id <pod_id> --draft-id <draft_id> --attachment-id <attachment_id>
+// ```
+func (r *PodDraftService) GetAttachment(ctx context.Context, attachmentID string, query PodDraftGetAttachmentParams, opts ...option.RequestOption) (res *AttachmentResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.PodID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return nil, err
+	}
+	if query.DraftID == "" {
+		err = errors.New("missing required draft_id parameter")
+		return nil, err
+	}
+	if attachmentID == "" {
+		err = errors.New("missing required attachment_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/pods/%s/drafts/%s/attachments/%s", url.PathEscape(query.PodID), url.PathEscape(query.DraftID), url.PathEscape(attachmentID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
 }
 
@@ -94,4 +127,12 @@ func (r PodDraftListParams) URLQuery() (v url.Values, err error) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type PodDraftGetAttachmentParams struct {
+	// ID of pod.
+	PodID string `path:"pod_id" api:"required" json:"-"`
+	// ID of draft.
+	DraftID string `path:"draft_id" api:"required" json:"-"`
+	paramObj
 }

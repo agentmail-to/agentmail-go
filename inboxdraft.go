@@ -40,7 +40,11 @@ func NewInboxDraftService(opts ...option.RequestOption) (r InboxDraftService) {
 	return
 }
 
-// Create Draft
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:drafts create --inbox-id <inbox_id> --to recipient@example.com --subject "Draft subject" --text "Draft body"
+// ```
 func (r *InboxDraftService) New(ctx context.Context, inboxID string, body InboxDraftNewParams, opts ...option.RequestOption) (res *Draft, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -53,7 +57,11 @@ func (r *InboxDraftService) New(ctx context.Context, inboxID string, body InboxD
 	return res, err
 }
 
-// Get Draft
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:drafts retrieve --inbox-id <inbox_id> --draft-id <draft_id>
+// ```
 func (r *InboxDraftService) Get(ctx context.Context, draftID string, query InboxDraftGetParams, opts ...option.RequestOption) (res *Draft, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -70,7 +78,11 @@ func (r *InboxDraftService) Get(ctx context.Context, draftID string, query Inbox
 	return res, err
 }
 
-// Update Draft
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:drafts update --inbox-id <inbox_id> --draft-id <draft_id> --subject "Updated subject"
+// ```
 func (r *InboxDraftService) Update(ctx context.Context, draftID string, params InboxDraftUpdateParams, opts ...option.RequestOption) (res *Draft, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -87,7 +99,11 @@ func (r *InboxDraftService) Update(ctx context.Context, draftID string, params I
 	return res, err
 }
 
-// List Drafts
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:drafts list --inbox-id <inbox_id>
+// ```
 func (r *InboxDraftService) List(ctx context.Context, inboxID string, query InboxDraftListParams, opts ...option.RequestOption) (res *ListDrafts, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -100,7 +116,11 @@ func (r *InboxDraftService) List(ctx context.Context, inboxID string, query Inbo
 	return res, err
 }
 
-// Delete Draft
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:drafts delete --inbox-id <inbox_id> --draft-id <draft_id>
+// ```
 func (r *InboxDraftService) Delete(ctx context.Context, draftID string, body InboxDraftDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -118,7 +138,36 @@ func (r *InboxDraftService) Delete(ctx context.Context, draftID string, body Inb
 	return err
 }
 
-// Send Draft
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:drafts get-attachment --inbox-id <inbox_id> --draft-id <draft_id> --attachment-id <attachment_id>
+// ```
+func (r *InboxDraftService) GetAttachment(ctx context.Context, attachmentID string, query InboxDraftGetAttachmentParams, opts ...option.RequestOption) (res *AttachmentResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.InboxID == "" {
+		err = errors.New("missing required inbox_id parameter")
+		return nil, err
+	}
+	if query.DraftID == "" {
+		err = errors.New("missing required draft_id parameter")
+		return nil, err
+	}
+	if attachmentID == "" {
+		err = errors.New("missing required attachment_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/inboxes/%s/drafts/%s/attachments/%s", url.PathEscape(query.InboxID), url.PathEscape(query.DraftID), url.PathEscape(attachmentID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:drafts send --inbox-id <inbox_id> --draft-id <draft_id>
+// ```
 func (r *InboxDraftService) Send(ctx context.Context, draftID string, params InboxDraftSendParams, opts ...option.RequestOption) (res *SendMessageResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -310,6 +359,14 @@ func (r InboxDraftListParams) URLQuery() (v url.Values, err error) {
 type InboxDraftDeleteParams struct {
 	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
+	paramObj
+}
+
+type InboxDraftGetAttachmentParams struct {
+	// The ID of the inbox.
+	InboxID string `path:"inbox_id" api:"required" json:"-"`
+	// ID of draft.
+	DraftID string `path:"draft_id" api:"required" json:"-"`
 	paramObj
 }
 

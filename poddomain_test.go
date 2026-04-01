@@ -45,6 +45,65 @@ func TestPodDomainNew(t *testing.T) {
 	}
 }
 
+func TestPodDomainGet(t *testing.T) {
+	t.Skip("Mock server tests are disabled")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := agentmail.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	_, err := client.Pods.Domains.Get(
+		context.TODO(),
+		"domain_id",
+		agentmail.PodDomainGetParams{
+			PodID: "pod_id",
+		},
+	)
+	if err != nil {
+		var apierr *agentmail.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestPodDomainUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("Mock server tests are disabled")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := agentmail.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	_, err := client.Pods.Domains.Update(
+		context.TODO(),
+		"domain_id",
+		agentmail.PodDomainUpdateParams{
+			PodID:           "pod_id",
+			FeedbackEnabled: agentmail.Bool(true),
+		},
+	)
+	if err != nil {
+		var apierr *agentmail.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestPodDomainListWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
@@ -93,6 +152,64 @@ func TestPodDomainDelete(t *testing.T) {
 		context.TODO(),
 		"domain_id",
 		agentmail.PodDomainDeleteParams{
+			PodID: "pod_id",
+		},
+	)
+	if err != nil {
+		var apierr *agentmail.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestPodDomainGetZoneFile(t *testing.T) {
+	t.Skip("Mock server tests are disabled")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := agentmail.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	err := client.Pods.Domains.GetZoneFile(
+		context.TODO(),
+		"domain_id",
+		agentmail.PodDomainGetZoneFileParams{
+			PodID: "pod_id",
+		},
+	)
+	if err != nil {
+		var apierr *agentmail.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestPodDomainVerify(t *testing.T) {
+	t.Skip("Mock server tests are disabled")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := agentmail.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	err := client.Pods.Domains.Verify(
+		context.TODO(),
+		"domain_id",
+		agentmail.PodDomainVerifyParams{
 			PodID: "pod_id",
 		},
 	)

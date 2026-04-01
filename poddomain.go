@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"slices"
 
+	"github.com/agentmail-to/agentmail-go/internal/apijson"
 	"github.com/agentmail-to/agentmail-go/internal/apiquery"
 	shimjson "github.com/agentmail-to/agentmail-go/internal/encoding/json"
 	"github.com/agentmail-to/agentmail-go/internal/requestconfig"
@@ -37,7 +38,11 @@ func NewPodDomainService(opts ...option.RequestOption) (r PodDomainService) {
 	return
 }
 
-// Create Domain
+// **CLI:**
+//
+// ```bash
+// agentmail pods:domains create --pod-id <pod_id> --domain example.com
+// ```
 func (r *PodDomainService) New(ctx context.Context, podID string, body PodDomainNewParams, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -50,7 +55,53 @@ func (r *PodDomainService) New(ctx context.Context, podID string, body PodDomain
 	return res, err
 }
 
-// List Domains
+// **CLI:**
+//
+// ```bash
+// agentmail pods:domains retrieve --pod-id <pod_id> --domain-id <domain_id>
+// ```
+func (r *PodDomainService) Get(ctx context.Context, domainID string, query PodDomainGetParams, opts ...option.RequestOption) (res *Domain, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.PodID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return nil, err
+	}
+	if domainID == "" {
+		err = errors.New("missing required domain_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/pods/%s/domains/%s", url.PathEscape(query.PodID), url.PathEscape(domainID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail pods:domains update --pod-id <pod_id> --domain-id <domain_id>
+// ```
+func (r *PodDomainService) Update(ctx context.Context, domainID string, params PodDomainUpdateParams, opts ...option.RequestOption) (res *Domain, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if params.PodID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return nil, err
+	}
+	if domainID == "" {
+		err = errors.New("missing required domain_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/pods/%s/domains/%s", url.PathEscape(params.PodID), url.PathEscape(domainID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
+	return res, err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail pods:domains list --pod-id <pod_id>
+// ```
 func (r *PodDomainService) List(ctx context.Context, podID string, query PodDomainListParams, opts ...option.RequestOption) (res *ListDomains, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -63,7 +114,11 @@ func (r *PodDomainService) List(ctx context.Context, podID string, query PodDoma
 	return res, err
 }
 
-// Delete Domain
+// **CLI:**
+//
+// ```bash
+// agentmail pods:domains delete --pod-id <pod_id> --domain-id <domain_id>
+// ```
 func (r *PodDomainService) Delete(ctx context.Context, domainID string, body PodDomainDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
@@ -81,6 +136,50 @@ func (r *PodDomainService) Delete(ctx context.Context, domainID string, body Pod
 	return err
 }
 
+// **CLI:**
+//
+// ```bash
+// agentmail pods:domains get-zone-file --pod-id <pod_id> --domain-id <domain_id>
+// ```
+func (r *PodDomainService) GetZoneFile(ctx context.Context, domainID string, query PodDomainGetZoneFileParams, opts ...option.RequestOption) (err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.PodID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return err
+	}
+	if domainID == "" {
+		err = errors.New("missing required domain_id parameter")
+		return err
+	}
+	path := fmt.Sprintf("v0/pods/%s/domains/%s/zone-file", url.PathEscape(query.PodID), url.PathEscape(domainID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, nil, opts...)
+	return err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail pods:domains verify --pod-id <pod_id> --domain-id <domain_id>
+// ```
+func (r *PodDomainService) Verify(ctx context.Context, domainID string, body PodDomainVerifyParams, opts ...option.RequestOption) (err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if body.PodID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return err
+	}
+	if domainID == "" {
+		err = errors.New("missing required domain_id parameter")
+		return err
+	}
+	path := fmt.Sprintf("v0/pods/%s/domains/%s/verify", url.PathEscape(body.PodID), url.PathEscape(domainID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, nil, opts...)
+	return err
+}
+
 type PodDomainNewParams struct {
 	CreateDomain CreateDomainParam
 	paramObj
@@ -91,6 +190,28 @@ func (r PodDomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 func (r *PodDomainNewParams) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &r.CreateDomain)
+}
+
+type PodDomainGetParams struct {
+	// ID of pod.
+	PodID string `path:"pod_id" api:"required" json:"-"`
+	paramObj
+}
+
+type PodDomainUpdateParams struct {
+	// ID of pod.
+	PodID string `path:"pod_id" api:"required" json:"-"`
+	// Bounce and complaint notifications are sent to your inboxes.
+	FeedbackEnabled param.Opt[bool] `json:"feedback_enabled,omitzero"`
+	paramObj
+}
+
+func (r PodDomainUpdateParams) MarshalJSON() (data []byte, err error) {
+	type shadow PodDomainUpdateParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *PodDomainUpdateParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type PodDomainListParams struct {
@@ -112,6 +233,18 @@ func (r PodDomainListParams) URLQuery() (v url.Values, err error) {
 }
 
 type PodDomainDeleteParams struct {
+	// ID of pod.
+	PodID string `path:"pod_id" api:"required" json:"-"`
+	paramObj
+}
+
+type PodDomainGetZoneFileParams struct {
+	// ID of pod.
+	PodID string `path:"pod_id" api:"required" json:"-"`
+	paramObj
+}
+
+type PodDomainVerifyParams struct {
 	// ID of pod.
 	PodID string `path:"pod_id" api:"required" json:"-"`
 	paramObj
