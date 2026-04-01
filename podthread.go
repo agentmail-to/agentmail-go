@@ -36,7 +36,11 @@ func NewPodThreadService(opts ...option.RequestOption) (r PodThreadService) {
 	return
 }
 
-// Get Thread
+// **CLI:**
+//
+// ```bash
+// agentmail pods:threads retrieve --pod-id <pod_id> --thread-id <thread_id>
+// ```
 func (r *PodThreadService) Get(ctx context.Context, threadID string, query PodThreadGetParams, opts ...option.RequestOption) (res *Thread, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -53,7 +57,11 @@ func (r *PodThreadService) Get(ctx context.Context, threadID string, query PodTh
 	return res, err
 }
 
-// List Threads
+// **CLI:**
+//
+// ```bash
+// agentmail pods:threads list --pod-id <pod_id>
+// ```
 func (r *PodThreadService) List(ctx context.Context, podID string, query PodThreadListParams, opts ...option.RequestOption) (res *ListThreads, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -66,7 +74,11 @@ func (r *PodThreadService) List(ctx context.Context, podID string, query PodThre
 	return res, err
 }
 
-// Get Attachment
+// **CLI:**
+//
+// ```bash
+// agentmail pods:threads get-attachment --pod-id <pod_id> --thread-id <thread_id> --attachment-id <attachment_id>
+// ```
 func (r *PodThreadService) GetAttachment(ctx context.Context, attachmentID string, query PodThreadGetAttachmentParams, opts ...option.RequestOption) (res *AttachmentResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)

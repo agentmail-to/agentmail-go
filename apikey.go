@@ -36,7 +36,11 @@ func NewAPIKeyService(opts ...option.RequestOption) (r APIKeyService) {
 	return
 }
 
-// Create API Key
+// **CLI:**
+//
+// ```bash
+// agentmail api-keys create --name "My Key"
+// ```
 func (r *APIKeyService) New(ctx context.Context, body APIKeyNewParams, opts ...option.RequestOption) (res *APIKeyNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -45,7 +49,11 @@ func (r *APIKeyService) New(ctx context.Context, body APIKeyNewParams, opts ...o
 	return res, err
 }
 
-// List API Keys
+// **CLI:**
+//
+// ```bash
+// agentmail api-keys list
+// ```
 func (r *APIKeyService) List(ctx context.Context, query APIKeyListParams, opts ...option.RequestOption) (res *APIKeyListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)

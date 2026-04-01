@@ -37,7 +37,11 @@ func NewPodDomainService(opts ...option.RequestOption) (r PodDomainService) {
 	return
 }
 
-// Create Domain
+// **CLI:**
+//
+// ```bash
+// agentmail pods:domains create --pod-id <pod_id> --domain example.com
+// ```
 func (r *PodDomainService) New(ctx context.Context, podID string, body PodDomainNewParams, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -50,7 +54,11 @@ func (r *PodDomainService) New(ctx context.Context, podID string, body PodDomain
 	return res, err
 }
 
-// List Domains
+// **CLI:**
+//
+// ```bash
+// agentmail pods:domains list --pod-id <pod_id>
+// ```
 func (r *PodDomainService) List(ctx context.Context, podID string, query PodDomainListParams, opts ...option.RequestOption) (res *ListDomains, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -63,7 +71,11 @@ func (r *PodDomainService) List(ctx context.Context, podID string, query PodDoma
 	return res, err
 }
 
-// Delete Domain
+// **CLI:**
+//
+// ```bash
+// agentmail pods:domains delete --pod-id <pod_id> --domain-id <domain_id>
+// ```
 func (r *PodDomainService) Delete(ctx context.Context, domainID string, body PodDomainDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)

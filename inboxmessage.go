@@ -40,7 +40,11 @@ func NewInboxMessageService(opts ...option.RequestOption) (r InboxMessageService
 	return
 }
 
-// Get Message
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:messages retrieve --inbox-id <inbox_id> --message-id <message_id>
+// ```
 func (r *InboxMessageService) Get(ctx context.Context, messageID string, query InboxMessageGetParams, opts ...option.RequestOption) (res *Message, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -57,7 +61,11 @@ func (r *InboxMessageService) Get(ctx context.Context, messageID string, query I
 	return res, err
 }
 
-// Update Message
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:messages update --inbox-id <inbox_id> --message-id <message_id> --add-label read --remove-label unread
+// ```
 func (r *InboxMessageService) Update(ctx context.Context, messageID string, params InboxMessageUpdateParams, opts ...option.RequestOption) (res *InboxMessageUpdateResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -74,7 +82,11 @@ func (r *InboxMessageService) Update(ctx context.Context, messageID string, para
 	return res, err
 }
 
-// List Messages
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:messages list --inbox-id <inbox_id>
+// ```
 func (r *InboxMessageService) List(ctx context.Context, inboxID string, query InboxMessageListParams, opts ...option.RequestOption) (res *InboxMessageListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -87,7 +99,11 @@ func (r *InboxMessageService) List(ctx context.Context, inboxID string, query In
 	return res, err
 }
 
-// Forward Message
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:messages forward --inbox-id <inbox_id> --message-id <message_id> --to recipient@example.com
+// ```
 func (r *InboxMessageService) Forward(ctx context.Context, messageID string, params InboxMessageForwardParams, opts ...option.RequestOption) (res *SendMessageResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -104,7 +120,11 @@ func (r *InboxMessageService) Forward(ctx context.Context, messageID string, par
 	return res, err
 }
 
-// Get Attachment
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:messages get-attachment --inbox-id <inbox_id> --message-id <message_id> --attachment-id <attachment_id>
+// ```
 func (r *InboxMessageService) GetAttachment(ctx context.Context, attachmentID string, query InboxMessageGetAttachmentParams, opts ...option.RequestOption) (res *AttachmentResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -125,7 +145,11 @@ func (r *InboxMessageService) GetAttachment(ctx context.Context, attachmentID st
 	return res, err
 }
 
-// Get Raw Message
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:messages get-raw --inbox-id <inbox_id> --message-id <message_id>
+// ```
 func (r *InboxMessageService) GetRaw(ctx context.Context, messageID string, query InboxMessageGetRawParams, opts ...option.RequestOption) (res *InboxMessageGetRawResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -142,7 +166,11 @@ func (r *InboxMessageService) GetRaw(ctx context.Context, messageID string, quer
 	return res, err
 }
 
-// Reply To Message
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:messages reply --inbox-id <inbox_id> --message-id <message_id> --text "Reply text"
+// ```
 func (r *InboxMessageService) Reply(ctx context.Context, messageID string, params InboxMessageReplyParams, opts ...option.RequestOption) (res *SendMessageResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -159,7 +187,11 @@ func (r *InboxMessageService) Reply(ctx context.Context, messageID string, param
 	return res, err
 }
 
-// Reply All Message
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:messages reply-all --inbox-id <inbox_id> --message-id <message_id> --text "Reply text"
+// ```
 func (r *InboxMessageService) ReplyAll(ctx context.Context, messageID string, params InboxMessageReplyAllParams, opts ...option.RequestOption) (res *SendMessageResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -176,7 +208,11 @@ func (r *InboxMessageService) ReplyAll(ctx context.Context, messageID string, pa
 	return res, err
 }
 
-// Send Message
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:messages send --inbox-id <inbox_id> --to recipient@example.com --subject "Hello" --text "Body"
+// ```
 func (r *InboxMessageService) Send(ctx context.Context, inboxID string, body InboxMessageSendParams, opts ...option.RequestOption) (res *SendMessageResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)

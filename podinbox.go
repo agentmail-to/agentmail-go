@@ -37,7 +37,11 @@ func NewPodInboxService(opts ...option.RequestOption) (r PodInboxService) {
 	return
 }
 
-// Create Inbox
+// **CLI:**
+//
+// ```bash
+// agentmail pods:inboxes create --pod-id <pod_id> --username myagent --domain example.com
+// ```
 func (r *PodInboxService) New(ctx context.Context, podID string, body PodInboxNewParams, opts ...option.RequestOption) (res *Inbox, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -50,7 +54,11 @@ func (r *PodInboxService) New(ctx context.Context, podID string, body PodInboxNe
 	return res, err
 }
 
-// Get Inbox
+// **CLI:**
+//
+// ```bash
+// agentmail pods:inboxes retrieve --pod-id <pod_id> --inbox-id <inbox_id>
+// ```
 func (r *PodInboxService) Get(ctx context.Context, inboxID string, query PodInboxGetParams, opts ...option.RequestOption) (res *Inbox, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -67,7 +75,11 @@ func (r *PodInboxService) Get(ctx context.Context, inboxID string, query PodInbo
 	return res, err
 }
 
-// List Inboxes
+// **CLI:**
+//
+// ```bash
+// agentmail pods:inboxes list --pod-id <pod_id>
+// ```
 func (r *PodInboxService) List(ctx context.Context, podID string, query PodInboxListParams, opts ...option.RequestOption) (res *ListInboxes, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -80,7 +92,11 @@ func (r *PodInboxService) List(ctx context.Context, podID string, query PodInbox
 	return res, err
 }
 
-// Delete Inbox
+// **CLI:**
+//
+// ```bash
+// agentmail pods:inboxes delete --pod-id <pod_id> --inbox-id <inbox_id>
+// ```
 func (r *PodInboxService) Delete(ctx context.Context, inboxID string, body PodInboxDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)

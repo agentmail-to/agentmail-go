@@ -36,7 +36,11 @@ func NewThreadService(opts ...option.RequestOption) (r ThreadService) {
 	return
 }
 
-// Get Thread
+// **CLI:**
+//
+// ```bash
+// agentmail threads retrieve --thread-id <thread_id>
+// ```
 func (r *ThreadService) Get(ctx context.Context, threadID string, opts ...option.RequestOption) (res *Thread, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -49,7 +53,11 @@ func (r *ThreadService) Get(ctx context.Context, threadID string, opts ...option
 	return res, err
 }
 
-// List Threads
+// **CLI:**
+//
+// ```bash
+// agentmail threads list
+// ```
 func (r *ThreadService) List(ctx context.Context, query ThreadListParams, opts ...option.RequestOption) (res *ListThreads, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -58,7 +66,11 @@ func (r *ThreadService) List(ctx context.Context, query ThreadListParams, opts .
 	return res, err
 }
 
-// Get Attachment
+// **CLI:**
+//
+// ```bash
+// agentmail threads retrieve-attachment --thread-id <thread_id> --attachment-id <attachment_id>
+// ```
 func (r *ThreadService) GetAttachment(ctx context.Context, attachmentID string, query ThreadGetAttachmentParams, opts ...option.RequestOption) (res *AttachmentResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
