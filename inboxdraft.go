@@ -4,7 +4,6 @@ package agentmail
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -381,5 +380,5 @@ func (r InboxDraftSendParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.UpdateMessage)
 }
 func (r *InboxDraftSendParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.UpdateMessage)
+	return apijson.UnmarshalRoot(data, r)
 }

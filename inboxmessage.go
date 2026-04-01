@@ -4,7 +4,6 @@ package agentmail
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -597,7 +596,7 @@ func (r InboxMessageUpdateParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.UpdateMessage)
 }
 func (r *InboxMessageUpdateParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.UpdateMessage)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type InboxMessageListParams struct {
@@ -641,7 +640,7 @@ func (r InboxMessageForwardParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.SendMessageRequest)
 }
 func (r *InboxMessageForwardParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.SendMessageRequest)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type InboxMessageGetAttachmentParams struct {
@@ -727,5 +726,5 @@ func (r InboxMessageSendParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.SendMessageRequest)
 }
 func (r *InboxMessageSendParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.SendMessageRequest)
+	return apijson.UnmarshalRoot(data, r)
 }
