@@ -4,7 +4,6 @@ package agentmail
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -270,7 +269,7 @@ func (r InboxNewParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.CreateInbox)
 }
 func (r *InboxNewParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.CreateInbox)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type InboxUpdateParams struct {

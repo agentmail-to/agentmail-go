@@ -4,7 +4,6 @@ package agentmail
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -145,7 +144,7 @@ func (r PodInboxNewParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.CreateInbox)
 }
 func (r *PodInboxNewParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.CreateInbox)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type PodInboxGetParams struct {

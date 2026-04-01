@@ -4,7 +4,6 @@ package agentmail
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -329,7 +328,7 @@ func (r DomainNewParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.CreateDomain)
 }
 func (r *DomainNewParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.CreateDomain)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type DomainUpdateParams struct {
