@@ -74,6 +74,31 @@ func (r *PodDraftService) List(ctx context.Context, podID string, query PodDraft
 	return res, err
 }
 
+// **CLI:**
+//
+// ```bash
+// agentmail pods:drafts get-attachment --pod-id <pod_id> --draft-id <draft_id> --attachment-id <attachment_id>
+// ```
+func (r *PodDraftService) GetAttachment(ctx context.Context, attachmentID string, query PodDraftGetAttachmentParams, opts ...option.RequestOption) (res *AttachmentResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.PodID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return nil, err
+	}
+	if query.DraftID == "" {
+		err = errors.New("missing required draft_id parameter")
+		return nil, err
+	}
+	if attachmentID == "" {
+		err = errors.New("missing required attachment_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/pods/%s/drafts/%s/attachments/%s", url.PathEscape(query.PodID), url.PathEscape(query.DraftID), url.PathEscape(attachmentID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
+}
+
 type PodDraftGetParams struct {
 	// ID of pod.
 	PodID string `path:"pod_id" api:"required" json:"-"`
@@ -102,4 +127,12 @@ func (r PodDraftListParams) URLQuery() (v url.Values, err error) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type PodDraftGetAttachmentParams struct {
+	// ID of pod.
+	PodID string `path:"pod_id" api:"required" json:"-"`
+	// ID of draft.
+	DraftID string `path:"draft_id" api:"required" json:"-"`
+	paramObj
 }

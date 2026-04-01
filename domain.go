@@ -73,6 +73,23 @@ func (r *DomainService) Get(ctx context.Context, domainID string, opts ...option
 // **CLI:**
 //
 // ```bash
+// agentmail domains update --domain-id <domain_id>
+// ```
+func (r *DomainService) Update(ctx context.Context, domainID string, body DomainUpdateParams, opts ...option.RequestOption) (res *Domain, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if domainID == "" {
+		err = errors.New("missing required domain_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/domains/%s", url.PathEscape(domainID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
+	return res, err
+}
+
+// **CLI:**
+//
+// ```bash
 // agentmail domains list
 // ```
 func (r *DomainService) List(ctx context.Context, query DomainListParams, opts ...option.RequestOption) (res *ListDomains, err error) {
@@ -313,6 +330,20 @@ func (r DomainNewParams) MarshalJSON() (data []byte, err error) {
 }
 func (r *DomainNewParams) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &r.CreateDomain)
+}
+
+type DomainUpdateParams struct {
+	// Bounce and complaint notifications are sent to your inboxes.
+	FeedbackEnabled param.Opt[bool] `json:"feedback_enabled,omitzero"`
+	paramObj
+}
+
+func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
+	type shadow DomainUpdateParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *DomainUpdateParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type DomainListParams struct {

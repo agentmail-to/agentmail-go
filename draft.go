@@ -68,6 +68,27 @@ func (r *DraftService) List(ctx context.Context, query DraftListParams, opts ...
 	return res, err
 }
 
+// **CLI:**
+//
+// ```bash
+// agentmail drafts get-attachment --draft-id <draft_id> --attachment-id <attachment_id>
+// ```
+func (r *DraftService) GetAttachment(ctx context.Context, attachmentID string, query DraftGetAttachmentParams, opts ...option.RequestOption) (res *AttachmentResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.DraftID == "" {
+		err = errors.New("missing required draft_id parameter")
+		return nil, err
+	}
+	if attachmentID == "" {
+		err = errors.New("missing required attachment_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/drafts/%s/attachments/%s", url.PathEscape(query.DraftID), url.PathEscape(attachmentID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
+}
+
 type AttachmentFile struct {
 	// ID of attachment.
 	AttachmentID string `json:"attachment_id" api:"required"`
@@ -294,4 +315,10 @@ func (r DraftListParams) URLQuery() (v url.Values, err error) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type DraftGetAttachmentParams struct {
+	// ID of draft.
+	DraftID string `path:"draft_id" api:"required" json:"-"`
+	paramObj
 }

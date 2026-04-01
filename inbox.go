@@ -32,6 +32,8 @@ type InboxService struct {
 	Drafts   InboxDraftService
 	Messages InboxMessageService
 	Threads  InboxThreadService
+	Lists    InboxListService
+	APIKeys  InboxAPIKeyService
 }
 
 // NewInboxService generates a new service that applies the given options to each
@@ -43,6 +45,8 @@ func NewInboxService(opts ...option.RequestOption) (r InboxService) {
 	r.Drafts = NewInboxDraftService(opts...)
 	r.Messages = NewInboxMessageService(opts...)
 	r.Threads = NewInboxThreadService(opts...)
+	r.Lists = NewInboxListService(opts...)
+	r.APIKeys = NewInboxAPIKeyService(opts...)
 	return
 }
 
