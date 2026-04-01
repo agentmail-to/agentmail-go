@@ -19,21 +19,21 @@ import (
 	"github.com/agentmail-to/agentmail-go/packages/respjson"
 )
 
-// APIKeyService contains methods and other services that help with interacting
+// PodAPIKeyService contains methods and other services that help with interacting
 // with the agentmail API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAPIKeyService] method instead.
-type APIKeyService struct {
+// the [NewPodAPIKeyService] method instead.
+type PodAPIKeyService struct {
 	Options []option.RequestOption
 }
 
-// NewAPIKeyService generates a new service that applies the given options to each
-// request. These options are applied after the parent client's options (if there
-// is one), and before any request-specific options.
-func NewAPIKeyService(opts ...option.RequestOption) (r APIKeyService) {
-	r = APIKeyService{}
+// NewPodAPIKeyService generates a new service that applies the given options to
+// each request. These options are applied after the parent client's options (if
+// there is one), and before any request-specific options.
+func NewPodAPIKeyService(opts ...option.RequestOption) (r PodAPIKeyService) {
+	r = PodAPIKeyService{}
 	r.Options = opts
 	return
 }
@@ -41,12 +41,16 @@ func NewAPIKeyService(opts ...option.RequestOption) (r APIKeyService) {
 // **CLI:**
 //
 // ```bash
-// agentmail api-keys create --name "My Key"
+// agentmail pods:api-keys create --pod-id <pod_id> --name "My Key"
 // ```
-func (r *APIKeyService) New(ctx context.Context, body APIKeyNewParams, opts ...option.RequestOption) (res *APIKeyNewResponse, err error) {
+func (r *PodAPIKeyService) New(ctx context.Context, podID string, body PodAPIKeyNewParams, opts ...option.RequestOption) (res *PodAPIKeyNewResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	path := "v0/api-keys"
+	if podID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/pods/%s/api-keys", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return res, err
 }
@@ -54,12 +58,16 @@ func (r *APIKeyService) New(ctx context.Context, body APIKeyNewParams, opts ...o
 // **CLI:**
 //
 // ```bash
-// agentmail api-keys list
+// agentmail pods:api-keys list --pod-id <pod_id>
 // ```
-func (r *APIKeyService) List(ctx context.Context, query APIKeyListParams, opts ...option.RequestOption) (res *APIKeyListResponse, err error) {
+func (r *PodAPIKeyService) List(ctx context.Context, podID string, query PodAPIKeyListParams, opts ...option.RequestOption) (res *PodAPIKeyListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	path := "v0/api-keys"
+	if podID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/pods/%s/api-keys", url.PathEscape(podID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return res, err
 }
@@ -67,22 +75,26 @@ func (r *APIKeyService) List(ctx context.Context, query APIKeyListParams, opts .
 // **CLI:**
 //
 // ```bash
-// agentmail api-keys delete --api-key-id <api_key_id>
+// agentmail pods:api-keys delete --pod-id <pod_id> --api-key-id <api_key_id>
 // ```
-func (r *APIKeyService) Delete(ctx context.Context, apiKeyID string, opts ...option.RequestOption) (err error) {
+func (r *PodAPIKeyService) Delete(ctx context.Context, apiKeyID string, body PodAPIKeyDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if body.PodID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return err
+	}
 	if apiKeyID == "" {
 		err = errors.New("missing required api_key_id parameter")
 		return err
 	}
-	path := fmt.Sprintf("v0/api-keys/%s", url.PathEscape(apiKeyID))
+	path := fmt.Sprintf("v0/pods/%s/api-keys/%s", url.PathEscape(body.PodID), url.PathEscape(apiKeyID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
 }
 
-type APIKeyNewResponse struct {
+type PodAPIKeyNewResponse struct {
 	// API key.
 	APIKey string `json:"api_key" api:"required"`
 	// ID of api key.
@@ -97,7 +109,7 @@ type APIKeyNewResponse struct {
 	InboxID string `json:"inbox_id" api:"nullable"`
 	// Granular permissions for the API key. When ommitted all permissions are granted.
 	// Otherwise, only permissions set to true are granted.
-	Permissions APIKeyNewResponsePermissions `json:"permissions" api:"nullable"`
+	Permissions PodAPIKeyNewResponsePermissions `json:"permissions" api:"nullable"`
 	// Pod ID the api key is scoped to.
 	PodID string `json:"pod_id" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -116,14 +128,14 @@ type APIKeyNewResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r APIKeyNewResponse) RawJSON() string { return r.JSON.raw }
-func (r *APIKeyNewResponse) UnmarshalJSON(data []byte) error {
+func (r PodAPIKeyNewResponse) RawJSON() string { return r.JSON.raw }
+func (r *PodAPIKeyNewResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Granular permissions for the API key. When ommitted all permissions are granted.
 // Otherwise, only permissions set to true are granted.
-type APIKeyNewResponsePermissions struct {
+type PodAPIKeyNewResponsePermissions struct {
 	// Create API keys.
 	APIKeyCreate bool `json:"api_key_create" api:"nullable"`
 	// Delete API keys.
@@ -237,14 +249,14 @@ type APIKeyNewResponsePermissions struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r APIKeyNewResponsePermissions) RawJSON() string { return r.JSON.raw }
-func (r *APIKeyNewResponsePermissions) UnmarshalJSON(data []byte) error {
+func (r PodAPIKeyNewResponsePermissions) RawJSON() string { return r.JSON.raw }
+func (r *PodAPIKeyNewResponsePermissions) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIKeyListResponse struct {
+type PodAPIKeyListResponse struct {
 	// Ordered by `created_at` descending.
-	APIKeys []APIKeyListResponseAPIKey `json:"api_keys" api:"required"`
+	APIKeys []PodAPIKeyListResponseAPIKey `json:"api_keys" api:"required"`
 	// Number of items returned.
 	Count int64 `json:"count" api:"required"`
 	// Page token for pagination.
@@ -260,12 +272,12 @@ type APIKeyListResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r APIKeyListResponse) RawJSON() string { return r.JSON.raw }
-func (r *APIKeyListResponse) UnmarshalJSON(data []byte) error {
+func (r PodAPIKeyListResponse) RawJSON() string { return r.JSON.raw }
+func (r *PodAPIKeyListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIKeyListResponseAPIKey struct {
+type PodAPIKeyListResponseAPIKey struct {
 	// ID of api key.
 	APIKeyID string `json:"api_key_id" api:"required"`
 	// Time at which api key was created.
@@ -279,7 +291,7 @@ type APIKeyListResponseAPIKey struct {
 	InboxID string `json:"inbox_id" api:"nullable"`
 	// Granular permissions for the API key. When ommitted all permissions are granted.
 	// Otherwise, only permissions set to true are granted.
-	Permissions APIKeyListResponseAPIKeyPermissions `json:"permissions" api:"nullable"`
+	Permissions PodAPIKeyListResponseAPIKeyPermissions `json:"permissions" api:"nullable"`
 	// Pod ID the api key is scoped to. If set, the key can only access resources
 	// within this pod.
 	PodID string `json:"pod_id" api:"nullable"`
@@ -301,14 +313,14 @@ type APIKeyListResponseAPIKey struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r APIKeyListResponseAPIKey) RawJSON() string { return r.JSON.raw }
-func (r *APIKeyListResponseAPIKey) UnmarshalJSON(data []byte) error {
+func (r PodAPIKeyListResponseAPIKey) RawJSON() string { return r.JSON.raw }
+func (r *PodAPIKeyListResponseAPIKey) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Granular permissions for the API key. When ommitted all permissions are granted.
 // Otherwise, only permissions set to true are granted.
-type APIKeyListResponseAPIKeyPermissions struct {
+type PodAPIKeyListResponseAPIKeyPermissions struct {
 	// Create API keys.
 	APIKeyCreate bool `json:"api_key_create" api:"nullable"`
 	// Delete API keys.
@@ -422,31 +434,31 @@ type APIKeyListResponseAPIKeyPermissions struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r APIKeyListResponseAPIKeyPermissions) RawJSON() string { return r.JSON.raw }
-func (r *APIKeyListResponseAPIKeyPermissions) UnmarshalJSON(data []byte) error {
+func (r PodAPIKeyListResponseAPIKeyPermissions) RawJSON() string { return r.JSON.raw }
+func (r *PodAPIKeyListResponseAPIKeyPermissions) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIKeyNewParams struct {
+type PodAPIKeyNewParams struct {
 	// Name of api key.
 	Name string `json:"name" api:"required"`
 	// Granular permissions for the API key. When ommitted all permissions are granted.
 	// Otherwise, only permissions set to true are granted.
-	Permissions APIKeyNewParamsPermissions `json:"permissions,omitzero"`
+	Permissions PodAPIKeyNewParamsPermissions `json:"permissions,omitzero"`
 	paramObj
 }
 
-func (r APIKeyNewParams) MarshalJSON() (data []byte, err error) {
-	type shadow APIKeyNewParams
+func (r PodAPIKeyNewParams) MarshalJSON() (data []byte, err error) {
+	type shadow PodAPIKeyNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *APIKeyNewParams) UnmarshalJSON(data []byte) error {
+func (r *PodAPIKeyNewParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Granular permissions for the API key. When ommitted all permissions are granted.
 // Otherwise, only permissions set to true are granted.
-type APIKeyNewParamsPermissions struct {
+type PodAPIKeyNewParamsPermissions struct {
 	// Create API keys.
 	APIKeyCreate param.Opt[bool] `json:"api_key_create,omitzero"`
 	// Delete API keys.
@@ -520,17 +532,15 @@ type APIKeyNewParamsPermissions struct {
 	paramObj
 }
 
-func (r APIKeyNewParamsPermissions) MarshalJSON() (data []byte, err error) {
-	type shadow APIKeyNewParamsPermissions
+func (r PodAPIKeyNewParamsPermissions) MarshalJSON() (data []byte, err error) {
+	type shadow PodAPIKeyNewParamsPermissions
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *APIKeyNewParamsPermissions) UnmarshalJSON(data []byte) error {
+func (r *PodAPIKeyNewParamsPermissions) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIKeyListParams struct {
-	// Sort in ascending temporal order.
-	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
+type PodAPIKeyListParams struct {
 	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
@@ -538,10 +548,16 @@ type APIKeyListParams struct {
 	paramObj
 }
 
-// URLQuery serializes [APIKeyListParams]'s query parameters as `url.Values`.
-func (r APIKeyListParams) URLQuery() (v url.Values, err error) {
+// URLQuery serializes [PodAPIKeyListParams]'s query parameters as `url.Values`.
+func (r PodAPIKeyListParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type PodAPIKeyDeleteParams struct {
+	// ID of pod.
+	PodID string `path:"pod_id" api:"required" json:"-"`
+	paramObj
 }

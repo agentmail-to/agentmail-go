@@ -31,6 +31,9 @@ type PodService struct {
 	Drafts  PodDraftService
 	Inboxes PodInboxService
 	Threads PodThreadService
+	Lists   PodListService
+	APIKeys PodAPIKeyService
+	Metrics PodMetricService
 }
 
 // NewPodService generates a new service that applies the given options to each
@@ -43,6 +46,9 @@ func NewPodService(opts ...option.RequestOption) (r PodService) {
 	r.Drafts = NewPodDraftService(opts...)
 	r.Inboxes = NewPodInboxService(opts...)
 	r.Threads = NewPodThreadService(opts...)
+	r.Lists = NewPodListService(opts...)
+	r.APIKeys = NewPodAPIKeyService(opts...)
+	r.Metrics = NewPodMetricService(opts...)
 	return
 }
 

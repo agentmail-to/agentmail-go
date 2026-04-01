@@ -7,14 +7,13 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/agentmail-to/agentmail-go"
 	"github.com/agentmail-to/agentmail-go/internal/testutil"
 	"github.com/agentmail-to/agentmail-go/option"
 )
 
-func TestPodDraftGet(t *testing.T) {
+func TestListNewWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,11 +26,13 @@ func TestPodDraftGet(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Pods.Drafts.Get(
+	_, err := client.Lists.New(
 		context.TODO(),
-		"draft_id",
-		agentmail.PodDraftGetParams{
-			PodID: "pod_id",
+		agentmail.ListNewParamsTypeAllow,
+		agentmail.ListNewParams{
+			Direction: agentmail.ListNewParamsDirectionSend,
+			Entry:     "entry",
+			Reason:    agentmail.String("reason"),
 		},
 	)
 	if err != nil {
@@ -43,7 +44,7 @@ func TestPodDraftGet(t *testing.T) {
 	}
 }
 
-func TestPodDraftListWithOptionalParams(t *testing.T) {
+func TestListGet(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -56,14 +57,41 @@ func TestPodDraftListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Pods.Drafts.List(
+	_, err := client.Lists.Get(
 		context.TODO(),
-		"pod_id",
-		agentmail.PodDraftListParams{
-			After:     agentmail.Time(time.Now()),
-			Ascending: agentmail.Bool(true),
-			Before:    agentmail.Time(time.Now()),
-			Labels:    []string{"string"},
+		"entry",
+		agentmail.ListGetParams{
+			Direction: agentmail.ListGetParamsDirectionSend,
+			Type:      agentmail.ListGetParamsTypeAllow,
+		},
+	)
+	if err != nil {
+		var apierr *agentmail.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestListListWithOptionalParams(t *testing.T) {
+	t.Skip("Mock server tests are disabled")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := agentmail.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
+	)
+	_, err := client.Lists.List(
+		context.TODO(),
+		agentmail.ListListParamsTypeAllow,
+		agentmail.ListListParams{
+			Direction: agentmail.ListListParamsDirectionSend,
 			Limit:     agentmail.Int(0),
 			PageToken: agentmail.String("page_token"),
 		},
@@ -77,7 +105,7 @@ func TestPodDraftListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPodDraftGetAttachment(t *testing.T) {
+func TestListDelete(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -90,12 +118,12 @@ func TestPodDraftGetAttachment(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.Pods.Drafts.GetAttachment(
+	err := client.Lists.Delete(
 		context.TODO(),
-		"attachment_id",
-		agentmail.PodDraftGetAttachmentParams{
-			PodID:   "pod_id",
-			DraftID: "draft_id",
+		"entry",
+		agentmail.ListDeleteParams{
+			Direction: agentmail.ListDeleteParamsDirectionSend,
+			Type:      agentmail.ListDeleteParamsTypeAllow,
 		},
 	)
 	if err != nil {

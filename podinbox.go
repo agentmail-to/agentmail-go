@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"slices"
 
+	"github.com/agentmail-to/agentmail-go/internal/apijson"
 	"github.com/agentmail-to/agentmail-go/internal/apiquery"
 	shimjson "github.com/agentmail-to/agentmail-go/internal/encoding/json"
 	"github.com/agentmail-to/agentmail-go/internal/requestconfig"
@@ -78,6 +79,27 @@ func (r *PodInboxService) Get(ctx context.Context, inboxID string, query PodInbo
 // **CLI:**
 //
 // ```bash
+// agentmail pods:inboxes update --pod-id <pod_id> --inbox-id <inbox_id>
+// ```
+func (r *PodInboxService) Update(ctx context.Context, inboxID string, params PodInboxUpdateParams, opts ...option.RequestOption) (res *Inbox, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if params.PodID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return nil, err
+	}
+	if inboxID == "" {
+		err = errors.New("missing required inbox_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/pods/%s/inboxes/%s", url.PathEscape(params.PodID), url.PathEscape(inboxID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
+	return res, err
+}
+
+// **CLI:**
+//
+// ```bash
 // agentmail pods:inboxes list --pod-id <pod_id>
 // ```
 func (r *PodInboxService) List(ctx context.Context, podID string, query PodInboxListParams, opts ...option.RequestOption) (res *ListInboxes, err error) {
@@ -130,6 +152,22 @@ type PodInboxGetParams struct {
 	// ID of pod.
 	PodID string `path:"pod_id" api:"required" json:"-"`
 	paramObj
+}
+
+type PodInboxUpdateParams struct {
+	// ID of pod.
+	PodID string `path:"pod_id" api:"required" json:"-"`
+	// Display name: `Display Name <username@domain.com>`.
+	DisplayName string `json:"display_name" api:"required"`
+	paramObj
+}
+
+func (r PodInboxUpdateParams) MarshalJSON() (data []byte, err error) {
+	type shadow PodInboxUpdateParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *PodInboxUpdateParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type PodInboxListParams struct {
