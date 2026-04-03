@@ -30,7 +30,7 @@ func TestInboxAPIKeyNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"inbox_id",
 		agentmail.InboxAPIKeyNewParams{
-			Name: "name",
+			Name: agentmail.String("name"),
 			Permissions: agentmail.InboxAPIKeyNewParamsPermissions{
 				APIKeyCreate:     agentmail.Bool(true),
 				APIKeyDelete:     agentmail.Bool(true),

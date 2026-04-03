@@ -441,7 +441,7 @@ func (r *PodAPIKeyListResponseAPIKeyPermissions) UnmarshalJSON(data []byte) erro
 
 type PodAPIKeyNewParams struct {
 	// Name of api key.
-	Name string `json:"name" api:"required"`
+	Name param.Opt[string] `json:"name,omitzero"`
 	// Granular permissions for the API key. When ommitted all permissions are granted.
 	// Otherwise, only permissions set to true are granted.
 	Permissions PodAPIKeyNewParamsPermissions `json:"permissions,omitzero"`
