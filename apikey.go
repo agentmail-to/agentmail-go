@@ -531,7 +531,7 @@ func (r *APIKeyNewParamsPermissions) UnmarshalJSON(data []byte) error {
 type APIKeyListParams struct {
 	// Sort in ascending temporal order.
 	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
-	// Maximum number of items to return in a single page.
+	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
