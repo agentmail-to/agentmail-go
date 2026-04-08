@@ -236,7 +236,7 @@ type ListListResponse struct {
 	Count int64 `json:"count" api:"required"`
 	// Ordered by entry ascending.
 	Entries []ListListResponseEntry `json:"entries" api:"required"`
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit int64 `json:"limit" api:"nullable"`
 	// Page token for pagination.
 	NextPageToken string `json:"next_page_token" api:"nullable"`
@@ -369,7 +369,7 @@ type ListListParams struct {
 	//
 	// Any of "send", "receive", "reply".
 	Direction ListListParamsDirection `path:"direction,omitzero" api:"required" json:"-"`
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
