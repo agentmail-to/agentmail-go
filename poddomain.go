@@ -216,7 +216,7 @@ func (r *PodDomainUpdateParams) UnmarshalJSON(data []byte) error {
 type PodDomainListParams struct {
 	// Sort in ascending temporal order.
 	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
