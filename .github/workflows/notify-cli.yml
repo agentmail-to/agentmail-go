@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Trigger CLI auto-merge
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_PAT }}
         run: |
           gh api repos/agentmail-to/agentmail-cli/dispatches \
             -f event_type=go-sdk-released \
