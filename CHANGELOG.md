@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.5.0 (2026-04-08)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/agentmail-to/agentmail-go/compare/v0.4.0...v0.5.0)
+
+### Features
+
+* **api:** api update ([b77a697](https://github.com/agentmail-to/agentmail-go/commit/b77a697355e5fdb89841758f3501705d6cf3680d))
+* **api:** api update ([b8af50c](https://github.com/agentmail-to/agentmail-go/commit/b8af50c92cb55f4385420fc8bf4a061b68cd10fa))
+* **api:** api update ([0829dd6](https://github.com/agentmail-to/agentmail-go/commit/0829dd60c7927d7c3e3bf9ec1e4c2cec094e0a51))
+* **api:** manual updates ([2b19d66](https://github.com/agentmail-to/agentmail-go/commit/2b19d6673f89411836808b2542a17d3d74358c48))
+* **api:** manual updates ([8be2cd1](https://github.com/agentmail-to/agentmail-go/commit/8be2cd12945188c8ba80c6625c0dde72bdc4ae47))
+
+
+### Bug Fixes
+
+* fix issue with unmarshaling in some cases ([6216b61](https://github.com/agentmail-to/agentmail-go/commit/6216b6168940c383b70f5402c389ceab99512a96))
+* use RELEASE_PAT to approve and auto-merge release PRs ([edb6941](https://github.com/agentmail-to/agentmail-go/commit/edb69414507c8ba93db77014f1fa19eef08cc6d1))
+
 ## 0.4.0 (2026-04-01)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/agentmail-to/agentmail-go/compare/v0.3.0...v0.4.0)
