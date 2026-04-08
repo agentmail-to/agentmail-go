@@ -541,7 +541,7 @@ func (r *PodAPIKeyNewParamsPermissions) UnmarshalJSON(data []byte) error {
 }
 
 type PodAPIKeyListParams struct {
-	// Maximum number of items to return in a single page.
+	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`

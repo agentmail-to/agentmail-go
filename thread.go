@@ -122,7 +122,7 @@ type ThreadListParams struct {
 	IncludeSpam param.Opt[bool] `query:"include_spam,omitzero" json:"-"`
 	// Include trash in results.
 	IncludeTrash param.Opt[bool] `query:"include_trash,omitzero" json:"-"`
-	// Maximum number of items to return in a single page.
+	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
