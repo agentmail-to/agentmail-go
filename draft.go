@@ -214,7 +214,7 @@ type ListDrafts struct {
 	Count int64 `json:"count" api:"required"`
 	// Ordered by `updated_at` descending.
 	Drafts []ListDraftsDraft `json:"drafts" api:"required"`
-	// Maximum number of items to return in a single page.
+	// Limit of number of items returned.
 	Limit int64 `json:"limit" api:"nullable"`
 	// Page token for pagination.
 	NextPageToken string `json:"next_page_token" api:"nullable"`
@@ -300,7 +300,7 @@ type DraftListParams struct {
 	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
 	// Timestamp before which to filter by.
 	Before param.Opt[time.Time] `query:"before,omitzero" format:"date-time" json:"-"`
-	// Maximum number of items to return in a single page.
+	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`

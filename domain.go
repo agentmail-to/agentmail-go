@@ -263,7 +263,7 @@ type ListDomains struct {
 	Count int64 `json:"count" api:"required"`
 	// Ordered by `created_at` descending.
 	Domains []ListDomainsDomain `json:"domains" api:"required"`
-	// Maximum number of items to return in a single page.
+	// Limit of number of items returned.
 	Limit int64 `json:"limit" api:"nullable"`
 	// Page token for pagination.
 	NextPageToken string `json:"next_page_token" api:"nullable"`
@@ -348,7 +348,7 @@ func (r *DomainUpdateParams) UnmarshalJSON(data []byte) error {
 type DomainListParams struct {
 	// Sort in ascending temporal order.
 	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
-	// Maximum number of items to return in a single page.
+	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`

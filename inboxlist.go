@@ -264,7 +264,7 @@ type InboxListListResponse struct {
 	Count int64 `json:"count" api:"required"`
 	// Ordered by entry ascending.
 	Entries []InboxListListResponseEntry `json:"entries" api:"required"`
-	// Maximum number of items to return in a single page.
+	// Limit of number of items returned.
 	Limit int64 `json:"limit" api:"nullable"`
 	// Page token for pagination.
 	NextPageToken string `json:"next_page_token" api:"nullable"`
@@ -409,7 +409,7 @@ type InboxListListParams struct {
 	//
 	// Any of "send", "receive", "reply".
 	Direction InboxListListParamsDirection `path:"direction,omitzero" api:"required" json:"-"`
-	// Maximum number of items to return in a single page.
+	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
