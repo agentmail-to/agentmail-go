@@ -119,13 +119,15 @@ func (r *WebhookService) Delete(ctx context.Context, webhookID string, opts ...o
 type EventType string
 
 const (
-	EventTypeMessageReceived   EventType = "message.received"
-	EventTypeMessageSent       EventType = "message.sent"
-	EventTypeMessageDelivered  EventType = "message.delivered"
-	EventTypeMessageBounced    EventType = "message.bounced"
-	EventTypeMessageComplained EventType = "message.complained"
-	EventTypeMessageRejected   EventType = "message.rejected"
-	EventTypeDomainVerified    EventType = "domain.verified"
+	EventTypeMessageReceived        EventType = "message.received"
+	EventTypeMessageReceivedSpam    EventType = "message.received.spam"
+	EventTypeMessageReceivedBlocked EventType = "message.received.blocked"
+	EventTypeMessageSent            EventType = "message.sent"
+	EventTypeMessageDelivered       EventType = "message.delivered"
+	EventTypeMessageBounced         EventType = "message.bounced"
+	EventTypeMessageComplained      EventType = "message.complained"
+	EventTypeMessageRejected        EventType = "message.rejected"
+	EventTypeDomainVerified         EventType = "domain.verified"
 )
 
 type Webhook struct {
@@ -177,7 +179,7 @@ type WebhookListResponse struct {
 	Count int64 `json:"count" api:"required"`
 	// Ordered by `created_at` descending.
 	Webhooks []Webhook `json:"webhooks" api:"required"`
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit int64 `json:"limit" api:"nullable"`
 	// Page token for pagination.
 	NextPageToken string `json:"next_page_token" api:"nullable"`
@@ -243,7 +245,7 @@ func (r *WebhookUpdateParams) UnmarshalJSON(data []byte) error {
 type WebhookListParams struct {
 	// Sort in ascending temporal order.
 	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`

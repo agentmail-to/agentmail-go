@@ -27,7 +27,7 @@ func TestAPIKeyNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.APIKeys.New(context.TODO(), agentmail.APIKeyNewParams{
-		Name: "name",
+		Name: agentmail.String("name"),
 		Permissions: agentmail.APIKeyNewParamsPermissions{
 			APIKeyCreate:     agentmail.Bool(true),
 			APIKeyDelete:     agentmail.Bool(true),

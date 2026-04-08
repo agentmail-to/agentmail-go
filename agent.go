@@ -33,8 +33,11 @@ func NewAgentService(opts ...option.RequestOption) (r AgentService) {
 	return
 }
 
-// Create a new agent organization with an inbox and API key. A 6-digit OTP is sent
-// to the human's email for verification.
+// Create a new agent organization with an inbox and API key. This endpoint is for
+// signing up for the first time. If you've already signed up, you're all set —
+// just use your existing API key.
+//
+// A 6-digit OTP is sent to the human's email for verification.
 //
 // This endpoint is idempotent. Calling it again with the same `human_email` will
 // rotate the API key and resend the OTP if expired.

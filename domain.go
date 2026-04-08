@@ -4,7 +4,6 @@ package agentmail
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -264,7 +263,7 @@ type ListDomains struct {
 	Count int64 `json:"count" api:"required"`
 	// Ordered by `created_at` descending.
 	Domains []ListDomainsDomain `json:"domains" api:"required"`
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit int64 `json:"limit" api:"nullable"`
 	// Page token for pagination.
 	NextPageToken string `json:"next_page_token" api:"nullable"`
@@ -329,7 +328,7 @@ func (r DomainNewParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.CreateDomain)
 }
 func (r *DomainNewParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.CreateDomain)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type DomainUpdateParams struct {
@@ -349,7 +348,7 @@ func (r *DomainUpdateParams) UnmarshalJSON(data []byte) error {
 type DomainListParams struct {
 	// Sort in ascending temporal order.
 	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`

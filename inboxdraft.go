@@ -4,7 +4,6 @@ package agentmail
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -339,7 +338,7 @@ type InboxDraftListParams struct {
 	Ascending param.Opt[bool] `query:"ascending,omitzero" json:"-"`
 	// Timestamp before which to filter by.
 	Before param.Opt[time.Time] `query:"before,omitzero" format:"date-time" json:"-"`
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
@@ -381,5 +380,5 @@ func (r InboxDraftSendParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.UpdateMessage)
 }
 func (r *InboxDraftSendParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.UpdateMessage)
+	return apijson.UnmarshalRoot(data, r)
 }

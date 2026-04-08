@@ -4,7 +4,6 @@ package agentmail
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -460,7 +459,7 @@ type InboxMessageListResponse struct {
 	Count int64 `json:"count" api:"required"`
 	// Ordered by `timestamp` descending.
 	Messages []InboxMessageListResponseMessage `json:"messages" api:"required"`
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit int64 `json:"limit" api:"nullable"`
 	// Page token for pagination.
 	NextPageToken string `json:"next_page_token" api:"nullable"`
@@ -597,7 +596,7 @@ func (r InboxMessageUpdateParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.UpdateMessage)
 }
 func (r *InboxMessageUpdateParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.UpdateMessage)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type InboxMessageListParams struct {
@@ -613,7 +612,7 @@ type InboxMessageListParams struct {
 	IncludeSpam param.Opt[bool] `query:"include_spam,omitzero" json:"-"`
 	// Include trash in results.
 	IncludeTrash param.Opt[bool] `query:"include_trash,omitzero" json:"-"`
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
@@ -641,7 +640,7 @@ func (r InboxMessageForwardParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.SendMessageRequest)
 }
 func (r *InboxMessageForwardParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.SendMessageRequest)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type InboxMessageGetAttachmentParams struct {
@@ -727,5 +726,5 @@ func (r InboxMessageSendParams) MarshalJSON() (data []byte, err error) {
 	return shimjson.Marshal(r.SendMessageRequest)
 }
 func (r *InboxMessageSendParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.SendMessageRequest)
+	return apijson.UnmarshalRoot(data, r)
 }

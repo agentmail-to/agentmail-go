@@ -441,7 +441,7 @@ func (r *InboxAPIKeyListResponseAPIKeyPermissions) UnmarshalJSON(data []byte) er
 
 type InboxAPIKeyNewParams struct {
 	// Name of api key.
-	Name string `json:"name" api:"required"`
+	Name param.Opt[string] `json:"name,omitzero"`
 	// Granular permissions for the API key. When ommitted all permissions are granted.
 	// Otherwise, only permissions set to true are granted.
 	Permissions InboxAPIKeyNewParamsPermissions `json:"permissions,omitzero"`
@@ -541,7 +541,7 @@ func (r *InboxAPIKeyNewParamsPermissions) UnmarshalJSON(data []byte) error {
 }
 
 type InboxAPIKeyListParams struct {
-	// Limit of number of items returned.
+	// Maximum number of items to return in a single page.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`

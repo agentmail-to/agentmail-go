@@ -30,7 +30,7 @@ func TestPodAPIKeyNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"pod_id",
 		agentmail.PodAPIKeyNewParams{
-			Name: "name",
+			Name: agentmail.String("name"),
 			Permissions: agentmail.PodAPIKeyNewParamsPermissions{
 				APIKeyCreate:     agentmail.Bool(true),
 				APIKeyDelete:     agentmail.Bool(true),
