@@ -42,27 +42,6 @@ func NewInboxMessageService(opts ...option.RequestOption) (r InboxMessageService
 // **CLI:**
 //
 // ```bash
-// agentmail inboxes:messages retrieve --inbox-id <inbox_id> --message-id <message_id>
-// ```
-func (r *InboxMessageService) Get(ctx context.Context, messageID string, query InboxMessageGetParams, opts ...option.RequestOption) (res *Message, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if query.InboxID == "" {
-		err = errors.New("missing required inbox_id parameter")
-		return nil, err
-	}
-	if messageID == "" {
-		err = errors.New("missing required message_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/inboxes/%s/messages/%s", url.PathEscape(query.InboxID), url.PathEscape(messageID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
 // agentmail inboxes:messages update --inbox-id <inbox_id> --message-id <message_id> --add-label read --remove-label unread
 // ```
 func (r *InboxMessageService) Update(ctx context.Context, messageID string, params InboxMessageUpdateParams, opts ...option.RequestOption) (res *InboxMessageUpdateResponse, err error) {
@@ -116,6 +95,27 @@ func (r *InboxMessageService) Forward(ctx context.Context, messageID string, par
 	}
 	path := fmt.Sprintf("v0/inboxes/%s/messages/%s/forward", url.PathEscape(params.InboxID), url.PathEscape(messageID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
+	return res, err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:messages retrieve --inbox-id <inbox_id> --message-id <message_id>
+// ```
+func (r *InboxMessageService) Get(ctx context.Context, messageID string, query InboxMessageGetParams, opts ...option.RequestOption) (res *Message, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.InboxID == "" {
+		err = errors.New("missing required inbox_id parameter")
+		return nil, err
+	}
+	if messageID == "" {
+		err = errors.New("missing required message_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/inboxes/%s/messages/%s", url.PathEscape(query.InboxID), url.PathEscape(messageID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
 }
 
@@ -579,12 +579,6 @@ func (r *InboxMessageGetRawResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type InboxMessageGetParams struct {
-	// The ID of the inbox.
-	InboxID string `path:"inbox_id" api:"required" json:"-"`
-	paramObj
-}
-
 type InboxMessageUpdateParams struct {
 	// The ID of the inbox.
 	InboxID       string `path:"inbox_id" api:"required" json:"-"`
@@ -641,6 +635,12 @@ func (r InboxMessageForwardParams) MarshalJSON() (data []byte, err error) {
 }
 func (r *InboxMessageForwardParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type InboxMessageGetParams struct {
+	// The ID of the inbox.
+	InboxID string `path:"inbox_id" api:"required" json:"-"`
+	paramObj
 }
 
 type InboxMessageGetAttachmentParams struct {
