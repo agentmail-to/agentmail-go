@@ -113,7 +113,7 @@ func (r *InboxService) Delete(ctx context.Context, inboxID string, opts ...optio
 // **CLI:**
 //
 // ```bash
-// agentmail inboxes retrieve --inbox-id <inbox_id>
+// agentmail inboxes get --inbox-id <inbox_id>
 // ```
 func (r *InboxService) Get(ctx context.Context, inboxID string, opts ...option.RequestOption) (res *Inbox, err error) {
 	opts = slices.Concat(r.Options, opts)

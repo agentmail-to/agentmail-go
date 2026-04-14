@@ -97,7 +97,7 @@ func (r *InboxListService) Delete(ctx context.Context, entry string, body InboxL
 // **CLI:**
 //
 // ```bash
-// agentmail inboxes:lists retrieve --inbox-id <inbox_id> --direction <direction> --type <type> --entry <entry>
+// agentmail inboxes:lists get --inbox-id <inbox_id> --direction <direction> --type <type> --entry <entry>
 // ```
 func (r *InboxListService) Get(ctx context.Context, entry string, query InboxListGetParams, opts ...option.RequestOption) (res *InboxListGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)

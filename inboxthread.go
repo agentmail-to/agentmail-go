@@ -84,7 +84,7 @@ func (r *InboxThreadService) Delete(ctx context.Context, threadID string, params
 // **CLI:**
 //
 // ```bash
-// agentmail inboxes:threads retrieve --inbox-id <inbox_id> --thread-id <thread_id>
+// agentmail inboxes:threads get --inbox-id <inbox_id> --thread-id <thread_id>
 // ```
 func (r *InboxThreadService) Get(ctx context.Context, threadID string, query InboxThreadGetParams, opts ...option.RequestOption) (res *Thread, err error) {
 	opts = slices.Concat(r.Options, opts)

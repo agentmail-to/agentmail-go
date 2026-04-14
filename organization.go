@@ -33,7 +33,14 @@ func NewOrganizationService(opts ...option.RequestOption) (r OrganizationService
 	return
 }
 
-// Get the current organization.
+// Returns the organization for the authenticated API key (usage limits, counts,
+// and billing metadata).
+//
+// **CLI:**
+//
+// ```bash
+// agentmail organizations get
+// ```
 func (r *OrganizationService) Get(ctx context.Context, opts ...option.RequestOption) (res *OrganizationGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)

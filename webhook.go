@@ -102,7 +102,7 @@ func (r *WebhookService) Delete(ctx context.Context, webhookID string, opts ...o
 // **CLI:**
 //
 // ```bash
-// agentmail webhooks retrieve --webhook-id <webhook_id>
+// agentmail webhooks get --webhook-id <webhook_id>
 // ```
 func (r *WebhookService) Get(ctx context.Context, webhookID string, opts ...option.RequestOption) (res *Webhook, err error) {
 	opts = slices.Concat(r.Options, opts)

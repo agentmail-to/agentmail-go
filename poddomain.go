@@ -117,7 +117,7 @@ func (r *PodDomainService) Delete(ctx context.Context, domainID string, body Pod
 // **CLI:**
 //
 // ```bash
-// agentmail pods:domains retrieve --pod-id <pod_id> --domain-id <domain_id>
+// agentmail pods:domains get --pod-id <pod_id> --domain-id <domain_id>
 // ```
 func (r *PodDomainService) Get(ctx context.Context, domainID string, query PodDomainGetParams, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = slices.Concat(r.Options, opts)
