@@ -117,7 +117,7 @@ func (r *PodInboxService) Delete(ctx context.Context, inboxID string, body PodIn
 // **CLI:**
 //
 // ```bash
-// agentmail pods:inboxes retrieve --pod-id <pod_id> --inbox-id <inbox_id>
+// agentmail pods:inboxes get --pod-id <pod_id> --inbox-id <inbox_id>
 // ```
 func (r *PodInboxService) Get(ctx context.Context, inboxID string, query PodInboxGetParams, opts ...option.RequestOption) (res *Inbox, err error) {
 	opts = slices.Concat(r.Options, opts)

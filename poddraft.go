@@ -56,7 +56,7 @@ func (r *PodDraftService) List(ctx context.Context, podID string, query PodDraft
 // **CLI:**
 //
 // ```bash
-// agentmail pods:drafts retrieve --pod-id <pod_id> --draft-id <draft_id>
+// agentmail pods:drafts get --pod-id <pod_id> --draft-id <draft_id>
 // ```
 func (r *PodDraftService) Get(ctx context.Context, draftID string, query PodDraftGetParams, opts ...option.RequestOption) (res *Draft, err error) {
 	opts = slices.Concat(r.Options, opts)

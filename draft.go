@@ -54,7 +54,7 @@ func (r *DraftService) List(ctx context.Context, query DraftListParams, opts ...
 // **CLI:**
 //
 // ```bash
-// agentmail drafts retrieve --draft-id <draft_id>
+// agentmail drafts get --draft-id <draft_id>
 // ```
 func (r *DraftService) Get(ctx context.Context, draftID string, opts ...option.RequestOption) (res *Draft, err error) {
 	opts = slices.Concat(r.Options, opts)

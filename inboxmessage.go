@@ -101,7 +101,7 @@ func (r *InboxMessageService) Forward(ctx context.Context, messageID string, par
 // **CLI:**
 //
 // ```bash
-// agentmail inboxes:messages retrieve --inbox-id <inbox_id> --message-id <message_id>
+// agentmail inboxes:messages get --inbox-id <inbox_id> --message-id <message_id>
 // ```
 func (r *InboxMessageService) Get(ctx context.Context, messageID string, query InboxMessageGetParams, opts ...option.RequestOption) (res *Message, err error) {
 	opts = slices.Concat(r.Options, opts)

@@ -85,7 +85,7 @@ func (r *ListService) Delete(ctx context.Context, entry string, body ListDeleteP
 // **CLI:**
 //
 // ```bash
-// agentmail lists retrieve --direction <direction> --type <type> --entry <entry>
+// agentmail lists get --direction <direction> --type <type> --entry <entry>
 // ```
 func (r *ListService) Get(ctx context.Context, entry string, query ListGetParams, opts ...option.RequestOption) (res *ListGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)

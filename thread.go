@@ -74,7 +74,7 @@ func (r *ThreadService) Delete(ctx context.Context, threadID string, body Thread
 // **CLI:**
 //
 // ```bash
-// agentmail threads retrieve --thread-id <thread_id>
+// agentmail threads get --thread-id <thread_id>
 // ```
 func (r *ThreadService) Get(ctx context.Context, threadID string, opts ...option.RequestOption) (res *Thread, err error) {
 	opts = slices.Concat(r.Options, opts)
@@ -91,7 +91,7 @@ func (r *ThreadService) Get(ctx context.Context, threadID string, opts ...option
 // **CLI:**
 //
 // ```bash
-// agentmail threads retrieve-attachment --thread-id <thread_id> --attachment-id <attachment_id>
+// agentmail threads get-attachment --thread-id <thread_id> --attachment-id <attachment_id>
 // ```
 func (r *ThreadService) GetAttachment(ctx context.Context, attachmentID string, query ThreadGetAttachmentParams, opts ...option.RequestOption) (res *AttachmentResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
