@@ -55,23 +55,6 @@ func (r *DomainService) New(ctx context.Context, body DomainNewParams, opts ...o
 // **CLI:**
 //
 // ```bash
-// agentmail domains retrieve --domain-id <domain_id>
-// ```
-func (r *DomainService) Get(ctx context.Context, domainID string, opts ...option.RequestOption) (res *Domain, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if domainID == "" {
-		err = errors.New("missing required domain_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/domains/%s", url.PathEscape(domainID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
 // agentmail domains update --domain-id <domain_id>
 // ```
 func (r *DomainService) Update(ctx context.Context, domainID string, body DomainUpdateParams, opts ...option.RequestOption) (res *Domain, err error) {
@@ -115,6 +98,23 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, opts ...opt
 	path := fmt.Sprintf("v0/domains/%s", url.PathEscape(domainID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail domains retrieve --domain-id <domain_id>
+// ```
+func (r *DomainService) Get(ctx context.Context, domainID string, opts ...option.RequestOption) (res *Domain, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if domainID == "" {
+		err = errors.New("missing required domain_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/domains/%s", url.PathEscape(domainID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
 }
 
 // **CLI:**

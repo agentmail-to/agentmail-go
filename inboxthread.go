@@ -41,27 +41,6 @@ func NewInboxThreadService(opts ...option.RequestOption) (r InboxThreadService) 
 // **CLI:**
 //
 // ```bash
-// agentmail inboxes:threads retrieve --inbox-id <inbox_id> --thread-id <thread_id>
-// ```
-func (r *InboxThreadService) Get(ctx context.Context, threadID string, query InboxThreadGetParams, opts ...option.RequestOption) (res *Thread, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if query.InboxID == "" {
-		err = errors.New("missing required inbox_id parameter")
-		return nil, err
-	}
-	if threadID == "" {
-		err = errors.New("missing required thread_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(query.InboxID), url.PathEscape(threadID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
 // agentmail inboxes:threads list --inbox-id <inbox_id>
 // ```
 func (r *InboxThreadService) List(ctx context.Context, inboxID string, query InboxThreadListParams, opts ...option.RequestOption) (res *ListThreads, err error) {
@@ -100,6 +79,27 @@ func (r *InboxThreadService) Delete(ctx context.Context, threadID string, params
 	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(params.InboxID), url.PathEscape(threadID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
 	return err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:threads retrieve --inbox-id <inbox_id> --thread-id <thread_id>
+// ```
+func (r *InboxThreadService) Get(ctx context.Context, threadID string, query InboxThreadGetParams, opts ...option.RequestOption) (res *Thread, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.InboxID == "" {
+		err = errors.New("missing required inbox_id parameter")
+		return nil, err
+	}
+	if threadID == "" {
+		err = errors.New("missing required thread_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(query.InboxID), url.PathEscape(threadID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
 }
 
 // **CLI:**
@@ -284,12 +284,6 @@ func (r *Thread) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type InboxThreadGetParams struct {
-	// The ID of the inbox.
-	InboxID string `path:"inbox_id" api:"required" json:"-"`
-	paramObj
-}
-
 type InboxThreadListParams struct {
 	// Timestamp after which to filter by.
 	After param.Opt[time.Time] `query:"after,omitzero" format:"date-time" json:"-"`
@@ -335,6 +329,12 @@ func (r InboxThreadDeleteParams) URLQuery() (v url.Values, err error) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type InboxThreadGetParams struct {
+	// The ID of the inbox.
+	InboxID string `path:"inbox_id" api:"required" json:"-"`
+	paramObj
 }
 
 type InboxThreadGetAttachmentParams struct {

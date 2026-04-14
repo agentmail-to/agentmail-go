@@ -54,23 +54,6 @@ func (r *ListService) New(ctx context.Context, type_ ListNewParamsType, params L
 // **CLI:**
 //
 // ```bash
-// agentmail lists retrieve --direction <direction> --type <type> --entry <entry>
-// ```
-func (r *ListService) Get(ctx context.Context, entry string, query ListGetParams, opts ...option.RequestOption) (res *ListGetResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if entry == "" {
-		err = errors.New("missing required entry parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/lists/%v/%v/%s", query.Direction, query.Type, url.PathEscape(entry))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
 // agentmail lists list --direction <direction> --type <type>
 // ```
 func (r *ListService) List(ctx context.Context, type_ ListListParamsType, params ListListParams, opts ...option.RequestOption) (res *ListListResponse, err error) {
@@ -97,6 +80,23 @@ func (r *ListService) Delete(ctx context.Context, entry string, body ListDeleteP
 	path := fmt.Sprintf("v0/lists/%v/%v/%s", body.Direction, body.Type, url.PathEscape(entry))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail lists retrieve --direction <direction> --type <type> --entry <entry>
+// ```
+func (r *ListService) Get(ctx context.Context, entry string, query ListGetParams, opts ...option.RequestOption) (res *ListGetResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if entry == "" {
+		err = errors.New("missing required entry parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/lists/%v/%v/%s", query.Direction, query.Type, url.PathEscape(entry))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
 }
 
 type ListNewResponse struct {
@@ -163,72 +163,6 @@ type ListNewResponseListType string
 const (
 	ListNewResponseListTypeAllow ListNewResponseListType = "allow"
 	ListNewResponseListTypeBlock ListNewResponseListType = "block"
-)
-
-type ListGetResponse struct {
-	// Time at which entry was created.
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// Direction of list entry.
-	//
-	// Any of "send", "receive", "reply".
-	Direction ListGetResponseDirection `json:"direction" api:"required"`
-	// Email address or domain of list entry.
-	Entry string `json:"entry" api:"required"`
-	// Whether the entry is an email address or domain.
-	//
-	// Any of "email", "domain".
-	EntryType ListGetResponseEntryType `json:"entry_type" api:"required"`
-	// Type of list entry.
-	//
-	// Any of "allow", "block".
-	ListType ListGetResponseListType `json:"list_type" api:"required"`
-	// ID of organization.
-	OrganizationID string `json:"organization_id" api:"required"`
-	// Reason for adding the entry.
-	Reason string `json:"reason" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		CreatedAt      respjson.Field
-		Direction      respjson.Field
-		Entry          respjson.Field
-		EntryType      respjson.Field
-		ListType       respjson.Field
-		OrganizationID respjson.Field
-		Reason         respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r ListGetResponse) RawJSON() string { return r.JSON.raw }
-func (r *ListGetResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Direction of list entry.
-type ListGetResponseDirection string
-
-const (
-	ListGetResponseDirectionSend    ListGetResponseDirection = "send"
-	ListGetResponseDirectionReceive ListGetResponseDirection = "receive"
-	ListGetResponseDirectionReply   ListGetResponseDirection = "reply"
-)
-
-// Whether the entry is an email address or domain.
-type ListGetResponseEntryType string
-
-const (
-	ListGetResponseEntryTypeEmail  ListGetResponseEntryType = "email"
-	ListGetResponseEntryTypeDomain ListGetResponseEntryType = "domain"
-)
-
-// Type of list entry.
-type ListGetResponseListType string
-
-const (
-	ListGetResponseListTypeAllow ListGetResponseListType = "allow"
-	ListGetResponseListTypeBlock ListGetResponseListType = "block"
 )
 
 type ListListResponse struct {
@@ -298,6 +232,72 @@ func (r *ListListResponseEntry) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type ListGetResponse struct {
+	// Time at which entry was created.
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Direction of list entry.
+	//
+	// Any of "send", "receive", "reply".
+	Direction ListGetResponseDirection `json:"direction" api:"required"`
+	// Email address or domain of list entry.
+	Entry string `json:"entry" api:"required"`
+	// Whether the entry is an email address or domain.
+	//
+	// Any of "email", "domain".
+	EntryType ListGetResponseEntryType `json:"entry_type" api:"required"`
+	// Type of list entry.
+	//
+	// Any of "allow", "block".
+	ListType ListGetResponseListType `json:"list_type" api:"required"`
+	// ID of organization.
+	OrganizationID string `json:"organization_id" api:"required"`
+	// Reason for adding the entry.
+	Reason string `json:"reason" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CreatedAt      respjson.Field
+		Direction      respjson.Field
+		Entry          respjson.Field
+		EntryType      respjson.Field
+		ListType       respjson.Field
+		OrganizationID respjson.Field
+		Reason         respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r ListGetResponse) RawJSON() string { return r.JSON.raw }
+func (r *ListGetResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Direction of list entry.
+type ListGetResponseDirection string
+
+const (
+	ListGetResponseDirectionSend    ListGetResponseDirection = "send"
+	ListGetResponseDirectionReceive ListGetResponseDirection = "receive"
+	ListGetResponseDirectionReply   ListGetResponseDirection = "reply"
+)
+
+// Whether the entry is an email address or domain.
+type ListGetResponseEntryType string
+
+const (
+	ListGetResponseEntryTypeEmail  ListGetResponseEntryType = "email"
+	ListGetResponseEntryTypeDomain ListGetResponseEntryType = "domain"
+)
+
+// Type of list entry.
+type ListGetResponseListType string
+
+const (
+	ListGetResponseListTypeAllow ListGetResponseListType = "allow"
+	ListGetResponseListTypeBlock ListGetResponseListType = "block"
+)
+
 type ListNewParams struct {
 	// Direction of list entry.
 	//
@@ -333,35 +333,6 @@ type ListNewParamsType string
 const (
 	ListNewParamsTypeAllow ListNewParamsType = "allow"
 	ListNewParamsTypeBlock ListNewParamsType = "block"
-)
-
-type ListGetParams struct {
-	// Direction of list entry.
-	//
-	// Any of "send", "receive", "reply".
-	Direction ListGetParamsDirection `path:"direction,omitzero" api:"required" json:"-"`
-	// Type of list entry.
-	//
-	// Any of "allow", "block".
-	Type ListGetParamsType `path:"type,omitzero" api:"required" json:"-"`
-	paramObj
-}
-
-// Direction of list entry.
-type ListGetParamsDirection string
-
-const (
-	ListGetParamsDirectionSend    ListGetParamsDirection = "send"
-	ListGetParamsDirectionReceive ListGetParamsDirection = "receive"
-	ListGetParamsDirectionReply   ListGetParamsDirection = "reply"
-)
-
-// Type of list entry.
-type ListGetParamsType string
-
-const (
-	ListGetParamsTypeAllow ListGetParamsType = "allow"
-	ListGetParamsTypeBlock ListGetParamsType = "block"
 )
 
 type ListListParams struct {
@@ -428,4 +399,33 @@ type ListDeleteParamsType string
 const (
 	ListDeleteParamsTypeAllow ListDeleteParamsType = "allow"
 	ListDeleteParamsTypeBlock ListDeleteParamsType = "block"
+)
+
+type ListGetParams struct {
+	// Direction of list entry.
+	//
+	// Any of "send", "receive", "reply".
+	Direction ListGetParamsDirection `path:"direction,omitzero" api:"required" json:"-"`
+	// Type of list entry.
+	//
+	// Any of "allow", "block".
+	Type ListGetParamsType `path:"type,omitzero" api:"required" json:"-"`
+	paramObj
+}
+
+// Direction of list entry.
+type ListGetParamsDirection string
+
+const (
+	ListGetParamsDirectionSend    ListGetParamsDirection = "send"
+	ListGetParamsDirectionReceive ListGetParamsDirection = "receive"
+	ListGetParamsDirectionReply   ListGetParamsDirection = "reply"
+)
+
+// Type of list entry.
+type ListGetParamsType string
+
+const (
+	ListGetParamsTypeAllow ListGetParamsType = "allow"
+	ListGetParamsTypeBlock ListGetParamsType = "block"
 )

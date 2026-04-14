@@ -41,6 +41,19 @@ func NewDraftService(opts ...option.RequestOption) (r DraftService) {
 // **CLI:**
 //
 // ```bash
+// agentmail drafts list
+// ```
+func (r *DraftService) List(ctx context.Context, query DraftListParams, opts ...option.RequestOption) (res *ListDrafts, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	path := "v0/drafts"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return res, err
+}
+
+// **CLI:**
+//
+// ```bash
 // agentmail drafts retrieve --draft-id <draft_id>
 // ```
 func (r *DraftService) Get(ctx context.Context, draftID string, opts ...option.RequestOption) (res *Draft, err error) {
@@ -52,19 +65,6 @@ func (r *DraftService) Get(ctx context.Context, draftID string, opts ...option.R
 	}
 	path := fmt.Sprintf("v0/drafts/%s", url.PathEscape(draftID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
-// agentmail drafts list
-// ```
-func (r *DraftService) List(ctx context.Context, query DraftListParams, opts ...option.RequestOption) (res *ListDrafts, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	path := "v0/drafts"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return res, err
 }
 

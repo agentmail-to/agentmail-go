@@ -57,27 +57,6 @@ func (r *PodInboxService) New(ctx context.Context, podID string, body PodInboxNe
 // **CLI:**
 //
 // ```bash
-// agentmail pods:inboxes retrieve --pod-id <pod_id> --inbox-id <inbox_id>
-// ```
-func (r *PodInboxService) Get(ctx context.Context, inboxID string, query PodInboxGetParams, opts ...option.RequestOption) (res *Inbox, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if query.PodID == "" {
-		err = errors.New("missing required pod_id parameter")
-		return nil, err
-	}
-	if inboxID == "" {
-		err = errors.New("missing required inbox_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/pods/%s/inboxes/%s", url.PathEscape(query.PodID), url.PathEscape(inboxID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
 // agentmail pods:inboxes update --pod-id <pod_id> --inbox-id <inbox_id>
 // ```
 func (r *PodInboxService) Update(ctx context.Context, inboxID string, params PodInboxUpdateParams, opts ...option.RequestOption) (res *Inbox, err error) {
@@ -135,6 +114,27 @@ func (r *PodInboxService) Delete(ctx context.Context, inboxID string, body PodIn
 	return err
 }
 
+// **CLI:**
+//
+// ```bash
+// agentmail pods:inboxes retrieve --pod-id <pod_id> --inbox-id <inbox_id>
+// ```
+func (r *PodInboxService) Get(ctx context.Context, inboxID string, query PodInboxGetParams, opts ...option.RequestOption) (res *Inbox, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.PodID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return nil, err
+	}
+	if inboxID == "" {
+		err = errors.New("missing required inbox_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/pods/%s/inboxes/%s", url.PathEscape(query.PodID), url.PathEscape(inboxID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
+}
+
 type PodInboxNewParams struct {
 	CreateInbox CreateInboxParam
 	paramObj
@@ -145,12 +145,6 @@ func (r PodInboxNewParams) MarshalJSON() (data []byte, err error) {
 }
 func (r *PodInboxNewParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
-}
-
-type PodInboxGetParams struct {
-	// ID of pod.
-	PodID string `path:"pod_id" api:"required" json:"-"`
-	paramObj
 }
 
 type PodInboxUpdateParams struct {
@@ -188,6 +182,12 @@ func (r PodInboxListParams) URLQuery() (v url.Values, err error) {
 }
 
 type PodInboxDeleteParams struct {
+	// ID of pod.
+	PodID string `path:"pod_id" api:"required" json:"-"`
+	paramObj
+}
+
+type PodInboxGetParams struct {
 	// ID of pod.
 	PodID string `path:"pod_id" api:"required" json:"-"`
 	paramObj
