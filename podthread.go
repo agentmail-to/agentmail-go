@@ -39,27 +39,6 @@ func NewPodThreadService(opts ...option.RequestOption) (r PodThreadService) {
 // **CLI:**
 //
 // ```bash
-// agentmail pods:threads retrieve --pod-id <pod_id> --thread-id <thread_id>
-// ```
-func (r *PodThreadService) Get(ctx context.Context, threadID string, query PodThreadGetParams, opts ...option.RequestOption) (res *Thread, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if query.PodID == "" {
-		err = errors.New("missing required pod_id parameter")
-		return nil, err
-	}
-	if threadID == "" {
-		err = errors.New("missing required thread_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/pods/%s/threads/%s", url.PathEscape(query.PodID), url.PathEscape(threadID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
 // agentmail pods:threads list --pod-id <pod_id>
 // ```
 func (r *PodThreadService) List(ctx context.Context, podID string, query PodThreadListParams, opts ...option.RequestOption) (res *ListThreads, err error) {
@@ -103,6 +82,27 @@ func (r *PodThreadService) Delete(ctx context.Context, threadID string, params P
 // **CLI:**
 //
 // ```bash
+// agentmail pods:threads retrieve --pod-id <pod_id> --thread-id <thread_id>
+// ```
+func (r *PodThreadService) Get(ctx context.Context, threadID string, query PodThreadGetParams, opts ...option.RequestOption) (res *Thread, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.PodID == "" {
+		err = errors.New("missing required pod_id parameter")
+		return nil, err
+	}
+	if threadID == "" {
+		err = errors.New("missing required thread_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/pods/%s/threads/%s", url.PathEscape(query.PodID), url.PathEscape(threadID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
+}
+
+// **CLI:**
+//
+// ```bash
 // agentmail pods:threads get-attachment --pod-id <pod_id> --thread-id <thread_id> --attachment-id <attachment_id>
 // ```
 func (r *PodThreadService) GetAttachment(ctx context.Context, attachmentID string, query PodThreadGetAttachmentParams, opts ...option.RequestOption) (res *AttachmentResponse, err error) {
@@ -123,12 +123,6 @@ func (r *PodThreadService) GetAttachment(ctx context.Context, attachmentID strin
 	path := fmt.Sprintf("v0/pods/%s/threads/%s/attachments/%s", url.PathEscape(query.PodID), url.PathEscape(query.ThreadID), url.PathEscape(attachmentID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
-}
-
-type PodThreadGetParams struct {
-	// ID of pod.
-	PodID string `path:"pod_id" api:"required" json:"-"`
-	paramObj
 }
 
 type PodThreadListParams struct {
@@ -175,6 +169,12 @@ func (r PodThreadDeleteParams) URLQuery() (v url.Values, err error) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type PodThreadGetParams struct {
+	// ID of pod.
+	PodID string `path:"pod_id" api:"required" json:"-"`
+	paramObj
 }
 
 type PodThreadGetAttachmentParams struct {

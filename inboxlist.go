@@ -58,27 +58,6 @@ func (r *InboxListService) New(ctx context.Context, type_ InboxListNewParamsType
 // **CLI:**
 //
 // ```bash
-// agentmail inboxes:lists retrieve --inbox-id <inbox_id> --direction <direction> --type <type> --entry <entry>
-// ```
-func (r *InboxListService) Get(ctx context.Context, entry string, query InboxListGetParams, opts ...option.RequestOption) (res *InboxListGetResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if query.InboxID == "" {
-		err = errors.New("missing required inbox_id parameter")
-		return nil, err
-	}
-	if entry == "" {
-		err = errors.New("missing required entry parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/inboxes/%s/lists/%v/%v/%s", url.PathEscape(query.InboxID), query.Direction, query.Type, url.PathEscape(entry))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
 // agentmail inboxes:lists list --inbox-id <inbox_id> --direction <direction> --type <type>
 // ```
 func (r *InboxListService) List(ctx context.Context, type_ InboxListListParamsType, params InboxListListParams, opts ...option.RequestOption) (res *InboxListListResponse, err error) {
@@ -113,6 +92,27 @@ func (r *InboxListService) Delete(ctx context.Context, entry string, body InboxL
 	path := fmt.Sprintf("v0/inboxes/%s/lists/%v/%v/%s", url.PathEscape(body.InboxID), body.Direction, body.Type, url.PathEscape(entry))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes:lists retrieve --inbox-id <inbox_id> --direction <direction> --type <type> --entry <entry>
+// ```
+func (r *InboxListService) Get(ctx context.Context, entry string, query InboxListGetParams, opts ...option.RequestOption) (res *InboxListGetResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if query.InboxID == "" {
+		err = errors.New("missing required inbox_id parameter")
+		return nil, err
+	}
+	if entry == "" {
+		err = errors.New("missing required entry parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/inboxes/%s/lists/%v/%v/%s", url.PathEscape(query.InboxID), query.Direction, query.Type, url.PathEscape(entry))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
 }
 
 type InboxListNewResponse struct {
@@ -185,78 +185,6 @@ type InboxListNewResponseListType string
 const (
 	InboxListNewResponseListTypeAllow InboxListNewResponseListType = "allow"
 	InboxListNewResponseListTypeBlock InboxListNewResponseListType = "block"
-)
-
-type InboxListGetResponse struct {
-	// Time at which entry was created.
-	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
-	// Direction of list entry.
-	//
-	// Any of "send", "receive", "reply".
-	Direction InboxListGetResponseDirection `json:"direction" api:"required"`
-	// Email address or domain of list entry.
-	Entry string `json:"entry" api:"required"`
-	// Whether the entry is an email address or domain.
-	//
-	// Any of "email", "domain".
-	EntryType InboxListGetResponseEntryType `json:"entry_type" api:"required"`
-	// Type of list entry.
-	//
-	// Any of "allow", "block".
-	ListType InboxListGetResponseListType `json:"list_type" api:"required"`
-	// ID of organization.
-	OrganizationID string `json:"organization_id" api:"required"`
-	// ID of pod.
-	PodID string `json:"pod_id" api:"required"`
-	// ID of inbox, if entry is inbox-scoped.
-	InboxID string `json:"inbox_id" api:"nullable"`
-	// Reason for adding the entry.
-	Reason string `json:"reason" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		CreatedAt      respjson.Field
-		Direction      respjson.Field
-		Entry          respjson.Field
-		EntryType      respjson.Field
-		ListType       respjson.Field
-		OrganizationID respjson.Field
-		PodID          respjson.Field
-		InboxID        respjson.Field
-		Reason         respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r InboxListGetResponse) RawJSON() string { return r.JSON.raw }
-func (r *InboxListGetResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Direction of list entry.
-type InboxListGetResponseDirection string
-
-const (
-	InboxListGetResponseDirectionSend    InboxListGetResponseDirection = "send"
-	InboxListGetResponseDirectionReceive InboxListGetResponseDirection = "receive"
-	InboxListGetResponseDirectionReply   InboxListGetResponseDirection = "reply"
-)
-
-// Whether the entry is an email address or domain.
-type InboxListGetResponseEntryType string
-
-const (
-	InboxListGetResponseEntryTypeEmail  InboxListGetResponseEntryType = "email"
-	InboxListGetResponseEntryTypeDomain InboxListGetResponseEntryType = "domain"
-)
-
-// Type of list entry.
-type InboxListGetResponseListType string
-
-const (
-	InboxListGetResponseListTypeAllow InboxListGetResponseListType = "allow"
-	InboxListGetResponseListTypeBlock InboxListGetResponseListType = "block"
 )
 
 type InboxListListResponse struct {
@@ -332,6 +260,78 @@ func (r *InboxListListResponseEntry) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type InboxListGetResponse struct {
+	// Time at which entry was created.
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Direction of list entry.
+	//
+	// Any of "send", "receive", "reply".
+	Direction InboxListGetResponseDirection `json:"direction" api:"required"`
+	// Email address or domain of list entry.
+	Entry string `json:"entry" api:"required"`
+	// Whether the entry is an email address or domain.
+	//
+	// Any of "email", "domain".
+	EntryType InboxListGetResponseEntryType `json:"entry_type" api:"required"`
+	// Type of list entry.
+	//
+	// Any of "allow", "block".
+	ListType InboxListGetResponseListType `json:"list_type" api:"required"`
+	// ID of organization.
+	OrganizationID string `json:"organization_id" api:"required"`
+	// ID of pod.
+	PodID string `json:"pod_id" api:"required"`
+	// ID of inbox, if entry is inbox-scoped.
+	InboxID string `json:"inbox_id" api:"nullable"`
+	// Reason for adding the entry.
+	Reason string `json:"reason" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CreatedAt      respjson.Field
+		Direction      respjson.Field
+		Entry          respjson.Field
+		EntryType      respjson.Field
+		ListType       respjson.Field
+		OrganizationID respjson.Field
+		PodID          respjson.Field
+		InboxID        respjson.Field
+		Reason         respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r InboxListGetResponse) RawJSON() string { return r.JSON.raw }
+func (r *InboxListGetResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Direction of list entry.
+type InboxListGetResponseDirection string
+
+const (
+	InboxListGetResponseDirectionSend    InboxListGetResponseDirection = "send"
+	InboxListGetResponseDirectionReceive InboxListGetResponseDirection = "receive"
+	InboxListGetResponseDirectionReply   InboxListGetResponseDirection = "reply"
+)
+
+// Whether the entry is an email address or domain.
+type InboxListGetResponseEntryType string
+
+const (
+	InboxListGetResponseEntryTypeEmail  InboxListGetResponseEntryType = "email"
+	InboxListGetResponseEntryTypeDomain InboxListGetResponseEntryType = "domain"
+)
+
+// Type of list entry.
+type InboxListGetResponseListType string
+
+const (
+	InboxListGetResponseListTypeAllow InboxListGetResponseListType = "allow"
+	InboxListGetResponseListTypeBlock InboxListGetResponseListType = "block"
+)
+
 type InboxListNewParams struct {
 	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
@@ -369,37 +369,6 @@ type InboxListNewParamsType string
 const (
 	InboxListNewParamsTypeAllow InboxListNewParamsType = "allow"
 	InboxListNewParamsTypeBlock InboxListNewParamsType = "block"
-)
-
-type InboxListGetParams struct {
-	// The ID of the inbox.
-	InboxID string `path:"inbox_id" api:"required" json:"-"`
-	// Direction of list entry.
-	//
-	// Any of "send", "receive", "reply".
-	Direction InboxListGetParamsDirection `path:"direction,omitzero" api:"required" json:"-"`
-	// Type of list entry.
-	//
-	// Any of "allow", "block".
-	Type InboxListGetParamsType `path:"type,omitzero" api:"required" json:"-"`
-	paramObj
-}
-
-// Direction of list entry.
-type InboxListGetParamsDirection string
-
-const (
-	InboxListGetParamsDirectionSend    InboxListGetParamsDirection = "send"
-	InboxListGetParamsDirectionReceive InboxListGetParamsDirection = "receive"
-	InboxListGetParamsDirectionReply   InboxListGetParamsDirection = "reply"
-)
-
-// Type of list entry.
-type InboxListGetParamsType string
-
-const (
-	InboxListGetParamsTypeAllow InboxListGetParamsType = "allow"
-	InboxListGetParamsTypeBlock InboxListGetParamsType = "block"
 )
 
 type InboxListListParams struct {
@@ -470,4 +439,35 @@ type InboxListDeleteParamsType string
 const (
 	InboxListDeleteParamsTypeAllow InboxListDeleteParamsType = "allow"
 	InboxListDeleteParamsTypeBlock InboxListDeleteParamsType = "block"
+)
+
+type InboxListGetParams struct {
+	// The ID of the inbox.
+	InboxID string `path:"inbox_id" api:"required" json:"-"`
+	// Direction of list entry.
+	//
+	// Any of "send", "receive", "reply".
+	Direction InboxListGetParamsDirection `path:"direction,omitzero" api:"required" json:"-"`
+	// Type of list entry.
+	//
+	// Any of "allow", "block".
+	Type InboxListGetParamsType `path:"type,omitzero" api:"required" json:"-"`
+	paramObj
+}
+
+// Direction of list entry.
+type InboxListGetParamsDirection string
+
+const (
+	InboxListGetParamsDirectionSend    InboxListGetParamsDirection = "send"
+	InboxListGetParamsDirectionReceive InboxListGetParamsDirection = "receive"
+	InboxListGetParamsDirectionReply   InboxListGetParamsDirection = "reply"
+)
+
+// Type of list entry.
+type InboxListGetParamsType string
+
+const (
+	InboxListGetParamsTypeAllow InboxListGetParamsType = "allow"
+	InboxListGetParamsTypeBlock InboxListGetParamsType = "block"
 )

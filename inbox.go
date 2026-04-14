@@ -65,23 +65,6 @@ func (r *InboxService) New(ctx context.Context, body InboxNewParams, opts ...opt
 // **CLI:**
 //
 // ```bash
-// agentmail inboxes retrieve --inbox-id <inbox_id>
-// ```
-func (r *InboxService) Get(ctx context.Context, inboxID string, opts ...option.RequestOption) (res *Inbox, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if inboxID == "" {
-		err = errors.New("missing required inbox_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/inboxes/%s", url.PathEscape(inboxID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
 // agentmail inboxes update --inbox-id <inbox_id> --display-name "Updated Name"
 // ```
 func (r *InboxService) Update(ctx context.Context, inboxID string, body InboxUpdateParams, opts ...option.RequestOption) (res *Inbox, err error) {
@@ -125,6 +108,23 @@ func (r *InboxService) Delete(ctx context.Context, inboxID string, opts ...optio
 	path := fmt.Sprintf("v0/inboxes/%s", url.PathEscape(inboxID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail inboxes retrieve --inbox-id <inbox_id>
+// ```
+func (r *InboxService) Get(ctx context.Context, inboxID string, opts ...option.RequestOption) (res *Inbox, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if inboxID == "" {
+		err = errors.New("missing required inbox_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/inboxes/%s", url.PathEscape(inboxID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
 }
 
 // **CLI:**

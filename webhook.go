@@ -54,23 +54,6 @@ func (r *WebhookService) New(ctx context.Context, body WebhookNewParams, opts ..
 // **CLI:**
 //
 // ```bash
-// agentmail webhooks retrieve --webhook-id <webhook_id>
-// ```
-func (r *WebhookService) Get(ctx context.Context, webhookID string, opts ...option.RequestOption) (res *Webhook, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if webhookID == "" {
-		err = errors.New("missing required webhook_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/webhooks/%s", url.PathEscape(webhookID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
 // agentmail webhooks update --webhook-id <webhook_id> --add-inbox-id <inbox_id>
 // ```
 func (r *WebhookService) Update(ctx context.Context, webhookID string, body WebhookUpdateParams, opts ...option.RequestOption) (res *Webhook, err error) {
@@ -114,6 +97,23 @@ func (r *WebhookService) Delete(ctx context.Context, webhookID string, opts ...o
 	path := fmt.Sprintf("v0/webhooks/%s", url.PathEscape(webhookID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail webhooks retrieve --webhook-id <webhook_id>
+// ```
+func (r *WebhookService) Get(ctx context.Context, webhookID string, opts ...option.RequestOption) (res *Webhook, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if webhookID == "" {
+		err = errors.New("missing required webhook_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/webhooks/%s", url.PathEscape(webhookID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
 }
 
 type EventType string

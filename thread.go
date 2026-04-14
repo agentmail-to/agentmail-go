@@ -39,23 +39,6 @@ func NewThreadService(opts ...option.RequestOption) (r ThreadService) {
 // **CLI:**
 //
 // ```bash
-// agentmail threads retrieve --thread-id <thread_id>
-// ```
-func (r *ThreadService) Get(ctx context.Context, threadID string, opts ...option.RequestOption) (res *Thread, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if threadID == "" {
-		err = errors.New("missing required thread_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/threads/%s", url.PathEscape(threadID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return res, err
-}
-
-// **CLI:**
-//
-// ```bash
 // agentmail threads list
 // ```
 func (r *ThreadService) List(ctx context.Context, query ThreadListParams, opts ...option.RequestOption) (res *ListThreads, err error) {
@@ -86,6 +69,23 @@ func (r *ThreadService) Delete(ctx context.Context, threadID string, body Thread
 	path := fmt.Sprintf("v0/threads/%s", url.PathEscape(threadID))
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
 	return err
+}
+
+// **CLI:**
+//
+// ```bash
+// agentmail threads retrieve --thread-id <thread_id>
+// ```
+func (r *ThreadService) Get(ctx context.Context, threadID string, opts ...option.RequestOption) (res *Thread, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if threadID == "" {
+		err = errors.New("missing required thread_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/threads/%s", url.PathEscape(threadID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return res, err
 }
 
 // **CLI:**
