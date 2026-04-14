@@ -97,7 +97,7 @@ func (r *PodListService) Delete(ctx context.Context, entry string, body PodListD
 // **CLI:**
 //
 // ```bash
-// agentmail pods:lists retrieve --pod-id <pod_id> --direction <direction> --type <type> --entry <entry>
+// agentmail pods:lists get --pod-id <pod_id> --direction <direction> --type <type> --entry <entry>
 // ```
 func (r *PodListService) Get(ctx context.Context, entry string, query PodListGetParams, opts ...option.RequestOption) (res *PodListGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)

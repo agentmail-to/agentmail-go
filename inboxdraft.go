@@ -119,7 +119,7 @@ func (r *InboxDraftService) Delete(ctx context.Context, draftID string, body Inb
 // **CLI:**
 //
 // ```bash
-// agentmail inboxes:drafts retrieve --inbox-id <inbox_id> --draft-id <draft_id>
+// agentmail inboxes:drafts get --inbox-id <inbox_id> --draft-id <draft_id>
 // ```
 func (r *InboxDraftService) Get(ctx context.Context, draftID string, query InboxDraftGetParams, opts ...option.RequestOption) (res *Draft, err error) {
 	opts = slices.Concat(r.Options, opts)

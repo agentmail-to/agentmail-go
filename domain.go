@@ -103,7 +103,7 @@ func (r *DomainService) Delete(ctx context.Context, domainID string, opts ...opt
 // **CLI:**
 //
 // ```bash
-// agentmail domains retrieve --domain-id <domain_id>
+// agentmail domains get --domain-id <domain_id>
 // ```
 func (r *DomainService) Get(ctx context.Context, domainID string, opts ...option.RequestOption) (res *Domain, err error) {
 	opts = slices.Concat(r.Options, opts)

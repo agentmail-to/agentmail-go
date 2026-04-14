@@ -82,7 +82,7 @@ func (r *PodThreadService) Delete(ctx context.Context, threadID string, params P
 // **CLI:**
 //
 // ```bash
-// agentmail pods:threads retrieve --pod-id <pod_id> --thread-id <thread_id>
+// agentmail pods:threads get --pod-id <pod_id> --thread-id <thread_id>
 // ```
 func (r *PodThreadService) Get(ctx context.Context, threadID string, query PodThreadGetParams, opts ...option.RequestOption) (res *Thread, err error) {
 	opts = slices.Concat(r.Options, opts)

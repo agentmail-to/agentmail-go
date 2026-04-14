@@ -99,7 +99,7 @@ func (r *PodService) Delete(ctx context.Context, podID string, opts ...option.Re
 // **CLI:**
 //
 // ```bash
-// agentmail pods retrieve --pod-id <pod_id>
+// agentmail pods get --pod-id <pod_id>
 // ```
 func (r *PodService) Get(ctx context.Context, podID string, opts ...option.RequestOption) (res *Pod, err error) {
 	opts = slices.Concat(r.Options, opts)
