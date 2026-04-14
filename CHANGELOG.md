@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0 (2026-04-14)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/agentmail-to/agentmail-go/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **api:** api update ([f28c847](https://github.com/agentmail-to/agentmail-go/commit/f28c84756eadc0dd120baf2a3d1968807dfef07f))
+
 ## 0.7.0 (2026-04-14)
 
 Full Changelog: [v0.6.1...v0.7.0](https://github.com/agentmail-to/agentmail-go/compare/v0.6.1...v0.7.0)
