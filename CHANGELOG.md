@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.1 (2026-04-23)
+
+Full Changelog: [v0.8.0...v0.8.1](https://github.com/agentmail-to/agentmail-go/compare/v0.8.0...v0.8.1)
+
+### Chores
+
+* **internal:** more robust bootstrap script ([7002e21](https://github.com/agentmail-to/agentmail-go/commit/7002e21511aa31a5096038580ab5fa1ee3251772))
+
 ## 0.8.0 (2026-04-14)
 
 Full Changelog: [v0.7.0...v0.8.0](https://github.com/agentmail-to/agentmail-go/compare/v0.7.0...v0.8.0)
