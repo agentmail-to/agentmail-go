@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.0 (2026-04-28)
+
+Full Changelog: [v0.8.1...v0.9.0](https://github.com/agentmail-to/agentmail-go/compare/v0.8.1...v0.9.0)
+
+### Features
+
+* **go:** add default http client with timeout ([3124c6a](https://github.com/agentmail-to/agentmail-go/commit/3124c6a21cd83176fdf906e86330a32bd2c67770))
+* support setting headers via env ([31a8150](https://github.com/agentmail-to/agentmail-go/commit/31a8150dec2d1f7846c5bdfa8a20cda38127326b))
+
 ## 0.8.1 (2026-04-23)
 
 Full Changelog: [v0.8.0...v0.8.1](https://github.com/agentmail-to/agentmail-go/compare/v0.8.0...v0.8.1)
