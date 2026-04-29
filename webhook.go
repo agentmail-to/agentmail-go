@@ -119,15 +119,16 @@ func (r *WebhookService) Get(ctx context.Context, webhookID string, opts ...opti
 type EventType string
 
 const (
-	EventTypeMessageReceived        EventType = "message.received"
-	EventTypeMessageReceivedSpam    EventType = "message.received.spam"
-	EventTypeMessageReceivedBlocked EventType = "message.received.blocked"
-	EventTypeMessageSent            EventType = "message.sent"
-	EventTypeMessageDelivered       EventType = "message.delivered"
-	EventTypeMessageBounced         EventType = "message.bounced"
-	EventTypeMessageComplained      EventType = "message.complained"
-	EventTypeMessageRejected        EventType = "message.rejected"
-	EventTypeDomainVerified         EventType = "domain.verified"
+	EventTypeMessageReceived                EventType = "message.received"
+	EventTypeMessageReceivedSpam            EventType = "message.received.spam"
+	EventTypeMessageReceivedBlocked         EventType = "message.received.blocked"
+	EventTypeMessageReceivedUnauthenticated EventType = "message.received.unauthenticated"
+	EventTypeMessageSent                    EventType = "message.sent"
+	EventTypeMessageDelivered               EventType = "message.delivered"
+	EventTypeMessageBounced                 EventType = "message.bounced"
+	EventTypeMessageComplained              EventType = "message.complained"
+	EventTypeMessageRejected                EventType = "message.rejected"
+	EventTypeDomainVerified                 EventType = "domain.verified"
 )
 
 type Webhook struct {
