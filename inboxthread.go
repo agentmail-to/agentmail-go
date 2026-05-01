@@ -297,6 +297,8 @@ type InboxThreadListParams struct {
 	IncludeSpam param.Opt[bool] `query:"include_spam,omitzero" json:"-"`
 	// Include trash in results.
 	IncludeTrash param.Opt[bool] `query:"include_trash,omitzero" json:"-"`
+	// Include unauthenticated in results.
+	IncludeUnauthenticated param.Opt[bool] `query:"include_unauthenticated,omitzero" json:"-"`
 	// Limit of number of items returned.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
