@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.2 (2026-05-08)
+
+Full Changelog: [v0.11.1...v0.11.2](https://github.com/agentmail-to/agentmail-go/compare/v0.11.1...v0.11.2)
+
+### Bug Fixes
+
+* **go:** avoid panic when http.DefaultTransport is wrapped ([d0427a7](https://github.com/agentmail-to/agentmail-go/commit/d0427a7619ee9184741d401ddc291a29ca30fb0e))
+
 ## 0.11.1 (2026-05-08)
 
 Full Changelog: [v0.11.0...v0.11.1](https://github.com/agentmail-to/agentmail-go/compare/v0.11.0...v0.11.1)
