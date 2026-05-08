@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.1 (2026-05-08)
+
+Full Changelog: [v0.11.0...v0.11.1](https://github.com/agentmail-to/agentmail-go/compare/v0.11.0...v0.11.1)
+
+### Chores
+
+* redact api-key headers in debug logs ([00e1b8f](https://github.com/agentmail-to/agentmail-go/commit/00e1b8f2eefce606203c2e9657924d9ef420f391))
+
 ## 0.11.0 (2026-05-01)
 
 Full Changelog: [v0.10.1...v0.11.0](https://github.com/agentmail-to/agentmail-go/compare/v0.10.1...v0.11.0)
