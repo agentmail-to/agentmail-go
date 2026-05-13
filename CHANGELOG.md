@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.3 (2026-05-13)
+
+Full Changelog: [v0.11.2...v0.11.3](https://github.com/agentmail-to/agentmail-go/compare/v0.11.2...v0.11.3)
+
 ## 0.11.2 (2026-05-08)
 
 Full Changelog: [v0.11.1...v0.11.2](https://github.com/agentmail-to/agentmail-go/compare/v0.11.1...v0.11.2)
