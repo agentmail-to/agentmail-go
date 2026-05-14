@@ -13,7 +13,7 @@ import (
 	"github.com/agentmail-to/agentmail-go/option"
 )
 
-func TestAgentSignUp(t *testing.T) {
+func TestAgentSignUpWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,6 +29,8 @@ func TestAgentSignUp(t *testing.T) {
 	_, err := client.Agent.SignUp(context.TODO(), agentmail.AgentSignUpParams{
 		HumanEmail: "human_email",
 		Username:   "username",
+		Referrer:   agentmail.String("referrer"),
+		Source:     agentmail.String("source"),
 	})
 	if err != nil {
 		var apierr *agentmail.Error

@@ -130,6 +130,14 @@ type AgentSignUpParams struct {
 	// Username for the auto-created inbox (e.g. "my-agent" creates
 	// my-agent@agentmail.to).
 	Username string `json:"username" api:"required"`
+	// The channel that drove this sign-up — where the agent or its developer
+	// discovered AgentMail (e.g. `agent.email`, a partner URL, a campaign tag).
+	// Answers "where did this sign-up come from". Max 2048 characters.
+	Referrer param.Opt[string] `json:"referrer,omitzero"`
+	// The SDK, framework, or platform issuing this sign-up (e.g. `agentmail-python`,
+	// `agentmail-cli`, `agentmail-mcp`). Identifies the caller — answers "who is
+	// signing up". Max 2048 characters.
+	Source param.Opt[string] `json:"source,omitzero"`
 	paramObj
 }
 
