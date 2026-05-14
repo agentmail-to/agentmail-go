@@ -61,6 +61,7 @@ func TestWebhookUpdateWithOptionalParams(t *testing.T) {
 		agentmail.WebhookUpdateParams{
 			AddInboxIDs:    []string{"string"},
 			AddPodIDs:      []string{"string"},
+			EventTypes:     []agentmail.EventType{agentmail.EventTypeMessageReceived},
 			RemoveInboxIDs: []string{"string"},
 			RemovePodIDs:   []string{"string"},
 		},
