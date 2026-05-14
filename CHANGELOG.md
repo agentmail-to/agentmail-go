@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.13.0 (2026-05-14)
+
+Full Changelog: [v0.12.0...v0.13.0](https://github.com/agentmail-to/agentmail-go/compare/v0.12.0...v0.13.0)
+
+### Features
+
+* **client:** optimize json encoder for internal types ([e004e78](https://github.com/agentmail-to/agentmail-go/commit/e004e7878b9adf1d1682857d418769c73e140f7c))
+
 ## 0.12.0 (2026-05-14)
 
 Full Changelog: [v0.11.3...v0.12.0](https://github.com/agentmail-to/agentmail-go/compare/v0.11.3...v0.12.0)
