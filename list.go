@@ -118,6 +118,8 @@ type ListNewResponse struct {
 	ListType ListNewResponseListType `json:"list_type" api:"required"`
 	// ID of organization.
 	OrganizationID string `json:"organization_id" api:"required"`
+	// Whether the entry is read-only and cannot be deleted via the API.
+	ReadOnly bool `json:"read_only" api:"nullable"`
 	// Reason for adding the entry.
 	Reason string `json:"reason" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -128,6 +130,7 @@ type ListNewResponse struct {
 		EntryType      respjson.Field
 		ListType       respjson.Field
 		OrganizationID respjson.Field
+		ReadOnly       respjson.Field
 		Reason         respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
@@ -210,6 +213,8 @@ type ListListResponseEntry struct {
 	ListType string `json:"list_type" api:"required"`
 	// ID of organization.
 	OrganizationID string `json:"organization_id" api:"required"`
+	// Whether the entry is read-only and cannot be deleted via the API.
+	ReadOnly bool `json:"read_only" api:"nullable"`
 	// Reason for adding the entry.
 	Reason string `json:"reason" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -220,6 +225,7 @@ type ListListResponseEntry struct {
 		EntryType      respjson.Field
 		ListType       respjson.Field
 		OrganizationID respjson.Field
+		ReadOnly       respjson.Field
 		Reason         respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
@@ -251,6 +257,8 @@ type ListGetResponse struct {
 	ListType ListGetResponseListType `json:"list_type" api:"required"`
 	// ID of organization.
 	OrganizationID string `json:"organization_id" api:"required"`
+	// Whether the entry is read-only and cannot be deleted via the API.
+	ReadOnly bool `json:"read_only" api:"nullable"`
 	// Reason for adding the entry.
 	Reason string `json:"reason" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -261,6 +269,7 @@ type ListGetResponse struct {
 		EntryType      respjson.Field
 		ListType       respjson.Field
 		OrganizationID respjson.Field
+		ReadOnly       respjson.Field
 		Reason         respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string

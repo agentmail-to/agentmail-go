@@ -138,6 +138,8 @@ type InboxListNewResponse struct {
 	PodID string `json:"pod_id" api:"required"`
 	// ID of inbox, if entry is inbox-scoped.
 	InboxID string `json:"inbox_id" api:"nullable"`
+	// Whether the entry is read-only and cannot be deleted via the API.
+	ReadOnly bool `json:"read_only" api:"nullable"`
 	// Reason for adding the entry.
 	Reason string `json:"reason" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -150,6 +152,7 @@ type InboxListNewResponse struct {
 		OrganizationID respjson.Field
 		PodID          respjson.Field
 		InboxID        respjson.Field
+		ReadOnly       respjson.Field
 		Reason         respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
@@ -236,6 +239,8 @@ type InboxListListResponseEntry struct {
 	PodID string `json:"pod_id" api:"required"`
 	// ID of inbox, if entry is inbox-scoped.
 	InboxID string `json:"inbox_id" api:"nullable"`
+	// Whether the entry is read-only and cannot be deleted via the API.
+	ReadOnly bool `json:"read_only" api:"nullable"`
 	// Reason for adding the entry.
 	Reason string `json:"reason" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -248,6 +253,7 @@ type InboxListListResponseEntry struct {
 		OrganizationID respjson.Field
 		PodID          respjson.Field
 		InboxID        respjson.Field
+		ReadOnly       respjson.Field
 		Reason         respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
@@ -283,6 +289,8 @@ type InboxListGetResponse struct {
 	PodID string `json:"pod_id" api:"required"`
 	// ID of inbox, if entry is inbox-scoped.
 	InboxID string `json:"inbox_id" api:"nullable"`
+	// Whether the entry is read-only and cannot be deleted via the API.
+	ReadOnly bool `json:"read_only" api:"nullable"`
 	// Reason for adding the entry.
 	Reason string `json:"reason" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -295,6 +303,7 @@ type InboxListGetResponse struct {
 		OrganizationID respjson.Field
 		PodID          respjson.Field
 		InboxID        respjson.Field
+		ReadOnly       respjson.Field
 		Reason         respjson.Field
 		ExtraFields    map[string]respjson.Field
 		raw            string
