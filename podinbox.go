@@ -151,7 +151,12 @@ type PodInboxUpdateParams struct {
 	// ID of pod.
 	PodID string `path:"pod_id" api:"required" json:"-"`
 	// Display name: `Display Name <username@domain.com>`.
-	DisplayName string `json:"display_name" api:"required"`
+	DisplayName param.Opt[string] `json:"display_name,omitzero"`
+	// Metadata to merge into the inbox's existing metadata. Keys you include are added
+	// or overwritten; keys you omit are left unchanged. To remove a single key, send
+	// it with a null value. To clear all metadata, send `metadata` as null. Provide at
+	// least one of `display_name` or `metadata`.
+	Metadata map[string]PodInboxUpdateParamsMetadataUnion `json:"metadata,omitzero"`
 	paramObj
 }
 
@@ -161,6 +166,23 @@ func (r PodInboxUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 func (r *PodInboxUpdateParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type PodInboxUpdateParamsMetadataUnion struct {
+	OfString param.Opt[string]  `json:",omitzero,inline"`
+	OfFloat  param.Opt[float64] `json:",omitzero,inline"`
+	OfBool   param.Opt[bool]    `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u PodInboxUpdateParamsMetadataUnion) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion(u, u.OfString, u.OfFloat, u.OfBool)
+}
+func (u *PodInboxUpdateParamsMetadataUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
 }
 
 type PodInboxListParams struct {
