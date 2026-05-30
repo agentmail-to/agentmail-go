@@ -154,8 +154,7 @@ type PodInboxUpdateParams struct {
 	DisplayName param.Opt[string] `json:"display_name,omitzero"`
 	// Metadata to merge into the inbox's existing metadata. Keys you include are added
 	// or overwritten; keys you omit are left unchanged. To remove a single key, send
-	// it with a null value. To clear all metadata, send `metadata` as null. Provide at
-	// least one of `display_name` or `metadata`.
+	// it with a null value. To clear all metadata, send `metadata` as null.
 	Metadata map[string]PodInboxUpdateParamsMetadataUnion `json:"metadata,omitzero"`
 	paramObj
 }
