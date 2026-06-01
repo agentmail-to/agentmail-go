@@ -32,7 +32,12 @@ func TestInboxNewWithOptionalParams(t *testing.T) {
 			ClientID:    agentmail.String("client_id"),
 			DisplayName: agentmail.String("display_name"),
 			Domain:      agentmail.String("domain"),
-			Username:    agentmail.String("username"),
+			Metadata: map[string]agentmail.CreateInboxMetadataUnionParam{
+				"foo": {
+					OfString: agentmail.String("string"),
+				},
+			},
+			Username: agentmail.String("username"),
 		},
 	})
 	if err != nil {
@@ -44,7 +49,7 @@ func TestInboxNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestInboxUpdate(t *testing.T) {
+func TestInboxUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -61,7 +66,12 @@ func TestInboxUpdate(t *testing.T) {
 		context.TODO(),
 		"inbox_id",
 		agentmail.InboxUpdateParams{
-			DisplayName: "display_name",
+			DisplayName: agentmail.String("display_name"),
+			Metadata: map[string]agentmail.InboxUpdateParamsMetadataUnion{
+				"foo": {
+					OfString: agentmail.String("string"),
+				},
+			},
 		},
 	)
 	if err != nil {

@@ -34,7 +34,12 @@ func TestPodInboxNewWithOptionalParams(t *testing.T) {
 				ClientID:    agentmail.String("client_id"),
 				DisplayName: agentmail.String("display_name"),
 				Domain:      agentmail.String("domain"),
-				Username:    agentmail.String("username"),
+				Metadata: map[string]agentmail.CreateInboxMetadataUnionParam{
+					"foo": {
+						OfString: agentmail.String("string"),
+					},
+				},
+				Username: agentmail.String("username"),
 			},
 		},
 	)
@@ -47,7 +52,7 @@ func TestPodInboxNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPodInboxUpdate(t *testing.T) {
+func TestPodInboxUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -65,7 +70,12 @@ func TestPodInboxUpdate(t *testing.T) {
 		"inbox_id",
 		agentmail.PodInboxUpdateParams{
 			PodID:       "pod_id",
-			DisplayName: "display_name",
+			DisplayName: agentmail.String("display_name"),
+			Metadata: map[string]agentmail.PodInboxUpdateParamsMetadataUnion{
+				"foo": {
+					OfString: agentmail.String("string"),
+				},
+			},
 		},
 	)
 	if err != nil {

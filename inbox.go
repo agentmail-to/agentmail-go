@@ -4,6 +4,7 @@ package agentmail
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -153,6 +154,8 @@ type CreateInboxParam struct {
 	Domain param.Opt[string] `json:"domain,omitzero"`
 	// Username of address. Randomly generated if not specified.
 	Username param.Opt[string] `json:"username,omitzero"`
+	// Custom metadata to attach to the inbox.
+	Metadata map[string]CreateInboxMetadataUnionParam `json:"metadata,omitzero"`
 	paramObj
 }
 
@@ -162,6 +165,23 @@ func (r CreateInboxParam) MarshalJSON() (data []byte, err error) {
 }
 func (r *CreateInboxParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type CreateInboxMetadataUnionParam struct {
+	OfString param.Opt[string]  `json:",omitzero,inline"`
+	OfFloat  param.Opt[float64] `json:",omitzero,inline"`
+	OfBool   param.Opt[bool]    `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u CreateInboxMetadataUnionParam) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion(u, u.OfString, u.OfFloat, u.OfBool)
+}
+func (u *CreateInboxMetadataUnionParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
 }
 
 type Inbox struct {
@@ -179,6 +199,8 @@ type Inbox struct {
 	ClientID string `json:"client_id" api:"nullable"`
 	// Display name: `Display Name <username@domain.com>`.
 	DisplayName string `json:"display_name" api:"nullable"`
+	// Custom metadata attached to the inbox.
+	Metadata map[string]InboxMetadataUnion `json:"metadata" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CreatedAt   respjson.Field
@@ -188,6 +210,7 @@ type Inbox struct {
 		UpdatedAt   respjson.Field
 		ClientID    respjson.Field
 		DisplayName respjson.Field
+		Metadata    respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -196,6 +219,50 @@ type Inbox struct {
 // Returns the unmodified JSON received from the API
 func (r Inbox) RawJSON() string { return r.JSON.raw }
 func (r *Inbox) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// InboxMetadataUnion contains all possible properties and values from [string],
+// [float64], [bool].
+//
+// Use the methods beginning with 'As' to cast the union to one of its variants.
+//
+// If the underlying value is not a json object, one of the following properties
+// will be valid: OfString OfFloat OfBool]
+type InboxMetadataUnion struct {
+	// This field will be present if the value is a [string] instead of an object.
+	OfString string `json:",inline"`
+	// This field will be present if the value is a [float64] instead of an object.
+	OfFloat float64 `json:",inline"`
+	// This field will be present if the value is a [bool] instead of an object.
+	OfBool bool `json:",inline"`
+	JSON   struct {
+		OfString respjson.Field
+		OfFloat  respjson.Field
+		OfBool   respjson.Field
+		raw      string
+	} `json:"-"`
+}
+
+func (u InboxMetadataUnion) AsString() (v string) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u InboxMetadataUnion) AsFloat() (v float64) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u InboxMetadataUnion) AsBool() (v bool) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+// Returns the unmodified JSON received from the API
+func (u InboxMetadataUnion) RawJSON() string { return u.JSON.raw }
+
+func (r *InboxMetadataUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -274,7 +341,13 @@ func (r *InboxNewParams) UnmarshalJSON(data []byte) error {
 
 type InboxUpdateParams struct {
 	// Display name: `Display Name <username@domain.com>`.
-	DisplayName string `json:"display_name" api:"required"`
+	DisplayName param.Opt[string] `json:"display_name,omitzero"`
+	// Metadata to merge into the inbox's existing metadata. Keys you include are added
+	// or overwritten; keys you omit are left unchanged. To remove a single key, send
+	// it with a null value. To clear all metadata, send `metadata` as null. Sending an
+	// empty object is rejected; use null to clear. Each update must include at least
+	// one of `display_name` or `metadata`.
+	Metadata map[string]InboxUpdateParamsMetadataUnion `json:"metadata,omitzero"`
 	paramObj
 }
 
@@ -284,6 +357,23 @@ func (r InboxUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 func (r *InboxUpdateParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type InboxUpdateParamsMetadataUnion struct {
+	OfString param.Opt[string]  `json:",omitzero,inline"`
+	OfFloat  param.Opt[float64] `json:",omitzero,inline"`
+	OfBool   param.Opt[bool]    `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u InboxUpdateParamsMetadataUnion) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion(u, u.OfString, u.OfFloat, u.OfBool)
+}
+func (u *InboxUpdateParamsMetadataUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
 }
 
 type InboxListParams struct {
