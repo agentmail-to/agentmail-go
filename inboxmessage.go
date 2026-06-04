@@ -60,6 +60,11 @@ func (r *InboxMessageService) Update(ctx context.Context, messageID string, para
 	return res, err
 }
 
+// Lists messages in the inbox, most recent first. Pass `from`, `to`, or `subject`
+// to filter by substring. Filtered requests are served by search, which caps
+// `limit` at 100. For relevance-ranked full-text search across sender, recipients,
+// subject, and message body, use `Search Messages`.
+//
 // **CLI:**
 //
 // ```bash
@@ -612,8 +617,17 @@ type InboxMessageListParams struct {
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Page token for pagination.
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
+	// Filter to messages whose sender contains this value (substring match).
+	// Repeatable; all values must match.
+	From []string `query:"from,omitzero" json:"-"`
 	// Labels to filter by.
 	Labels []string `query:"labels,omitzero" json:"-"`
+	// Filter to messages whose subject contains this value (substring match).
+	// Repeatable; all values must match.
+	Subject []string `query:"subject,omitzero" json:"-"`
+	// Filter to messages whose recipients (to, cc, or bcc) contain this value
+	// (substring match). Repeatable; all values must match.
+	To []string `query:"to,omitzero" json:"-"`
 	paramObj
 }
 

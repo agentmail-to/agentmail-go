@@ -36,6 +36,11 @@ func NewThreadService(opts ...option.RequestOption) (r ThreadService) {
 	return
 }
 
+// Lists threads, most recent first. Pass `senders`, `recipients`, or `subject` to
+// filter by substring. Filtered requests are served by search, which caps `limit`
+// at 100. For relevance-ranked full-text search across senders, recipients,
+// subject, and message body, use `Search Threads`.
+//
 // **CLI:**
 //
 // ```bash
@@ -130,6 +135,15 @@ type ThreadListParams struct {
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
 	// Labels to filter by.
 	Labels []string `query:"labels,omitzero" json:"-"`
+	// Filter to threads whose recipients contain this value (substring match).
+	// Repeatable; all values must match.
+	Recipients []string `query:"recipients,omitzero" json:"-"`
+	// Filter to threads whose senders contain this value (substring match).
+	// Repeatable; all values must match.
+	Senders []string `query:"senders,omitzero" json:"-"`
+	// Filter to threads whose subject contains this value (substring match).
+	// Repeatable; all values must match.
+	Subject []string `query:"subject,omitzero" json:"-"`
 	paramObj
 }
 
