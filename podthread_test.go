@@ -41,6 +41,9 @@ func TestPodThreadListWithOptionalParams(t *testing.T) {
 			Labels:                 []string{"string"},
 			Limit:                  agentmail.Int(0),
 			PageToken:              agentmail.String("page_token"),
+			Recipients:             []string{"string"},
+			Senders:                []string{"string"},
+			Subject:                []string{"string"},
 		},
 	)
 	if err != nil {
