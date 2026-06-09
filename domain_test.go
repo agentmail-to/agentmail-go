@@ -13,7 +13,7 @@ import (
 	"github.com/agentmail-to/agentmail-go/option"
 )
 
-func TestDomainNew(t *testing.T) {
+func TestDomainNewWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,8 +28,9 @@ func TestDomainNew(t *testing.T) {
 	)
 	_, err := client.Domains.New(context.TODO(), agentmail.DomainNewParams{
 		CreateDomain: agentmail.CreateDomainParam{
-			Domain:          "domain",
-			FeedbackEnabled: true,
+			Domain:            "domain",
+			FeedbackEnabled:   agentmail.Bool(true),
+			SubdomainsEnabled: agentmail.Bool(true),
 		},
 	})
 	if err != nil {
@@ -58,7 +59,8 @@ func TestDomainUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"domain_id",
 		agentmail.DomainUpdateParams{
-			FeedbackEnabled: agentmail.Bool(true),
+			FeedbackEnabled:   agentmail.Bool(true),
+			SubdomainsEnabled: agentmail.Bool(true),
 		},
 	)
 	if err != nil {

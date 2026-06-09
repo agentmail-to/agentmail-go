@@ -153,12 +153,15 @@ func (r *DomainService) Verify(ctx context.Context, domainID string, opts ...opt
 	return err
 }
 
-// The properties Domain, FeedbackEnabled are required.
+// The property Domain is required.
 type CreateDomainParam struct {
 	// The name of the domain (e.g., `example.com`).
 	Domain string `json:"domain" api:"required"`
 	// Bounce and complaint notifications are sent to your inboxes.
-	FeedbackEnabled bool `json:"feedback_enabled" api:"required"`
+	FeedbackEnabled param.Opt[bool] `json:"feedback_enabled,omitzero"`
+	// Allow inboxes on any subdomain of this domain. Adds a required wildcard MX
+	// record (`*.<domain>`) to `records`.
+	SubdomainsEnabled param.Opt[bool] `json:"subdomains_enabled,omitzero"`
 	paramObj
 }
 
@@ -179,12 +182,16 @@ type Domain struct {
 	DomainID string `json:"domain_id" api:"required"`
 	// Bounce and complaint notifications are sent to your inboxes.
 	FeedbackEnabled bool `json:"feedback_enabled" api:"required"`
-	// A list of DNS records required to verify the domain.
+	// A list of DNS records required to verify the domain. Includes a wildcard MX
+	// record (`*.<domain>`) when `subdomains_enabled` is true.
 	Records []DomainRecord `json:"records" api:"required"`
 	// The verification status of the domain.
 	//
 	// Any of "NOT_STARTED", "PENDING", "INVALID", "FAILED", "VERIFYING", "VERIFIED".
 	Status DomainStatus `json:"status" api:"required"`
+	// Allow inboxes on any subdomain of this domain. Adds a required wildcard MX
+	// record (`*.<domain>`) to `records`.
+	SubdomainsEnabled bool `json:"subdomains_enabled" api:"required"`
 	// Time at which the domain was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Client ID of domain.
@@ -193,17 +200,18 @@ type Domain struct {
 	PodID string `json:"pod_id" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CreatedAt       respjson.Field
-		Domain          respjson.Field
-		DomainID        respjson.Field
-		FeedbackEnabled respjson.Field
-		Records         respjson.Field
-		Status          respjson.Field
-		UpdatedAt       respjson.Field
-		ClientID        respjson.Field
-		PodID           respjson.Field
-		ExtraFields     map[string]respjson.Field
-		raw             string
+		CreatedAt         respjson.Field
+		Domain            respjson.Field
+		DomainID          respjson.Field
+		FeedbackEnabled   respjson.Field
+		Records           respjson.Field
+		Status            respjson.Field
+		SubdomainsEnabled respjson.Field
+		UpdatedAt         respjson.Field
+		ClientID          respjson.Field
+		PodID             respjson.Field
+		ExtraFields       map[string]respjson.Field
+		raw               string
 	} `json:"-"`
 }
 
@@ -293,6 +301,9 @@ type ListDomainsDomain struct {
 	DomainID string `json:"domain_id" api:"required"`
 	// Bounce and complaint notifications are sent to your inboxes.
 	FeedbackEnabled bool `json:"feedback_enabled" api:"required"`
+	// Allow inboxes on any subdomain of this domain. Adds a required wildcard MX
+	// record (`*.<domain>`) to `records`.
+	SubdomainsEnabled bool `json:"subdomains_enabled" api:"required"`
 	// Time at which the domain was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Client ID of domain.
@@ -301,15 +312,16 @@ type ListDomainsDomain struct {
 	PodID string `json:"pod_id" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CreatedAt       respjson.Field
-		Domain          respjson.Field
-		DomainID        respjson.Field
-		FeedbackEnabled respjson.Field
-		UpdatedAt       respjson.Field
-		ClientID        respjson.Field
-		PodID           respjson.Field
-		ExtraFields     map[string]respjson.Field
-		raw             string
+		CreatedAt         respjson.Field
+		Domain            respjson.Field
+		DomainID          respjson.Field
+		FeedbackEnabled   respjson.Field
+		SubdomainsEnabled respjson.Field
+		UpdatedAt         respjson.Field
+		ClientID          respjson.Field
+		PodID             respjson.Field
+		ExtraFields       map[string]respjson.Field
+		raw               string
 	} `json:"-"`
 }
 
@@ -334,6 +346,9 @@ func (r *DomainNewParams) UnmarshalJSON(data []byte) error {
 type DomainUpdateParams struct {
 	// Bounce and complaint notifications are sent to your inboxes.
 	FeedbackEnabled param.Opt[bool] `json:"feedback_enabled,omitzero"`
+	// Allow inboxes on any subdomain of this domain. Adds a required wildcard MX
+	// record (`*.<domain>`) to `records`.
+	SubdomainsEnabled param.Opt[bool] `json:"subdomains_enabled,omitzero"`
 	paramObj
 }
 
