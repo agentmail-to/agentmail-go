@@ -128,23 +128,6 @@ func (r *InboxService) Get(ctx context.Context, inboxID string, opts ...option.R
 	return res, err
 }
 
-// **CLI:**
-//
-// ```bash
-// agentmail inboxes:metrics query --inbox-id <inbox_id>
-// ```
-func (r *InboxService) ListMetrics(ctx context.Context, inboxID string, query InboxListMetricsParams, opts ...option.RequestOption) (res *InboxListMetricsResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if inboxID == "" {
-		err = errors.New("missing required inbox_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/inboxes/%s/metrics", url.PathEscape(inboxID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return res, err
-}
-
 type CreateInboxParam struct {
 	// Client ID of inbox.
 	ClientID param.Opt[string] `json:"client_id,omitzero"`
@@ -294,41 +277,6 @@ func (r *ListInboxes) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Type of metric event.
-type MetricEventType string
-
-const (
-	MetricEventTypeMessageSent       MetricEventType = "message.sent"
-	MetricEventTypeMessageDelivered  MetricEventType = "message.delivered"
-	MetricEventTypeMessageBounced    MetricEventType = "message.bounced"
-	MetricEventTypeMessageDelayed    MetricEventType = "message.delayed"
-	MetricEventTypeMessageRejected   MetricEventType = "message.rejected"
-	MetricEventTypeMessageComplained MetricEventType = "message.complained"
-	MetricEventTypeMessageReceived   MetricEventType = "message.received"
-)
-
-type InboxListMetricsResponse map[string][]InboxListMetricsResponseItem
-
-type InboxListMetricsResponseItem struct {
-	// Count of events in the bucket.
-	Count int64 `json:"count" api:"required"`
-	// Timestamp of the bucket.
-	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Count       respjson.Field
-		Timestamp   respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r InboxListMetricsResponseItem) RawJSON() string { return r.JSON.raw }
-func (r *InboxListMetricsResponseItem) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type InboxNewParams struct {
 	CreateInbox CreateInboxParam
 	paramObj
@@ -390,30 +338,6 @@ type InboxListParams struct {
 
 // URLQuery serializes [InboxListParams]'s query parameters as `url.Values`.
 func (r InboxListParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type InboxListMetricsParams struct {
-	// Sort in descending order.
-	Descending param.Opt[bool] `query:"descending,omitzero" json:"-"`
-	// End timestamp for the query.
-	End param.Opt[time.Time] `query:"end,omitzero" format:"date-time" json:"-"`
-	// Limit on number of buckets to return.
-	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
-	// Period in number of seconds for the query.
-	Period param.Opt[string] `query:"period,omitzero" json:"-"`
-	// Start timestamp for the query.
-	Start param.Opt[time.Time] `query:"start,omitzero" format:"date-time" json:"-"`
-	// List of metric event types to query.
-	EventTypes []MetricEventType `query:"event_types,omitzero" json:"-"`
-	paramObj
-}
-
-// URLQuery serializes [InboxListMetricsParams]'s query parameters as `url.Values`.
-func (r InboxListMetricsParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

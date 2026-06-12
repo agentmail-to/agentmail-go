@@ -15,13 +15,11 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#CreateInboxParam">CreateInboxParam</a>
-- <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#MetricEventType">MetricEventType</a>
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#Inbox">Inbox</a>
 - <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#ListInboxes">ListInboxes</a>
-- <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#InboxListMetricsResponse">InboxListMetricsResponse</a>
 
 Methods:
 
@@ -30,7 +28,6 @@ Methods:
 - <code title="get /v0/inboxes">client.Inboxes.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#InboxService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#InboxListParams">InboxListParams</a>) (\*<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#ListInboxes">ListInboxes</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="delete /v0/inboxes/{inbox_id}">client.Inboxes.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#InboxService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, inboxID <a href="https://pkg.go.dev/builtin#string">string</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
 - <code title="get /v0/inboxes/{inbox_id}">client.Inboxes.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#InboxService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, inboxID <a href="https://pkg.go.dev/builtin#string">string</a>) (\*<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#Inbox">Inbox</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /v0/inboxes/{inbox_id}/metrics">client.Inboxes.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#InboxService.ListMetrics">ListMetrics</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, inboxID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#InboxListMetricsParams">InboxListMetricsParams</a>) (\*<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#InboxListMetricsResponse">InboxListMetricsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Drafts
 
@@ -207,14 +204,6 @@ Methods:
 
 ## Metrics
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#PodMetricQueryResponse">PodMetricQueryResponse</a>
-
-Methods:
-
-- <code title="get /v0/pods/{pod_id}/metrics">client.Pods.Metrics.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#PodMetricService.Query">Query</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, podID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#PodMetricQueryParams">PodMetricQueryParams</a>) (\*<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#PodMetricQueryResponse">PodMetricQueryResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 # Webhooks
 
 Params Types:
@@ -300,14 +289,6 @@ Methods:
 - <code title="get /v0/lists/{direction}/{type}/{entry}">client.Lists.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#ListService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, entry <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#ListGetParams">ListGetParams</a>) (\*<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#ListGetResponse">ListGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Metrics
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#MetricListResponse">MetricListResponse</a>
-
-Methods:
-
-- <code title="get /v0/metrics">client.Metrics.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#MetricService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#MetricListParams">MetricListParams</a>) (\*<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go">agentmail</a>.<a href="https://pkg.go.dev/github.com/agentmail-to/agentmail-go#MetricListResponse">MetricListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Organizations
 
