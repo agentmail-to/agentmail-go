@@ -144,6 +144,8 @@ type Draft struct {
 	Cc []string `json:"cc" api:"nullable"`
 	// Client ID of draft.
 	ClientID string `json:"client_id" api:"nullable"`
+	// ID of message being forwarded.
+	ForwardOf string `json:"forward_of" api:"nullable"`
 	// HTML body of draft.
 	HTML string `json:"html" api:"nullable"`
 	// ID of message being replied to.
@@ -179,6 +181,7 @@ type Draft struct {
 		Bcc         respjson.Field
 		Cc          respjson.Field
 		ClientID    respjson.Field
+		ForwardOf   respjson.Field
 		HTML        respjson.Field
 		InReplyTo   respjson.Field
 		Preview     respjson.Field
@@ -252,6 +255,8 @@ type ListDraftsDraft struct {
 	// Addresses of CC recipients. In format `username@domain.com` or
 	// `Display Name <username@domain.com>`.
 	Cc []string `json:"cc" api:"nullable"`
+	// ID of message being forwarded.
+	ForwardOf string `json:"forward_of" api:"nullable"`
 	// ID of message being replied to.
 	InReplyTo string `json:"in_reply_to" api:"nullable"`
 	// Text preview of draft.
@@ -276,6 +281,7 @@ type ListDraftsDraft struct {
 		Attachments respjson.Field
 		Bcc         respjson.Field
 		Cc          respjson.Field
+		ForwardOf   respjson.Field
 		InReplyTo   respjson.Field
 		Preview     respjson.Field
 		SendAt      respjson.Field
