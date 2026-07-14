@@ -51,7 +51,7 @@ func TestThreadListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestThreadDeleteWithOptionalParams(t *testing.T) {
+func TestThreadDelete(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -64,13 +64,7 @@ func TestThreadDeleteWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	err := client.Threads.Delete(
-		context.TODO(),
-		"thread_id",
-		agentmail.ThreadDeleteParams{
-			Permanent: agentmail.Bool(true),
-		},
-	)
+	err := client.Threads.Delete(context.TODO(), "thread_id")
 	if err != nil {
 		var apierr *agentmail.Error
 		if errors.As(err, &apierr) {
