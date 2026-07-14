@@ -54,16 +54,14 @@ func (r *ThreadService) List(ctx context.Context, query ThreadListParams, opts .
 	return res, err
 }
 
-// Moves the thread to trash by adding a trash label to all messages. If the thread
-// is already in trash, it will be permanently deleted. Use `permanent=true` to
-// force permanent deletion.
+// Permanently deletes a thread and all of its messages.
 //
 // **CLI:**
 //
 // ```bash
 // agentmail threads delete --thread-id <thread_id>
 // ```
-func (r *ThreadService) Delete(ctx context.Context, threadID string, body ThreadDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *ThreadService) Delete(ctx context.Context, threadID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -72,7 +70,7 @@ func (r *ThreadService) Delete(ctx context.Context, threadID string, body Thread
 		return err
 	}
 	path := fmt.Sprintf("v0/threads/%s", url.PathEscape(threadID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
 }
 
@@ -149,20 +147,6 @@ type ThreadListParams struct {
 
 // URLQuery serializes [ThreadListParams]'s query parameters as `url.Values`.
 func (r ThreadListParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type ThreadDeleteParams struct {
-	// If true, permanently delete the thread instead of moving to trash.
-	Permanent param.Opt[bool] `query:"permanent,omitzero" json:"-"`
-	paramObj
-}
-
-// URLQuery serializes [ThreadDeleteParams]'s query parameters as `url.Values`.
-func (r ThreadDeleteParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
