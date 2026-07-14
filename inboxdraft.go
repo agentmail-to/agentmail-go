@@ -39,6 +39,12 @@ func NewInboxDraftService(opts ...option.RequestOption) (r InboxDraftService) {
 	return
 }
 
+// Create a draft. Supply `in_reply_to` to create a reply draft (with `reply_all`
+// to address the whole thread), whose recipients, subject, and threading are
+// derived from the referenced message, or `forward_of` to create a forward draft,
+// which derives the subject, threading, and forwarded content from the source but
+// keeps recipients caller-supplied.
+//
 // **CLI:**
 //
 // ```bash
@@ -56,6 +62,10 @@ func (r *InboxDraftService) New(ctx context.Context, inboxID string, body InboxD
 	return res, err
 }
 
+// Edit fields on an existing draft. Passing `null` clears a field (or `[]` for a
+// recipient field); `send_at: null` un-schedules a scheduled draft. A draft that
+// is already being sent cannot be edited.
+//
 // **CLI:**
 //
 // ```bash
@@ -254,10 +264,14 @@ func (u *UpdateMessageRemoveLabelsUnionParam) UnmarshalJSON(data []byte) error {
 type InboxDraftNewParams struct {
 	// Client ID of draft.
 	ClientID param.Opt[string] `json:"client_id,omitzero"`
+	// ID of message being forwarded.
+	ForwardOf param.Opt[string] `json:"forward_of,omitzero"`
 	// HTML body of draft.
 	HTML param.Opt[string] `json:"html,omitzero"`
 	// ID of message being replied to.
 	InReplyTo param.Opt[string] `json:"in_reply_to,omitzero"`
+	// Reply to all recipients of the original message.
+	ReplyAll param.Opt[bool] `json:"reply_all,omitzero"`
 	// Time at which to schedule send draft.
 	SendAt param.Opt[time.Time] `json:"send_at,omitzero" format:"date-time"`
 	// Subject of draft.
@@ -302,12 +316,20 @@ type InboxDraftUpdateParams struct {
 	Subject param.Opt[string] `json:"subject,omitzero"`
 	// Plain text body of draft.
 	Text param.Opt[string] `json:"text,omitzero"`
+	// Attachments to add to the draft.
+	AddAttachments []SendAttachmentParam `json:"add_attachments,omitzero"`
+	// Label or labels to add to the draft.
+	AddLabels []string `json:"add_labels,omitzero"`
 	// Addresses of BCC recipients. In format `username@domain.com` or
 	// `Display Name <username@domain.com>`.
 	Bcc []string `json:"bcc,omitzero"`
 	// Addresses of CC recipients. In format `username@domain.com` or
 	// `Display Name <username@domain.com>`.
 	Cc []string `json:"cc,omitzero"`
+	// IDs of attachments to remove from the draft.
+	RemoveAttachments []string `json:"remove_attachments,omitzero"`
+	// Label or labels to remove from the draft.
+	RemoveLabels []string `json:"remove_labels,omitzero"`
 	// Reply-to addresses. In format `username@domain.com` or
 	// `Display Name <username@domain.com>`.
 	ReplyTo []string `json:"reply_to,omitzero"`
