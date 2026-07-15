@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.15.0 (2026-07-14)
+
+Full Changelog: [v0.14.0...v0.15.0](https://github.com/agentmail-to/agentmail-go/compare/v0.14.0...v0.15.0)
+
+### Features
+
+* **api:** api update ([a4e79c9](https://github.com/agentmail-to/agentmail-go/commit/a4e79c902647d8d4b7cae9a056de8ba44999b4db))
+* **api:** api update ([7fa5868](https://github.com/agentmail-to/agentmail-go/commit/7fa586879fd7b6b6836b72c4de3a3610a6cc2f6d))
+* **api:** api update ([a18a04d](https://github.com/agentmail-to/agentmail-go/commit/a18a04dfd5f0e76513171c12c5664727516a4ae6))
+* **api:** api update ([d157559](https://github.com/agentmail-to/agentmail-go/commit/d1575598d269d7b8fa7187576b02ecb7db99d908))
+* **api:** api update ([256640c](https://github.com/agentmail-to/agentmail-go/commit/256640cec0377871a1b606abb1305873f7f470e3))
+* **api:** api update ([e3e5d6c](https://github.com/agentmail-to/agentmail-go/commit/e3e5d6c2c1a08b1818c8131ca418dfcb16b5cd50))
+* **api:** api update ([c063bef](https://github.com/agentmail-to/agentmail-go/commit/c063befb1ea48ab781cf1a591bad18dc4ca32bf0))
+* **api:** api update ([25e6ee7](https://github.com/agentmail-to/agentmail-go/commit/25e6ee7de1c451a47316e426a21c135fd89e07fe))
+* **api:** api update ([27e9374](https://github.com/agentmail-to/agentmail-go/commit/27e93742f95d6023129b15c14d7084dae7936fbe))
+* **api:** api update ([d915d4b](https://github.com/agentmail-to/agentmail-go/commit/d915d4bca3c61f4891b8bc4e947469c0462ad922))
+* **api:** api update ([c1a4c8c](https://github.com/agentmail-to/agentmail-go/commit/c1a4c8cd89313015584e5546fb04c0ca72fb1d9b))
+
 ## 0.14.0 (2026-05-14)
 
 Full Changelog: [v0.13.0...v0.14.0](https://github.com/agentmail-to/agentmail-go/compare/v0.13.0...v0.14.0)

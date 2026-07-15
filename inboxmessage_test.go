@@ -71,6 +71,7 @@ func TestInboxMessageListWithOptionalParams(t *testing.T) {
 			After:                  agentmail.Time(time.Now()),
 			Ascending:              agentmail.Bool(true),
 			Before:                 agentmail.Time(time.Now()),
+			From:                   []string{"string"},
 			IncludeBlocked:         agentmail.Bool(true),
 			IncludeSpam:            agentmail.Bool(true),
 			IncludeTrash:           agentmail.Bool(true),
@@ -78,6 +79,8 @@ func TestInboxMessageListWithOptionalParams(t *testing.T) {
 			Labels:                 []string{"string"},
 			Limit:                  agentmail.Int(0),
 			PageToken:              agentmail.String("page_token"),
+			Subject:                []string{"string"},
+			To:                     []string{"string"},
 		},
 	)
 	if err != nil {

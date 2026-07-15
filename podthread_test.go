@@ -41,6 +41,9 @@ func TestPodThreadListWithOptionalParams(t *testing.T) {
 			Labels:                 []string{"string"},
 			Limit:                  agentmail.Int(0),
 			PageToken:              agentmail.String("page_token"),
+			Recipients:             []string{"string"},
+			Senders:                []string{"string"},
+			Subject:                []string{"string"},
 		},
 	)
 	if err != nil {
@@ -52,7 +55,7 @@ func TestPodThreadListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPodThreadDeleteWithOptionalParams(t *testing.T) {
+func TestPodThreadDelete(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -69,8 +72,7 @@ func TestPodThreadDeleteWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"thread_id",
 		agentmail.PodThreadDeleteParams{
-			PodID:     "pod_id",
-			Permanent: agentmail.Bool(true),
+			PodID: "pod_id",
 		},
 	)
 	if err != nil {

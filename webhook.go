@@ -215,8 +215,6 @@ type WebhookNewParams struct {
 	URL string `json:"url" api:"required"`
 	// Client ID of webhook.
 	ClientID param.Opt[string] `json:"client_id,omitzero"`
-	// Inboxes for which to send events. Maximum 10 per webhook.
-	InboxIDs []string `json:"inbox_ids,omitzero"`
 	// Pods for which to send events. Maximum 10 per webhook.
 	PodIDs []string `json:"pod_ids,omitzero"`
 	paramObj
@@ -231,8 +229,6 @@ func (r *WebhookNewParams) UnmarshalJSON(data []byte) error {
 }
 
 type WebhookUpdateParams struct {
-	// Inbox IDs to subscribe to the webhook.
-	AddInboxIDs []string `json:"add_inbox_ids,omitzero"`
 	// Pod IDs to subscribe to the webhook.
 	AddPodIDs []string `json:"add_pod_ids,omitzero"`
 	// When you send a non-empty list, it replaces the webhook's subscribed event types
@@ -244,8 +240,6 @@ type WebhookUpdateParams struct {
 	// `message.received.blocked`, or `message.received.unauthenticated` requires the
 	// matching label permission on the API key.
 	EventTypes []EventType `json:"event_types,omitzero"`
-	// Inbox IDs to unsubscribe from the webhook.
-	RemoveInboxIDs []string `json:"remove_inbox_ids,omitzero"`
 	// Pod IDs to unsubscribe from the webhook.
 	RemovePodIDs []string `json:"remove_pod_ids,omitzero"`
 	paramObj

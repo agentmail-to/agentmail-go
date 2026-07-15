@@ -36,6 +36,11 @@ func NewPodThreadService(opts ...option.RequestOption) (r PodThreadService) {
 	return
 }
 
+// Lists threads in the pod, most recent first. Pass `senders`, `recipients`, or
+// `subject` to filter by substring. Filtered requests are served by search, which
+// caps `limit` at 100. For relevance-ranked full-text search, use
+// `Search Threads`.
+//
 // **CLI:**
 //
 // ```bash
@@ -53,20 +58,18 @@ func (r *PodThreadService) List(ctx context.Context, podID string, query PodThre
 	return res, err
 }
 
-// Moves the thread to trash by adding a trash label to all messages. If the thread
-// is already in trash, it will be permanently deleted. Use `permanent=true` to
-// force permanent deletion.
+// Permanently deletes a thread and all of its messages.
 //
 // **CLI:**
 //
 // ```bash
 // agentmail pods:threads delete --pod-id <pod_id> --thread-id <thread_id>
 // ```
-func (r *PodThreadService) Delete(ctx context.Context, threadID string, params PodThreadDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *PodThreadService) Delete(ctx context.Context, threadID string, body PodThreadDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if params.PodID == "" {
+	if body.PodID == "" {
 		err = errors.New("missing required pod_id parameter")
 		return err
 	}
@@ -74,8 +77,8 @@ func (r *PodThreadService) Delete(ctx context.Context, threadID string, params P
 		err = errors.New("missing required thread_id parameter")
 		return err
 	}
-	path := fmt.Sprintf("v0/pods/%s/threads/%s", url.PathEscape(params.PodID), url.PathEscape(threadID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
+	path := fmt.Sprintf("v0/pods/%s/threads/%s", url.PathEscape(body.PodID), url.PathEscape(threadID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
 }
 
@@ -146,6 +149,15 @@ type PodThreadListParams struct {
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
 	// Labels to filter by.
 	Labels []string `query:"labels,omitzero" json:"-"`
+	// Filter to threads whose recipients contain this value (substring match).
+	// Repeatable; all values must match.
+	Recipients []string `query:"recipients,omitzero" json:"-"`
+	// Filter to threads whose senders contain this value (substring match).
+	// Repeatable; all values must match.
+	Senders []string `query:"senders,omitzero" json:"-"`
+	// Filter to threads whose subject contains this value (substring match).
+	// Repeatable; all values must match.
+	Subject []string `query:"subject,omitzero" json:"-"`
 	paramObj
 }
 
@@ -160,17 +172,7 @@ func (r PodThreadListParams) URLQuery() (v url.Values, err error) {
 type PodThreadDeleteParams struct {
 	// ID of pod.
 	PodID string `path:"pod_id" api:"required" json:"-"`
-	// If true, permanently delete the thread instead of moving to trash.
-	Permanent param.Opt[bool] `query:"permanent,omitzero" json:"-"`
 	paramObj
-}
-
-// URLQuery serializes [PodThreadDeleteParams]'s query parameters as `url.Values`.
-func (r PodThreadDeleteParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
 }
 
 type PodThreadGetParams struct {

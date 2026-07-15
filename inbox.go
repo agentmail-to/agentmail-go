@@ -4,6 +4,7 @@ package agentmail
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -127,32 +128,19 @@ func (r *InboxService) Get(ctx context.Context, inboxID string, opts ...option.R
 	return res, err
 }
 
-// **CLI:**
-//
-// ```bash
-// agentmail inboxes:metrics query --inbox-id <inbox_id>
-// ```
-func (r *InboxService) ListMetrics(ctx context.Context, inboxID string, query InboxListMetricsParams, opts ...option.RequestOption) (res *InboxListMetricsResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if inboxID == "" {
-		err = errors.New("missing required inbox_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("v0/inboxes/%s/metrics", url.PathEscape(inboxID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return res, err
-}
-
 type CreateInboxParam struct {
 	// Client ID of inbox.
 	ClientID param.Opt[string] `json:"client_id,omitzero"`
 	// Display name: `Display Name <username@domain.com>`.
 	DisplayName param.Opt[string] `json:"display_name,omitzero"`
-	// Domain of address. Must be verified domain. Defaults to `agentmail.to`.
+	// Domain of address. Must be a verified domain, or any subdomain of a verified
+	// domain that has subdomains enabled (e.g., `bot.example.com`). Defaults to
+	// `agentmail.to`.
 	Domain param.Opt[string] `json:"domain,omitzero"`
 	// Username of address. Randomly generated if not specified.
 	Username param.Opt[string] `json:"username,omitzero"`
+	// Custom metadata to attach to the inbox.
+	Metadata map[string]CreateInboxMetadataUnionParam `json:"metadata,omitzero"`
 	paramObj
 }
 
@@ -162,6 +150,23 @@ func (r CreateInboxParam) MarshalJSON() (data []byte, err error) {
 }
 func (r *CreateInboxParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type CreateInboxMetadataUnionParam struct {
+	OfString param.Opt[string]  `json:",omitzero,inline"`
+	OfFloat  param.Opt[float64] `json:",omitzero,inline"`
+	OfBool   param.Opt[bool]    `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u CreateInboxMetadataUnionParam) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion(u, u.OfString, u.OfFloat, u.OfBool)
+}
+func (u *CreateInboxMetadataUnionParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
 }
 
 type Inbox struct {
@@ -179,6 +184,8 @@ type Inbox struct {
 	ClientID string `json:"client_id" api:"nullable"`
 	// Display name: `Display Name <username@domain.com>`.
 	DisplayName string `json:"display_name" api:"nullable"`
+	// Custom metadata attached to the inbox.
+	Metadata map[string]InboxMetadataUnion `json:"metadata" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CreatedAt   respjson.Field
@@ -188,6 +195,7 @@ type Inbox struct {
 		UpdatedAt   respjson.Field
 		ClientID    respjson.Field
 		DisplayName respjson.Field
+		Metadata    respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -196,6 +204,50 @@ type Inbox struct {
 // Returns the unmodified JSON received from the API
 func (r Inbox) RawJSON() string { return r.JSON.raw }
 func (r *Inbox) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// InboxMetadataUnion contains all possible properties and values from [string],
+// [float64], [bool].
+//
+// Use the methods beginning with 'As' to cast the union to one of its variants.
+//
+// If the underlying value is not a json object, one of the following properties
+// will be valid: OfString OfFloat OfBool]
+type InboxMetadataUnion struct {
+	// This field will be present if the value is a [string] instead of an object.
+	OfString string `json:",inline"`
+	// This field will be present if the value is a [float64] instead of an object.
+	OfFloat float64 `json:",inline"`
+	// This field will be present if the value is a [bool] instead of an object.
+	OfBool bool `json:",inline"`
+	JSON   struct {
+		OfString respjson.Field
+		OfFloat  respjson.Field
+		OfBool   respjson.Field
+		raw      string
+	} `json:"-"`
+}
+
+func (u InboxMetadataUnion) AsString() (v string) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u InboxMetadataUnion) AsFloat() (v float64) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u InboxMetadataUnion) AsBool() (v bool) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+// Returns the unmodified JSON received from the API
+func (u InboxMetadataUnion) RawJSON() string { return u.JSON.raw }
+
+func (r *InboxMetadataUnion) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -225,41 +277,6 @@ func (r *ListInboxes) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Type of metric event.
-type MetricEventType string
-
-const (
-	MetricEventTypeMessageSent       MetricEventType = "message.sent"
-	MetricEventTypeMessageDelivered  MetricEventType = "message.delivered"
-	MetricEventTypeMessageBounced    MetricEventType = "message.bounced"
-	MetricEventTypeMessageDelayed    MetricEventType = "message.delayed"
-	MetricEventTypeMessageRejected   MetricEventType = "message.rejected"
-	MetricEventTypeMessageComplained MetricEventType = "message.complained"
-	MetricEventTypeMessageReceived   MetricEventType = "message.received"
-)
-
-type InboxListMetricsResponse map[string][]InboxListMetricsResponseItem
-
-type InboxListMetricsResponseItem struct {
-	// Count of events in the bucket.
-	Count int64 `json:"count" api:"required"`
-	// Timestamp of the bucket.
-	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Count       respjson.Field
-		Timestamp   respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r InboxListMetricsResponseItem) RawJSON() string { return r.JSON.raw }
-func (r *InboxListMetricsResponseItem) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type InboxNewParams struct {
 	CreateInbox CreateInboxParam
 	paramObj
@@ -274,7 +291,13 @@ func (r *InboxNewParams) UnmarshalJSON(data []byte) error {
 
 type InboxUpdateParams struct {
 	// Display name: `Display Name <username@domain.com>`.
-	DisplayName string `json:"display_name" api:"required"`
+	DisplayName param.Opt[string] `json:"display_name,omitzero"`
+	// Metadata to merge into the inbox's existing metadata. Keys you include are added
+	// or overwritten; keys you omit are left unchanged. To remove a single key, send
+	// it with a null value. To clear all metadata, send `metadata` as null. Sending an
+	// empty object is rejected; use null to clear. Each update must include at least
+	// one of `display_name` or `metadata`.
+	Metadata map[string]InboxUpdateParamsMetadataUnion `json:"metadata,omitzero"`
 	paramObj
 }
 
@@ -284,6 +307,23 @@ func (r InboxUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 func (r *InboxUpdateParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+// Only one field can be non-zero.
+//
+// Use [param.IsOmitted] to confirm if a field is set.
+type InboxUpdateParamsMetadataUnion struct {
+	OfString param.Opt[string]  `json:",omitzero,inline"`
+	OfFloat  param.Opt[float64] `json:",omitzero,inline"`
+	OfBool   param.Opt[bool]    `json:",omitzero,inline"`
+	paramUnion
+}
+
+func (u InboxUpdateParamsMetadataUnion) MarshalJSON() ([]byte, error) {
+	return param.MarshalUnion(u, u.OfString, u.OfFloat, u.OfBool)
+}
+func (u *InboxUpdateParamsMetadataUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, u)
 }
 
 type InboxListParams struct {
@@ -298,30 +338,6 @@ type InboxListParams struct {
 
 // URLQuery serializes [InboxListParams]'s query parameters as `url.Values`.
 func (r InboxListParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type InboxListMetricsParams struct {
-	// Sort in descending order.
-	Descending param.Opt[bool] `query:"descending,omitzero" json:"-"`
-	// End timestamp for the query.
-	End param.Opt[time.Time] `query:"end,omitzero" format:"date-time" json:"-"`
-	// Limit on number of buckets to return.
-	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
-	// Period in number of seconds for the query.
-	Period param.Opt[string] `query:"period,omitzero" json:"-"`
-	// Start timestamp for the query.
-	Start param.Opt[time.Time] `query:"start,omitzero" format:"date-time" json:"-"`
-	// List of metric event types to query.
-	EventTypes []MetricEventType `query:"event_types,omitzero" json:"-"`
-	paramObj
-}
-
-// URLQuery serializes [InboxListMetricsParams]'s query parameters as `url.Values`.
-func (r InboxListMetricsParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

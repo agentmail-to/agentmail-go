@@ -36,6 +36,11 @@ func NewThreadService(opts ...option.RequestOption) (r ThreadService) {
 	return
 }
 
+// Lists threads, most recent first. Pass `senders`, `recipients`, or `subject` to
+// filter by substring. Filtered requests are served by search, which caps `limit`
+// at 100. For relevance-ranked full-text search across senders, recipients,
+// subject, and message body, use `Search Threads`.
+//
 // **CLI:**
 //
 // ```bash
@@ -49,16 +54,14 @@ func (r *ThreadService) List(ctx context.Context, query ThreadListParams, opts .
 	return res, err
 }
 
-// Moves the thread to trash by adding a trash label to all messages. If the thread
-// is already in trash, it will be permanently deleted. Use `permanent=true` to
-// force permanent deletion.
+// Permanently deletes a thread and all of its messages.
 //
 // **CLI:**
 //
 // ```bash
 // agentmail threads delete --thread-id <thread_id>
 // ```
-func (r *ThreadService) Delete(ctx context.Context, threadID string, body ThreadDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *ThreadService) Delete(ctx context.Context, threadID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
@@ -67,7 +70,7 @@ func (r *ThreadService) Delete(ctx context.Context, threadID string, body Thread
 		return err
 	}
 	path := fmt.Sprintf("v0/threads/%s", url.PathEscape(threadID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
 }
 
@@ -130,25 +133,20 @@ type ThreadListParams struct {
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
 	// Labels to filter by.
 	Labels []string `query:"labels,omitzero" json:"-"`
+	// Filter to threads whose recipients contain this value (substring match).
+	// Repeatable; all values must match.
+	Recipients []string `query:"recipients,omitzero" json:"-"`
+	// Filter to threads whose senders contain this value (substring match).
+	// Repeatable; all values must match.
+	Senders []string `query:"senders,omitzero" json:"-"`
+	// Filter to threads whose subject contains this value (substring match).
+	// Repeatable; all values must match.
+	Subject []string `query:"subject,omitzero" json:"-"`
 	paramObj
 }
 
 // URLQuery serializes [ThreadListParams]'s query parameters as `url.Values`.
 func (r ThreadListParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type ThreadDeleteParams struct {
-	// If true, permanently delete the thread instead of moving to trash.
-	Permanent param.Opt[bool] `query:"permanent,omitzero" json:"-"`
-	paramObj
-}
-
-// URLQuery serializes [ThreadDeleteParams]'s query parameters as `url.Values`.
-func (r ThreadDeleteParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

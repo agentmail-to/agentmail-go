@@ -38,6 +38,11 @@ func NewInboxThreadService(opts ...option.RequestOption) (r InboxThreadService) 
 	return
 }
 
+// Lists threads in the inbox, most recent first. Pass `senders`, `recipients`, or
+// `subject` to filter by substring. Filtered requests are served by search, which
+// caps `limit` at 100. For relevance-ranked full-text search, use
+// `Search Threads`.
+//
 // **CLI:**
 //
 // ```bash
@@ -55,20 +60,18 @@ func (r *InboxThreadService) List(ctx context.Context, inboxID string, query Inb
 	return res, err
 }
 
-// Moves the thread to trash by adding a trash label to all messages. If the thread
-// is already in trash, it will be permanently deleted. Use `permanent=true` to
-// force permanent deletion.
+// Permanently deletes a thread and all of its messages.
 //
 // **CLI:**
 //
 // ```bash
 // agentmail inboxes:threads delete --inbox-id <inbox_id> --thread-id <thread_id>
 // ```
-func (r *InboxThreadService) Delete(ctx context.Context, threadID string, params InboxThreadDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *InboxThreadService) Delete(ctx context.Context, threadID string, body InboxThreadDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
-	if params.InboxID == "" {
+	if body.InboxID == "" {
 		err = errors.New("missing required inbox_id parameter")
 		return err
 	}
@@ -76,8 +79,8 @@ func (r *InboxThreadService) Delete(ctx context.Context, threadID string, params
 		err = errors.New("missing required thread_id parameter")
 		return err
 	}
-	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(params.InboxID), url.PathEscape(threadID))
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
+	path := fmt.Sprintf("v0/inboxes/%s/threads/%s", url.PathEscape(body.InboxID), url.PathEscape(threadID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return err
 }
 
@@ -305,6 +308,15 @@ type InboxThreadListParams struct {
 	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
 	// Labels to filter by.
 	Labels []string `query:"labels,omitzero" json:"-"`
+	// Filter to threads whose recipients contain this value (substring match).
+	// Repeatable; all values must match.
+	Recipients []string `query:"recipients,omitzero" json:"-"`
+	// Filter to threads whose senders contain this value (substring match).
+	// Repeatable; all values must match.
+	Senders []string `query:"senders,omitzero" json:"-"`
+	// Filter to threads whose subject contains this value (substring match).
+	// Repeatable; all values must match.
+	Subject []string `query:"subject,omitzero" json:"-"`
 	paramObj
 }
 
@@ -319,18 +331,7 @@ func (r InboxThreadListParams) URLQuery() (v url.Values, err error) {
 type InboxThreadDeleteParams struct {
 	// The ID of the inbox.
 	InboxID string `path:"inbox_id" api:"required" json:"-"`
-	// If true, permanently delete the thread instead of moving to trash.
-	Permanent param.Opt[bool] `query:"permanent,omitzero" json:"-"`
 	paramObj
-}
-
-// URLQuery serializes [InboxThreadDeleteParams]'s query parameters as
-// `url.Values`.
-func (r InboxThreadDeleteParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
 }
 
 type InboxThreadGetParams struct {

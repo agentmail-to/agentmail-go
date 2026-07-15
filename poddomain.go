@@ -196,6 +196,9 @@ type PodDomainUpdateParams struct {
 	PodID string `path:"pod_id" api:"required" json:"-"`
 	// Bounce and complaint notifications are sent to your inboxes.
 	FeedbackEnabled param.Opt[bool] `json:"feedback_enabled,omitzero"`
+	// Allow inboxes on any subdomain of this domain. Adds a required wildcard MX
+	// record (`*.<domain>`) to `records`.
+	SubdomainsEnabled param.Opt[bool] `json:"subdomains_enabled,omitzero"`
 	paramObj
 }
 

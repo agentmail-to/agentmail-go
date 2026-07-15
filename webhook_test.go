@@ -30,7 +30,6 @@ func TestWebhookNewWithOptionalParams(t *testing.T) {
 		EventTypes: []agentmail.EventType{agentmail.EventTypeMessageReceived},
 		URL:        "url",
 		ClientID:   agentmail.String("client_id"),
-		InboxIDs:   []string{"string"},
 		PodIDs:     []string{"string"},
 	})
 	if err != nil {
@@ -59,11 +58,9 @@ func TestWebhookUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"webhook_id",
 		agentmail.WebhookUpdateParams{
-			AddInboxIDs:    []string{"string"},
-			AddPodIDs:      []string{"string"},
-			EventTypes:     []agentmail.EventType{agentmail.EventTypeMessageReceived},
-			RemoveInboxIDs: []string{"string"},
-			RemovePodIDs:   []string{"string"},
+			AddPodIDs:    []string{"string"},
+			EventTypes:   []agentmail.EventType{agentmail.EventTypeMessageReceived},
+			RemovePodIDs: []string{"string"},
 		},
 	)
 	if err != nil {
