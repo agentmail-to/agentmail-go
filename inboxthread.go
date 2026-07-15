@@ -130,6 +130,22 @@ func (r *InboxThreadService) GetAttachment(ctx context.Context, attachmentID str
 	return res, err
 }
 
+// Full-text search across threads in the inbox, ranked by relevance. The query is
+// matched against senders, recipients, and subject (substring) and the message
+// body (tokenized full text). Spam, trash, blocked, and unauthenticated threads
+// are always excluded. `limit` cannot exceed 100.
+func (r *InboxThreadService) Search(ctx context.Context, inboxID string, query InboxThreadSearchParams, opts ...option.RequestOption) (res *InboxThreadSearchResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if inboxID == "" {
+		err = errors.New("missing required inbox_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/inboxes/%s/threads/search", url.PathEscape(inboxID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return res, err
+}
+
 type ListThreads struct {
 	// Number of items returned.
 	Count int64 `json:"count" api:"required"`
@@ -287,6 +303,128 @@ func (r *Thread) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type InboxThreadSearchResponse struct {
+	// Number of items returned.
+	Count int64 `json:"count" api:"required"`
+	// Ordered by relevance, best match first.
+	Threads []InboxThreadSearchResponseThread `json:"threads" api:"required"`
+	// Limit of number of items returned.
+	Limit int64 `json:"limit" api:"nullable"`
+	// Page token for pagination.
+	NextPageToken string `json:"next_page_token" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Count         respjson.Field
+		Threads       respjson.Field
+		Limit         respjson.Field
+		NextPageToken respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r InboxThreadSearchResponse) RawJSON() string { return r.JSON.raw }
+func (r *InboxThreadSearchResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type InboxThreadSearchResponseThread struct {
+	// Time at which thread was created.
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// The ID of the inbox.
+	InboxID string `json:"inbox_id" api:"required"`
+	// Labels of thread.
+	Labels []string `json:"labels" api:"required"`
+	// ID of last message in thread.
+	LastMessageID string `json:"last_message_id" api:"required"`
+	// Number of messages in thread.
+	MessageCount int64 `json:"message_count" api:"required"`
+	// Recipients in thread. In format `username@domain.com` or
+	// `Display Name <username@domain.com>`.
+	Recipients []string `json:"recipients" api:"required"`
+	// Senders in thread. In format `username@domain.com` or
+	// `Display Name <username@domain.com>`.
+	Senders []string `json:"senders" api:"required"`
+	// Size of thread in bytes.
+	Size int64 `json:"size" api:"required"`
+	// ID of thread.
+	ThreadID string `json:"thread_id" api:"required"`
+	// Timestamp of last sent or received message.
+	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
+	// Time at which thread was last updated.
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
+	// Attachments in thread.
+	Attachments []AttachmentFile `json:"attachments" api:"nullable"`
+	// Matched fragments per field. Present only when the query matched an indexed
+	// field.
+	Highlights InboxThreadSearchResponseThreadHighlights `json:"highlights" api:"nullable"`
+	// Text preview of last message in thread.
+	Preview string `json:"preview" api:"nullable"`
+	// Timestamp of last received message.
+	ReceivedTimestamp time.Time `json:"received_timestamp" api:"nullable" format:"date-time"`
+	// Timestamp of last sent message.
+	SentTimestamp time.Time `json:"sent_timestamp" api:"nullable" format:"date-time"`
+	// Subject of thread.
+	Subject string `json:"subject" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CreatedAt         respjson.Field
+		InboxID           respjson.Field
+		Labels            respjson.Field
+		LastMessageID     respjson.Field
+		MessageCount      respjson.Field
+		Recipients        respjson.Field
+		Senders           respjson.Field
+		Size              respjson.Field
+		ThreadID          respjson.Field
+		Timestamp         respjson.Field
+		UpdatedAt         respjson.Field
+		Attachments       respjson.Field
+		Highlights        respjson.Field
+		Preview           respjson.Field
+		ReceivedTimestamp respjson.Field
+		SentTimestamp     respjson.Field
+		Subject           respjson.Field
+		ExtraFields       map[string]respjson.Field
+		raw               string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r InboxThreadSearchResponseThread) RawJSON() string { return r.JSON.raw }
+func (r *InboxThreadSearchResponseThread) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matched fragments per field. Present only when the query matched an indexed
+// field.
+type InboxThreadSearchResponseThreadHighlights struct {
+	// Matched fragments from a sender address in the thread.
+	From []string `json:"from" api:"nullable"`
+	// Matched fragments from a recipient address in the thread (to, cc, or bcc).
+	Recipients []string `json:"recipients" api:"nullable"`
+	// Matched fragments from the subject.
+	Subject []string `json:"subject" api:"nullable"`
+	// Matched fragments from a message body in the thread.
+	Text []string `json:"text" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		From        respjson.Field
+		Recipients  respjson.Field
+		Subject     respjson.Field
+		Text        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r InboxThreadSearchResponseThreadHighlights) RawJSON() string { return r.JSON.raw }
+func (r *InboxThreadSearchResponseThreadHighlights) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type InboxThreadListParams struct {
 	// Timestamp after which to filter by.
 	After param.Opt[time.Time] `query:"after,omitzero" format:"date-time" json:"-"`
@@ -346,4 +484,28 @@ type InboxThreadGetAttachmentParams struct {
 	// ID of thread.
 	ThreadID string `path:"thread_id" api:"required" json:"-"`
 	paramObj
+}
+
+type InboxThreadSearchParams struct {
+	// Full-text search query. Matched against the sender, recipients, and subject
+	// (substring) and the message body (tokenized full text).
+	Q string `query:"q" api:"required" json:"-"`
+	// Timestamp after which to filter by.
+	After param.Opt[time.Time] `query:"after,omitzero" format:"date-time" json:"-"`
+	// Timestamp before which to filter by.
+	Before param.Opt[time.Time] `query:"before,omitzero" format:"date-time" json:"-"`
+	// Limit of number of items returned.
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
+	// Page token for pagination.
+	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [InboxThreadSearchParams]'s query parameters as
+// `url.Values`.
+func (r InboxThreadSearchParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }

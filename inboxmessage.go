@@ -212,6 +212,22 @@ func (r *InboxMessageService) ReplyAll(ctx context.Context, messageID string, pa
 	return res, err
 }
 
+// Full-text search across messages in the inbox, ranked by relevance. The query is
+// matched against the sender, recipients, and subject (substring) and the message
+// body (tokenized full text). Spam, trash, blocked, and unauthenticated messages
+// are always excluded. `limit` cannot exceed 100.
+func (r *InboxMessageService) Search(ctx context.Context, inboxID string, query InboxMessageSearchParams, opts ...option.RequestOption) (res *InboxMessageSearchResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	opts = append([]option.RequestOption{option.WithBaseURL("https://api.agentmail.to/")}, opts...)
+	if inboxID == "" {
+		err = errors.New("missing required inbox_id parameter")
+		return nil, err
+	}
+	path := fmt.Sprintf("v0/inboxes/%s/messages/search", url.PathEscape(inboxID))
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return res, err
+}
+
 // **CLI:**
 //
 // ```bash
@@ -584,6 +600,136 @@ func (r *InboxMessageGetRawResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type InboxMessageSearchResponse struct {
+	// Number of items returned.
+	Count int64 `json:"count" api:"required"`
+	// Ordered by relevance, best match first.
+	Messages []InboxMessageSearchResponseMessage `json:"messages" api:"required"`
+	// Limit of number of items returned.
+	Limit int64 `json:"limit" api:"nullable"`
+	// Page token for pagination.
+	NextPageToken string `json:"next_page_token" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Count         respjson.Field
+		Messages      respjson.Field
+		Limit         respjson.Field
+		NextPageToken respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r InboxMessageSearchResponse) RawJSON() string { return r.JSON.raw }
+func (r *InboxMessageSearchResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type InboxMessageSearchResponseMessage struct {
+	// Time at which message was created.
+	CreatedAt time.Time `json:"created_at" api:"required" format:"date-time"`
+	// Address of sender. In format `username@domain.com` or
+	// `Display Name <username@domain.com>`.
+	From string `json:"from" api:"required"`
+	// The ID of the inbox.
+	InboxID string `json:"inbox_id" api:"required"`
+	// Labels of message.
+	Labels []string `json:"labels" api:"required"`
+	// ID of message.
+	MessageID string `json:"message_id" api:"required"`
+	// Size of message in bytes.
+	Size int64 `json:"size" api:"required"`
+	// ID of thread.
+	ThreadID string `json:"thread_id" api:"required"`
+	// Time at which message was sent or drafted.
+	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
+	// Addresses of recipients. In format `username@domain.com` or
+	// `Display Name <username@domain.com>`.
+	To []string `json:"to" api:"required"`
+	// Time at which message was last updated.
+	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
+	// Attachments in message.
+	Attachments []AttachmentFile `json:"attachments" api:"nullable"`
+	// Addresses of BCC recipients. In format `username@domain.com` or
+	// `Display Name <username@domain.com>`.
+	Bcc []string `json:"bcc" api:"nullable"`
+	// Addresses of CC recipients. In format `username@domain.com` or
+	// `Display Name <username@domain.com>`.
+	Cc []string `json:"cc" api:"nullable"`
+	// Headers in message.
+	Headers map[string]string `json:"headers" api:"nullable"`
+	// Matched fragments per field. Present only when the query matched an indexed
+	// field.
+	Highlights InboxMessageSearchResponseMessageHighlights `json:"highlights" api:"nullable"`
+	// ID of message being replied to.
+	InReplyTo string `json:"in_reply_to" api:"nullable"`
+	// Text preview of message.
+	Preview string `json:"preview" api:"nullable"`
+	// IDs of previous messages in thread.
+	References []string `json:"references" api:"nullable"`
+	// Subject of message.
+	Subject string `json:"subject" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CreatedAt   respjson.Field
+		From        respjson.Field
+		InboxID     respjson.Field
+		Labels      respjson.Field
+		MessageID   respjson.Field
+		Size        respjson.Field
+		ThreadID    respjson.Field
+		Timestamp   respjson.Field
+		To          respjson.Field
+		UpdatedAt   respjson.Field
+		Attachments respjson.Field
+		Bcc         respjson.Field
+		Cc          respjson.Field
+		Headers     respjson.Field
+		Highlights  respjson.Field
+		InReplyTo   respjson.Field
+		Preview     respjson.Field
+		References  respjson.Field
+		Subject     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r InboxMessageSearchResponseMessage) RawJSON() string { return r.JSON.raw }
+func (r *InboxMessageSearchResponseMessage) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matched fragments per field. Present only when the query matched an indexed
+// field.
+type InboxMessageSearchResponseMessageHighlights struct {
+	// Matched fragments from the sender address.
+	From []string `json:"from" api:"nullable"`
+	// Matched fragments from the recipient addresses (to, cc, or bcc).
+	Recipients []string `json:"recipients" api:"nullable"`
+	// Matched fragments from the subject.
+	Subject []string `json:"subject" api:"nullable"`
+	// Matched fragments from the message body.
+	Text []string `json:"text" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		From        respjson.Field
+		Recipients  respjson.Field
+		Subject     respjson.Field
+		Text        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r InboxMessageSearchResponseMessageHighlights) RawJSON() string { return r.JSON.raw }
+func (r *InboxMessageSearchResponseMessageHighlights) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type InboxMessageUpdateParams struct {
 	// The ID of the inbox.
 	InboxID       string `path:"inbox_id" api:"required" json:"-"`
@@ -731,6 +877,30 @@ func (r InboxMessageReplyAllParams) MarshalJSON() (data []byte, err error) {
 }
 func (r *InboxMessageReplyAllParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type InboxMessageSearchParams struct {
+	// Full-text search query. Matched against the sender, recipients, and subject
+	// (substring) and the message body (tokenized full text).
+	Q string `query:"q" api:"required" json:"-"`
+	// Timestamp after which to filter by.
+	After param.Opt[time.Time] `query:"after,omitzero" format:"date-time" json:"-"`
+	// Timestamp before which to filter by.
+	Before param.Opt[time.Time] `query:"before,omitzero" format:"date-time" json:"-"`
+	// Limit of number of items returned.
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
+	// Page token for pagination.
+	PageToken param.Opt[string] `query:"page_token,omitzero" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [InboxMessageSearchParams]'s query parameters as
+// `url.Values`.
+func (r InboxMessageSearchParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type InboxMessageSendParams struct {
