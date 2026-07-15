@@ -425,6 +425,12 @@ func (cfg *RequestConfig) Execute() (err error) {
 	// Don't send the current retry count in the headers if the caller modified the header defaults.
 	shouldSendRetryCount := cfg.Request.Header.Get("X-Stainless-Retry-Count") == "0"
 
+	// Auto-mint an Idempotency-Key for send endpoints ONCE, before the retry loop,
+	// so every retried attempt (each a cfg.Request.Clone below) carries the SAME
+	// key. This runs after the URL is fully resolved above, so cfg.Request.URL.Path
+	// reflects the real request path. See idempotency.go.
+	maybeSetIdempotencyKey(cfg.Request)
+
 	var res *http.Response
 	var cancel context.CancelFunc
 	for retryCount := 0; retryCount <= cfg.MaxRetries; retryCount += 1 {

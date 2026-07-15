@@ -1,0 +1,18 @@
+# .fernignore
+#
+# Files listed here are hand-maintained and MUST be preserved across SDK
+# regeneration. They implement the Idempotency-Key auto-mint patch: when a
+# caller does not set an Idempotency-Key header on one of the five POST send
+# endpoints (/messages/send, /messages/{id}/reply, /reply-all, /forward,
+# /drafts/{id}/send), the core request path mints a single UUID4 once and sets
+# it as the Idempotency-Key header BEFORE the retry loop, so all internal
+# retries carry the same key. Do not let codegen overwrite or delete these.
+
+# New, non-generated files (the patch itself + its tests).
+internal/requestconfig/idempotency.go
+internal/requestconfig/idempotency_test.go
+
+# Generated file with a hand-added call site: maybeSetIdempotencyKey(cfg.Request)
+# is invoked in Execute() immediately before the retry loop. If regeneration
+# overwrites this file, re-apply that single call.
+internal/requestconfig/requestconfig.go
