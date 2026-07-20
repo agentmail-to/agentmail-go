@@ -142,6 +142,8 @@ type PodAPIKeyNewResponsePermissions struct {
 	APIKeyDelete bool `json:"api_key_delete" api:"nullable"`
 	// Read API keys.
 	APIKeyRead bool `json:"api_key_read" api:"nullable"`
+	// Update API keys.
+	APIKeyUpdate bool `json:"api_key_update" api:"nullable"`
 	// Create domains.
 	DomainCreate bool `json:"domain_create" api:"nullable"`
 	// Delete domains.
@@ -211,6 +213,7 @@ type PodAPIKeyNewResponsePermissions struct {
 		APIKeyCreate     respjson.Field
 		APIKeyDelete     respjson.Field
 		APIKeyRead       respjson.Field
+		APIKeyUpdate     respjson.Field
 		DomainCreate     respjson.Field
 		DomainDelete     respjson.Field
 		DomainRead       respjson.Field
@@ -327,6 +330,8 @@ type PodAPIKeyListResponseAPIKeyPermissions struct {
 	APIKeyDelete bool `json:"api_key_delete" api:"nullable"`
 	// Read API keys.
 	APIKeyRead bool `json:"api_key_read" api:"nullable"`
+	// Update API keys.
+	APIKeyUpdate bool `json:"api_key_update" api:"nullable"`
 	// Create domains.
 	DomainCreate bool `json:"domain_create" api:"nullable"`
 	// Delete domains.
@@ -396,6 +401,7 @@ type PodAPIKeyListResponseAPIKeyPermissions struct {
 		APIKeyCreate     respjson.Field
 		APIKeyDelete     respjson.Field
 		APIKeyRead       respjson.Field
+		APIKeyUpdate     respjson.Field
 		DomainCreate     respjson.Field
 		DomainDelete     respjson.Field
 		DomainRead       respjson.Field
@@ -465,6 +471,8 @@ type PodAPIKeyNewParamsPermissions struct {
 	APIKeyDelete param.Opt[bool] `json:"api_key_delete,omitzero"`
 	// Read API keys.
 	APIKeyRead param.Opt[bool] `json:"api_key_read,omitzero"`
+	// Update API keys.
+	APIKeyUpdate param.Opt[bool] `json:"api_key_update,omitzero"`
 	// Create domains.
 	DomainCreate param.Opt[bool] `json:"domain_create,omitzero"`
 	// Delete domains.

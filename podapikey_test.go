@@ -35,6 +35,7 @@ func TestPodAPIKeyNewWithOptionalParams(t *testing.T) {
 				APIKeyCreate:     agentmail.Bool(true),
 				APIKeyDelete:     agentmail.Bool(true),
 				APIKeyRead:       agentmail.Bool(true),
+				APIKeyUpdate:     agentmail.Bool(true),
 				DomainCreate:     agentmail.Bool(true),
 				DomainDelete:     agentmail.Bool(true),
 				DomainRead:       agentmail.Bool(true),
