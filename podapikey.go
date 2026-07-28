@@ -176,17 +176,21 @@ type PodAPIKeyNewResponsePermissions struct {
 	LabelSpamRead bool `json:"label_spam_read" api:"nullable"`
 	// Access messages labeled trash.
 	LabelTrashRead bool `json:"label_trash_read" api:"nullable"`
+	// Access messages labeled unauthenticated.
+	LabelUnauthenticatedRead bool `json:"label_unauthenticated_read" api:"nullable"`
 	// Create list entries.
 	ListEntryCreate bool `json:"list_entry_create" api:"nullable"`
 	// Delete list entries.
 	ListEntryDelete bool `json:"list_entry_delete" api:"nullable"`
 	// Read list entries.
 	ListEntryRead bool `json:"list_entry_read" api:"nullable"`
-	// Read messages.
+	// Delete messages. Also required to delete threads.
+	MessageDelete bool `json:"message_delete" api:"nullable"`
+	// Read messages. Also required to read threads.
 	MessageRead bool `json:"message_read" api:"nullable"`
 	// Send messages.
 	MessageSend bool `json:"message_send" api:"nullable"`
-	// Update message labels.
+	// Update message labels. Also required to update threads.
 	MessageUpdate bool `json:"message_update" api:"nullable"`
 	// Read metrics.
 	MetricsRead bool `json:"metrics_read" api:"nullable"`
@@ -196,10 +200,6 @@ type PodAPIKeyNewResponsePermissions struct {
 	PodDelete bool `json:"pod_delete" api:"nullable"`
 	// Read pods.
 	PodRead bool `json:"pod_read" api:"nullable"`
-	// Delete threads.
-	ThreadDelete bool `json:"thread_delete" api:"nullable"`
-	// Read threads.
-	ThreadRead bool `json:"thread_read" api:"nullable"`
 	// Create webhooks.
 	WebhookCreate bool `json:"webhook_create" api:"nullable"`
 	// Delete webhooks.
@@ -210,44 +210,44 @@ type PodAPIKeyNewResponsePermissions struct {
 	WebhookUpdate bool `json:"webhook_update" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		APIKeyCreate     respjson.Field
-		APIKeyDelete     respjson.Field
-		APIKeyRead       respjson.Field
-		APIKeyUpdate     respjson.Field
-		DomainCreate     respjson.Field
-		DomainDelete     respjson.Field
-		DomainRead       respjson.Field
-		DomainUpdate     respjson.Field
-		DraftCreate      respjson.Field
-		DraftDelete      respjson.Field
-		DraftRead        respjson.Field
-		DraftSend        respjson.Field
-		DraftUpdate      respjson.Field
-		InboxCreate      respjson.Field
-		InboxDelete      respjson.Field
-		InboxRead        respjson.Field
-		InboxUpdate      respjson.Field
-		LabelBlockedRead respjson.Field
-		LabelSpamRead    respjson.Field
-		LabelTrashRead   respjson.Field
-		ListEntryCreate  respjson.Field
-		ListEntryDelete  respjson.Field
-		ListEntryRead    respjson.Field
-		MessageRead      respjson.Field
-		MessageSend      respjson.Field
-		MessageUpdate    respjson.Field
-		MetricsRead      respjson.Field
-		PodCreate        respjson.Field
-		PodDelete        respjson.Field
-		PodRead          respjson.Field
-		ThreadDelete     respjson.Field
-		ThreadRead       respjson.Field
-		WebhookCreate    respjson.Field
-		WebhookDelete    respjson.Field
-		WebhookRead      respjson.Field
-		WebhookUpdate    respjson.Field
-		ExtraFields      map[string]respjson.Field
-		raw              string
+		APIKeyCreate             respjson.Field
+		APIKeyDelete             respjson.Field
+		APIKeyRead               respjson.Field
+		APIKeyUpdate             respjson.Field
+		DomainCreate             respjson.Field
+		DomainDelete             respjson.Field
+		DomainRead               respjson.Field
+		DomainUpdate             respjson.Field
+		DraftCreate              respjson.Field
+		DraftDelete              respjson.Field
+		DraftRead                respjson.Field
+		DraftSend                respjson.Field
+		DraftUpdate              respjson.Field
+		InboxCreate              respjson.Field
+		InboxDelete              respjson.Field
+		InboxRead                respjson.Field
+		InboxUpdate              respjson.Field
+		LabelBlockedRead         respjson.Field
+		LabelSpamRead            respjson.Field
+		LabelTrashRead           respjson.Field
+		LabelUnauthenticatedRead respjson.Field
+		ListEntryCreate          respjson.Field
+		ListEntryDelete          respjson.Field
+		ListEntryRead            respjson.Field
+		MessageDelete            respjson.Field
+		MessageRead              respjson.Field
+		MessageSend              respjson.Field
+		MessageUpdate            respjson.Field
+		MetricsRead              respjson.Field
+		PodCreate                respjson.Field
+		PodDelete                respjson.Field
+		PodRead                  respjson.Field
+		WebhookCreate            respjson.Field
+		WebhookDelete            respjson.Field
+		WebhookRead              respjson.Field
+		WebhookUpdate            respjson.Field
+		ExtraFields              map[string]respjson.Field
+		raw                      string
 	} `json:"-"`
 }
 
@@ -364,17 +364,21 @@ type PodAPIKeyListResponseAPIKeyPermissions struct {
 	LabelSpamRead bool `json:"label_spam_read" api:"nullable"`
 	// Access messages labeled trash.
 	LabelTrashRead bool `json:"label_trash_read" api:"nullable"`
+	// Access messages labeled unauthenticated.
+	LabelUnauthenticatedRead bool `json:"label_unauthenticated_read" api:"nullable"`
 	// Create list entries.
 	ListEntryCreate bool `json:"list_entry_create" api:"nullable"`
 	// Delete list entries.
 	ListEntryDelete bool `json:"list_entry_delete" api:"nullable"`
 	// Read list entries.
 	ListEntryRead bool `json:"list_entry_read" api:"nullable"`
-	// Read messages.
+	// Delete messages. Also required to delete threads.
+	MessageDelete bool `json:"message_delete" api:"nullable"`
+	// Read messages. Also required to read threads.
 	MessageRead bool `json:"message_read" api:"nullable"`
 	// Send messages.
 	MessageSend bool `json:"message_send" api:"nullable"`
-	// Update message labels.
+	// Update message labels. Also required to update threads.
 	MessageUpdate bool `json:"message_update" api:"nullable"`
 	// Read metrics.
 	MetricsRead bool `json:"metrics_read" api:"nullable"`
@@ -384,10 +388,6 @@ type PodAPIKeyListResponseAPIKeyPermissions struct {
 	PodDelete bool `json:"pod_delete" api:"nullable"`
 	// Read pods.
 	PodRead bool `json:"pod_read" api:"nullable"`
-	// Delete threads.
-	ThreadDelete bool `json:"thread_delete" api:"nullable"`
-	// Read threads.
-	ThreadRead bool `json:"thread_read" api:"nullable"`
 	// Create webhooks.
 	WebhookCreate bool `json:"webhook_create" api:"nullable"`
 	// Delete webhooks.
@@ -398,44 +398,44 @@ type PodAPIKeyListResponseAPIKeyPermissions struct {
 	WebhookUpdate bool `json:"webhook_update" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		APIKeyCreate     respjson.Field
-		APIKeyDelete     respjson.Field
-		APIKeyRead       respjson.Field
-		APIKeyUpdate     respjson.Field
-		DomainCreate     respjson.Field
-		DomainDelete     respjson.Field
-		DomainRead       respjson.Field
-		DomainUpdate     respjson.Field
-		DraftCreate      respjson.Field
-		DraftDelete      respjson.Field
-		DraftRead        respjson.Field
-		DraftSend        respjson.Field
-		DraftUpdate      respjson.Field
-		InboxCreate      respjson.Field
-		InboxDelete      respjson.Field
-		InboxRead        respjson.Field
-		InboxUpdate      respjson.Field
-		LabelBlockedRead respjson.Field
-		LabelSpamRead    respjson.Field
-		LabelTrashRead   respjson.Field
-		ListEntryCreate  respjson.Field
-		ListEntryDelete  respjson.Field
-		ListEntryRead    respjson.Field
-		MessageRead      respjson.Field
-		MessageSend      respjson.Field
-		MessageUpdate    respjson.Field
-		MetricsRead      respjson.Field
-		PodCreate        respjson.Field
-		PodDelete        respjson.Field
-		PodRead          respjson.Field
-		ThreadDelete     respjson.Field
-		ThreadRead       respjson.Field
-		WebhookCreate    respjson.Field
-		WebhookDelete    respjson.Field
-		WebhookRead      respjson.Field
-		WebhookUpdate    respjson.Field
-		ExtraFields      map[string]respjson.Field
-		raw              string
+		APIKeyCreate             respjson.Field
+		APIKeyDelete             respjson.Field
+		APIKeyRead               respjson.Field
+		APIKeyUpdate             respjson.Field
+		DomainCreate             respjson.Field
+		DomainDelete             respjson.Field
+		DomainRead               respjson.Field
+		DomainUpdate             respjson.Field
+		DraftCreate              respjson.Field
+		DraftDelete              respjson.Field
+		DraftRead                respjson.Field
+		DraftSend                respjson.Field
+		DraftUpdate              respjson.Field
+		InboxCreate              respjson.Field
+		InboxDelete              respjson.Field
+		InboxRead                respjson.Field
+		InboxUpdate              respjson.Field
+		LabelBlockedRead         respjson.Field
+		LabelSpamRead            respjson.Field
+		LabelTrashRead           respjson.Field
+		LabelUnauthenticatedRead respjson.Field
+		ListEntryCreate          respjson.Field
+		ListEntryDelete          respjson.Field
+		ListEntryRead            respjson.Field
+		MessageDelete            respjson.Field
+		MessageRead              respjson.Field
+		MessageSend              respjson.Field
+		MessageUpdate            respjson.Field
+		MetricsRead              respjson.Field
+		PodCreate                respjson.Field
+		PodDelete                respjson.Field
+		PodRead                  respjson.Field
+		WebhookCreate            respjson.Field
+		WebhookDelete            respjson.Field
+		WebhookRead              respjson.Field
+		WebhookUpdate            respjson.Field
+		ExtraFields              map[string]respjson.Field
+		raw                      string
 	} `json:"-"`
 }
 
@@ -505,17 +505,21 @@ type PodAPIKeyNewParamsPermissions struct {
 	LabelSpamRead param.Opt[bool] `json:"label_spam_read,omitzero"`
 	// Access messages labeled trash.
 	LabelTrashRead param.Opt[bool] `json:"label_trash_read,omitzero"`
+	// Access messages labeled unauthenticated.
+	LabelUnauthenticatedRead param.Opt[bool] `json:"label_unauthenticated_read,omitzero"`
 	// Create list entries.
 	ListEntryCreate param.Opt[bool] `json:"list_entry_create,omitzero"`
 	// Delete list entries.
 	ListEntryDelete param.Opt[bool] `json:"list_entry_delete,omitzero"`
 	// Read list entries.
 	ListEntryRead param.Opt[bool] `json:"list_entry_read,omitzero"`
-	// Read messages.
+	// Delete messages. Also required to delete threads.
+	MessageDelete param.Opt[bool] `json:"message_delete,omitzero"`
+	// Read messages. Also required to read threads.
 	MessageRead param.Opt[bool] `json:"message_read,omitzero"`
 	// Send messages.
 	MessageSend param.Opt[bool] `json:"message_send,omitzero"`
-	// Update message labels.
+	// Update message labels. Also required to update threads.
 	MessageUpdate param.Opt[bool] `json:"message_update,omitzero"`
 	// Read metrics.
 	MetricsRead param.Opt[bool] `json:"metrics_read,omitzero"`
@@ -525,10 +529,6 @@ type PodAPIKeyNewParamsPermissions struct {
 	PodDelete param.Opt[bool] `json:"pod_delete,omitzero"`
 	// Read pods.
 	PodRead param.Opt[bool] `json:"pod_read,omitzero"`
-	// Delete threads.
-	ThreadDelete param.Opt[bool] `json:"thread_delete,omitzero"`
-	// Read threads.
-	ThreadRead param.Opt[bool] `json:"thread_read,omitzero"`
 	// Create webhooks.
 	WebhookCreate param.Opt[bool] `json:"webhook_create,omitzero"`
 	// Delete webhooks.
