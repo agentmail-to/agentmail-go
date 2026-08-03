@@ -30,7 +30,10 @@ func TestWebhookNewWithOptionalParams(t *testing.T) {
 		EventTypes: []agentmail.EventType{agentmail.EventTypeMessageReceived},
 		URL:        "url",
 		ClientID:   agentmail.String("client_id"),
-		PodIDs:     []string{"string"},
+		Headers: map[string]string{
+			"foo": "string",
+		},
+		PodIDs: []string{"string"},
 	})
 	if err != nil {
 		var apierr *agentmail.Error

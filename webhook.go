@@ -215,6 +215,11 @@ type WebhookNewParams struct {
 	URL string `json:"url" api:"required"`
 	// Client ID of webhook.
 	ClientID param.Opt[string] `json:"client_id,omitzero"`
+	// Custom HTTP headers to include with every delivery to this webhook. Header
+	// values are write-only: AgentMail never returns them from webhook read endpoints.
+	// The map must contain at least one entry when provided, and every name and value
+	// must be a valid HTTP header.
+	Headers map[string]string `json:"headers,omitzero"`
 	// Pods for which to send events. Maximum 10 per webhook.
 	PodIDs []string `json:"pod_ids,omitzero"`
 	paramObj
