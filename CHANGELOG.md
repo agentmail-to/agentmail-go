@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.17.0 (2026-08-18)
+
+Full Changelog: [v0.16.0...v0.17.0](https://github.com/agentmail-to/agentmail-go/compare/v0.16.0...v0.17.0)
+
+### Features
+
+* **api:** api update ([729dad2](https://github.com/agentmail-to/agentmail-go/commit/729dad28744f1e3c47a0daf87d6156d0f6d27073))
+* **api:** api update ([9603e86](https://github.com/agentmail-to/agentmail-go/commit/9603e8678e6752e7cda6cf234b5bca597be02d2d))
+* **api:** api update ([8c43c1d](https://github.com/agentmail-to/agentmail-go/commit/8c43c1d7ecf3b99a1cf57c71278e72b3673e4438))
+* **api:** api update ([fec001a](https://github.com/agentmail-to/agentmail-go/commit/fec001a5f8daa206da829ef87fb907afc70bdf23))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([32ee657](https://github.com/agentmail-to/agentmail-go/commit/32ee657b22d1873ac8b166a45ac4d498229741e3))
+
 ## 0.16.0 (2026-07-15)
 
 Full Changelog: [v0.15.0...v0.16.0](https://github.com/agentmail-to/agentmail-go/compare/v0.15.0...v0.16.0)

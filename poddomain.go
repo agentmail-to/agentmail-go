@@ -199,6 +199,10 @@ type PodDomainUpdateParams struct {
 	// Allow inboxes on any subdomain of this domain. Adds a required wildcard MX
 	// record (`*.<domain>`) to `records`.
 	SubdomainsEnabled param.Opt[bool] `json:"subdomains_enabled,omitzero"`
+	// Serve open tracking pixels from this domain. Adds a required `link.<domain>`
+	// CNAME record to `records`, which must be published and verified before
+	// `track_opens` can be used on a send.
+	TrackingEnabled param.Opt[bool] `json:"tracking_enabled,omitzero"`
 	paramObj
 }
 

@@ -34,6 +34,7 @@ func TestPodDomainNewWithOptionalParams(t *testing.T) {
 				Domain:            "domain",
 				FeedbackEnabled:   agentmail.Bool(true),
 				SubdomainsEnabled: agentmail.Bool(true),
+				TrackingEnabled:   agentmail.Bool(true),
 			},
 		},
 	)
@@ -66,6 +67,7 @@ func TestPodDomainUpdateWithOptionalParams(t *testing.T) {
 			PodID:             "pod_id",
 			FeedbackEnabled:   agentmail.Bool(true),
 			SubdomainsEnabled: agentmail.Bool(true),
+			TrackingEnabled:   agentmail.Bool(true),
 		},
 	)
 	if err != nil {
