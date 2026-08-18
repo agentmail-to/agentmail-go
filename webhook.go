@@ -132,6 +132,7 @@ const (
 	EventTypeMessageBounced                 EventType = "message.bounced"
 	EventTypeMessageComplained              EventType = "message.complained"
 	EventTypeMessageRejected                EventType = "message.rejected"
+	EventTypeMessageOpened                  EventType = "message.opened"
 	EventTypeDomainVerified                 EventType = "domain.verified"
 )
 

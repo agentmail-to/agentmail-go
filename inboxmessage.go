@@ -430,6 +430,12 @@ type SendMessageRequestParam struct {
 	Subject param.Opt[string] `json:"subject,omitzero"`
 	// Plain text body of message.
 	Text param.Opt[string] `json:"text,omitzero"`
+	// Track when this message is first opened. Requires a custom domain with tracking
+	// enabled and an HTML body. Opens surface as the `opened` label on the message and
+	// as a `message.opened` event. One pixel is injected per message, not per
+	// recipient, so a message with several recipients fires once when any of them
+	// opens it, and the event does not identify which one.
+	TrackOpens param.Opt[bool] `json:"track_opens,omitzero"`
 	// Attachments to include in message.
 	Attachments []SendAttachmentParam `json:"attachments,omitzero"`
 	// Headers to include in message.
@@ -828,6 +834,12 @@ type InboxMessageReplyParams struct {
 	ReplyAll param.Opt[bool] `json:"reply_all,omitzero"`
 	// Plain text body of message.
 	Text param.Opt[string] `json:"text,omitzero"`
+	// Track when this message is first opened. Requires a custom domain with tracking
+	// enabled and an HTML body. Opens surface as the `opened` label on the message and
+	// as a `message.opened` event. One pixel is injected per message, not per
+	// recipient, so a message with several recipients fires once when any of them
+	// opens it, and the event does not identify which one.
+	TrackOpens param.Opt[bool] `json:"track_opens,omitzero"`
 	// Attachments to include in message.
 	Attachments []SendAttachmentParam `json:"attachments,omitzero"`
 	// Headers to include in message.
@@ -860,6 +872,12 @@ type InboxMessageReplyAllParams struct {
 	HTML param.Opt[string] `json:"html,omitzero"`
 	// Plain text body of message.
 	Text param.Opt[string] `json:"text,omitzero"`
+	// Track when this message is first opened. Requires a custom domain with tracking
+	// enabled and an HTML body. Opens surface as the `opened` label on the message and
+	// as a `message.opened` event. One pixel is injected per message, not per
+	// recipient, so a message with several recipients fires once when any of them
+	// opens it, and the event does not identify which one.
+	TrackOpens param.Opt[bool] `json:"track_opens,omitzero"`
 	// Attachments to include in message.
 	Attachments []SendAttachmentParam `json:"attachments,omitzero"`
 	// Headers to include in message.

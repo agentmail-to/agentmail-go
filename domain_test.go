@@ -31,6 +31,7 @@ func TestDomainNewWithOptionalParams(t *testing.T) {
 			Domain:            "domain",
 			FeedbackEnabled:   agentmail.Bool(true),
 			SubdomainsEnabled: agentmail.Bool(true),
+			TrackingEnabled:   agentmail.Bool(true),
 		},
 	})
 	if err != nil {
@@ -61,6 +62,7 @@ func TestDomainUpdateWithOptionalParams(t *testing.T) {
 		agentmail.DomainUpdateParams{
 			FeedbackEnabled:   agentmail.Bool(true),
 			SubdomainsEnabled: agentmail.Bool(true),
+			TrackingEnabled:   agentmail.Bool(true),
 		},
 	)
 	if err != nil {

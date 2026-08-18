@@ -162,6 +162,10 @@ type CreateDomainParam struct {
 	// Allow inboxes on any subdomain of this domain. Adds a required wildcard MX
 	// record (`*.<domain>`) to `records`.
 	SubdomainsEnabled param.Opt[bool] `json:"subdomains_enabled,omitzero"`
+	// Serve open tracking pixels from this domain. Adds a required `link.<domain>`
+	// CNAME record to `records`, which must be published and verified before
+	// `track_opens` can be used on a send.
+	TrackingEnabled param.Opt[bool] `json:"tracking_enabled,omitzero"`
 	paramObj
 }
 
@@ -192,6 +196,10 @@ type Domain struct {
 	// Allow inboxes on any subdomain of this domain. Adds a required wildcard MX
 	// record (`*.<domain>`) to `records`.
 	SubdomainsEnabled bool `json:"subdomains_enabled" api:"required"`
+	// Serve open tracking pixels from this domain. Adds a required `link.<domain>`
+	// CNAME record to `records`, which must be published and verified before
+	// `track_opens` can be used on a send.
+	TrackingEnabled bool `json:"tracking_enabled" api:"required"`
 	// Time at which the domain was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Client ID of domain.
@@ -207,6 +215,7 @@ type Domain struct {
 		Records           respjson.Field
 		Status            respjson.Field
 		SubdomainsEnabled respjson.Field
+		TrackingEnabled   respjson.Field
 		UpdatedAt         respjson.Field
 		ClientID          respjson.Field
 		PodID             respjson.Field
@@ -304,6 +313,10 @@ type ListDomainsDomain struct {
 	// Allow inboxes on any subdomain of this domain. Adds a required wildcard MX
 	// record (`*.<domain>`) to `records`.
 	SubdomainsEnabled bool `json:"subdomains_enabled" api:"required"`
+	// Serve open tracking pixels from this domain. Adds a required `link.<domain>`
+	// CNAME record to `records`, which must be published and verified before
+	// `track_opens` can be used on a send.
+	TrackingEnabled bool `json:"tracking_enabled" api:"required"`
 	// Time at which the domain was last updated.
 	UpdatedAt time.Time `json:"updated_at" api:"required" format:"date-time"`
 	// Client ID of domain.
@@ -317,6 +330,7 @@ type ListDomainsDomain struct {
 		DomainID          respjson.Field
 		FeedbackEnabled   respjson.Field
 		SubdomainsEnabled respjson.Field
+		TrackingEnabled   respjson.Field
 		UpdatedAt         respjson.Field
 		ClientID          respjson.Field
 		PodID             respjson.Field
@@ -349,6 +363,10 @@ type DomainUpdateParams struct {
 	// Allow inboxes on any subdomain of this domain. Adds a required wildcard MX
 	// record (`*.<domain>`) to `records`.
 	SubdomainsEnabled param.Opt[bool] `json:"subdomains_enabled,omitzero"`
+	// Serve open tracking pixels from this domain. Adds a required `link.<domain>`
+	// CNAME record to `records`, which must be published and verified before
+	// `track_opens` can be used on a send.
+	TrackingEnabled param.Opt[bool] `json:"tracking_enabled,omitzero"`
 	paramObj
 }
 

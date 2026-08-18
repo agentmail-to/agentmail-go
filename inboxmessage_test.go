@@ -138,6 +138,7 @@ func TestInboxMessageForwardWithOptionalParams(t *testing.T) {
 				To: agentmail.AddressesUnionParam{
 					OfString: agentmail.String("string"),
 				},
+				TrackOpens: agentmail.Bool(true),
 			},
 		},
 	)
@@ -283,6 +284,7 @@ func TestInboxMessageReplyWithOptionalParams(t *testing.T) {
 			To: agentmail.AddressesUnionParam{
 				OfString: agentmail.String("string"),
 			},
+			TrackOpens: agentmail.Bool(true),
 		},
 	)
 	if err != nil {
@@ -328,7 +330,8 @@ func TestInboxMessageReplyAllWithOptionalParams(t *testing.T) {
 			ReplyTo: agentmail.AddressesUnionParam{
 				OfString: agentmail.String("string"),
 			},
-			Text: agentmail.String("text"),
+			Text:       agentmail.String("text"),
+			TrackOpens: agentmail.Bool(true),
 		},
 	)
 	if err != nil {
@@ -418,6 +421,7 @@ func TestInboxMessageSendWithOptionalParams(t *testing.T) {
 				To: agentmail.AddressesUnionParam{
 					OfString: agentmail.String("string"),
 				},
+				TrackOpens: agentmail.Bool(true),
 			},
 		},
 	)
